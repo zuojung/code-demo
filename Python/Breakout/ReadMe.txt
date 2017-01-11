@@ -1,0 +1,1 @@
+This is soley based on TKinter and therefore simply play the game with python installed in your computer.

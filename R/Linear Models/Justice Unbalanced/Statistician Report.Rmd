@@ -1,0 +1,593 @@
+---
+title: "Report-Statistican Report"
+author: "Zuojun Gong"
+date: "December 16, 2016"
+output: pdf_document
+---
+```{r, include=FALSE}
+library(knitr) # We need the knitr package to set chunk options
+library(ggplot2)
+library(car)
+library(pander)
+library(arm)
+
+# Set default knitr options for knitting code into the report:
+opts_chunk$set(echo=TRUE,  # change to FALSE to keep code out of the knitted document
+               cache=TRUE, # do not re-run code that has already been run
+               autodep=TRUE, # assure that caching dependencies are updated correctly
+               cache.comments=FALSE, # do not re-run a chunk if only comments are changed
+               message=TRUE, # change to FALSE to keep messages out of the knitted document
+               warning=TRUE  # change to FALSE to keep warnings out of the knitted document
+               )
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+
+```
+
+```{r}
+# Read in the data file
+init.data = read.csv("damages.csv")
+```
+
+##### Analysis Goal:
+
+The relationship between the total damages and the amount of damages demanded by the plaintiff
+
+The group hypothesizes that the following ar predictive of a higher probability that damages are awarded, of a higher amount:
+  a. A more recent trail
+  b. Defendent is a corporation
+  c. Increased number of plaintiffs
+  d. Interaction between bodily injury, total damages, and amount demanded
+
+##### Data
+Our Data Set contains the following Variables:
+TOTDAM: Total amount of damages awarded to plaintiff
+
+DEMANDED: total amount of damages requested from the court by plaintiff (in $)
+
+TRIDAYS: how many days the trial lasted
+
+BODINJ: whether or not a bodily injury was part of the claim (1 - Yes; 0 - No)
+
+DECORP: whether or not the defendant was a corporation (1 - Yes; 0 - No)
+
+DEGOVT: whether or not the defendant was the government (1 - Yes; 0 - No)
+
+YEAR: year the civil lawsuit was filed - categorized as follows:
+       1: pre-1997; 2: 1997; 3: 1998; 4: 1999; 5: 2000; 6: 2001
+       
+CLAIMTYPE: type of claim the plaintiff made
+       1: motor vehicle; 2: premises liability; 3: malpractice; 4: fraud; 5: rental/lease ; 6: other
+       
+TOTALNOPL: total number of plaintiffs - categorized as follows:
+       1: if one plaintiff ; 2: if two plaintiffs ; 3: if >= 3 plaintiffs
+       
+TOTALNODE: total number of defendants - categorized as follows:
+       1: if one defendant; 2: if two defendants; 3: if >=  3 defendants
+
+
+# EDA
+##### Univariate
+```{r, fig.height=4, fig.width=9}
+# kable(summary(init.data))
+
+# Plot EDA for the entire dataset
+par(mfrow = c(1,4))
+hist(init.data$TOTDAM, main = "Total Damange")
+hist(init.data$DEMANDED, main = "Damage Demanded")
+hist(init.data$TRIDAYS, main = "Trial Days")
+hist(init.data$YEAR, main = "Year", breaks = 6)
+
+par(mfrow = c(1,3))
+barplot(table(init.data$DECORP), main = "Is Coporation")
+barplot(table(init.data$DEGOVT), main = "Is Government")
+barplot(table(init.data$TOTALNODE), main = "Total Number of Defendant")
+
+par(mfrow = c(1,3))
+barplot(table(init.data$BODINJ), main = "Bodily Injury")
+barplot(table(init.data$YEAR), main = "Type of Claim")
+barplot(table(init.data$TOTALNOPL), main = "Total Number of Plaintiff")
+
+# Compute Precentages
+# table(init.data$DEGOVT) / sum(table(init.data$DEGOVT))
+```
+
+From initial look at the general statistics of the data, it appears that total damage rewarded, damage demanded, and Trial days are very right skewed. This is potentially caused by two issues: Some of the cases had were rewarded with zero award (661), and there are significant outliers in all three variables.
+
+In terms of the type of defendants, it appears that approximately half of them are corporations, and only 5% of the cases involves government as defendants. About 55.5% of the cases involved one defendant. 
+
+When it comes to year when the law suit is filed, it appears to be normally distributed with a left skew and a right cutoff, possibly caused by data collection (fewer cases in the most recent year collected). We want to look into the possible relationship between year and response variables to see if regrouping is a possibility. Around 42% of the plaintiffs received have bodily injury as part of the claim, and we can see that 78.5% of the cases had only one plaintiff.
+
+
+##### Basic Mutivariate
+```{r, fig.height=4, fig.width=9}
+par(mfrow = c(1,2 ))
+plot(init.data$DEMANDED, init.data$TOTDAM, xlab = "Demanded", ylab = "Total", main = "Total Damage vs Demanded",
+     pch = 16, cex = 0.8)
+abline(lm(init.data$TOTDAM ~ init.data$DEMANDED), col = 2 )
+
+plot(init.data$TRIDAYS, init.data$TOTDAM, xlab = "Trial Days", ylab = "Total", main = "Total Damage vs Trial Days",
+     pch = 16, cex = 0.8)
+abline(lm(init.data$TOTDAM ~ init.data$TRIDAYS), col = 2 )
+```
+
+```{r, results= 'hide'}
+init.data[which(init.data$TOTDAM > 1e+06),]
+init.data[which(init.data$TOTDAM > 1e+06),]
+
+init.data.subset <- init.data[which(init.data$TOTDAM < 1e+06 &
+                                      init.data$DEMANDED < 1e+06),]
+```
+
+We can see that there are several cases with very high demanded and awarded values that departs significantly from the rest of the data. Upon examining the cases, we do not have sufficient to rule them as outliers just yet. We do observe that there are higher portion of these cases have corporates as defendants. Nonetheless, we will keep them during modeling, but exclude them for now to have a better understanding of visually of the relationships between our variables.
+
+```{r, fig.height=4, fig.width=9}
+par(mfrow = c(1,2))
+plot(init.data.subset$DEMANDED, init.data.subset$TOTDAM, xlab = "Demanded", ylab = "Total", main = "Total Damage vs Demanded",
+     pch = 16, cex = 0.8)
+abline(lm(init.data.subset$TOTDAM ~ init.data.subset$DEMANDED), col = 2 )
+
+plot(init.data.subset$TRIDAYS, init.data.subset$TOTDAM, xlab = "Trial Days", ylab = "Total", main = "Total Damage vs Trial Days",
+     pch = 16, cex = 0.8)
+abline(lm(init.data.subset$TOTDAM ~ init.data.subset$TRIDAYS), col = 2 )
+```
+
+With the subset of data that contains all claims awards under $100K, we can see that there is a positive correlation between the amount demanded by the plaintiff and the amount awarded. There also appear to be a positive correlation between damage awarded and the trial days.
+
+Of all the cases in our dataset, 36% did not award plaintiff with any damages, and therefore we will treat them separately. We will construct two datasets with different response variables: whether the plaintiff is awarded with damage, and if so, how much is the plaintiff awarded. Then we want to fit regression models separately to evaluate the relationship between the two response variables and the other covariates.
+
+```{r}
+# Create dummy variable of whether the defendant is awarded with damages
+df.isaward = init.data
+df.isaward[, "is.Awarded"] = ifelse(df.isaward$TOTDAM > 0, 1, 0)
+
+# Subset of the origional data that contails only 
+# cases that are awareded with damages
+df.awardsize = init.data[which(init.data$TOTDAM > 0), ]
+```
+
+
+#### Binary Award Dataset Mutivariate
+
+```{r, fig.height=4, fig.width=9}
+df.isaward.sub <- df.isaward[which(df.isaward$TOTDAM < 1e+06 &
+                                      df.isaward$DEMANDED < 1e+06),]
+
+## Continuous
+# Demanded vs Awarded
+par(mfrow = c(1,2))
+boxplot(df.isaward.sub$DEMANDED ~ df.isaward.sub$is.Awarded, 
+        main = "Demanded vs Is Awarded")
+# Trial Days vs Awarded
+boxplot(df.isaward.sub$TRIDAYS ~ df.isaward.sub$is.Awarded, 
+        main = "Trial Days vs Is Awarded")
+```
+
+First we look at the binary data set with whether the plaintiff received the damage award as the predictor variable, and we want to see the relationship between the amount of damage demanded and the number of days the trial lasted to whether the case was awarded. Here we only selected the sub set with award under 500K to help us visualize the majority of the cases better on grpah. We can see that there does not appear to be a relationship between Demand and is.awarded or Trial Days and is.awarded. Their median appears to be similiar for both variables.
+
+```{r}
+## Discrete
+# Body injury
+eda.table  = table(df.isaward$BODINJ, df.isaward$is.Awarded)
+colnames(eda.table) = c("AWard", "NoAward")
+rownames(eda.table) = c("NotInjured", "Injured")
+eda.table
+
+# Crop
+eda.table  = table(df.isaward$DECORP, df.isaward$is.Awarded)
+colnames(eda.table) = c("AWard", "NoAward")
+rownames(eda.table) = c("NotCrop", "Crop")
+eda.table
+
+# Govt
+eda.table  = table(df.isaward$DEGOVT, df.isaward$is.Awarded)
+colnames(eda.table) = c("AWard", "NoAward")
+rownames(eda.table) = c("NotGov", "Gov")
+eda.table
+
+# Year
+eda.table  = table(df.isaward$YEAR, df.isaward$is.Awarded)
+colnames(eda.table) = c("AWard", "NoAward")
+eda.table
+
+# Claim Type
+eda.table  = table(df.isaward$CLAIMTYPE, df.isaward$is.Awarded)
+colnames(eda.table) = c("AWard", "NoAward")
+eda.table
+
+# Plaintiff
+eda.table  = table(df.isaward$TOTALNOPL, df.isaward$is.Awarded)
+colnames(eda.table) = c("AWard", "NoAward")
+eda.table
+
+# Defendant
+eda.table  = table(df.isaward$TOTALNODE, df.isaward$is.Awarded)
+colnames(eda.table) = c("AWard", "NoAward")
+eda.table
+
+# Dispaly the precentage of sum of row
+# So the precentage in each category that is 
+# awarded vs not awarded
+# round(eda.table / rowSums(eda.table), 2)
+```
+
+Now we examine the discrete variables and their relationship with the response variable. In terms of whether the case involves a bodily injury, only 29% of the non-injured plaintiffs were awarded damage whereas 46% of the injured plaintiffs were awarded. This difference is unlikely caused by the sample size as the awarded portion is roughly equal and large. When the defendant was a corporation, 32% of the cases were awarded with damages, but this number is 40% in non-corporation defendants. In terms of year, it appears that in the recent years, the portion of cases that were awarded with damage shrieked. 1999-2001 had similar rates while prior to 1999 the rates were higher. This suggests that we could possibly regroup Year during modeling. In terms of the relationship with number of plaintiffs, our result suggests that portion of cases that received damages was the smallest when there's three or more plaintiffs.
+
+```{r, fig.height=4, fig.width=9}
+# Interaction between bodily injury, total damages, and amount demanded
+# is.award vs amount demanded by bodily injury
+par(mfrow = c(1,2))
+boxplot(df.isaward.sub$DEMANDED ~ df.isaward.sub$is.Awarded, 
+        subset = df.isaward.sub$BODINJ == 0,
+        main = "Demanded vs Is Awarded: No Injury")
+
+boxplot(df.isaward.sub$DEMANDED ~ df.isaward.sub$is.Awarded, 
+        subset = df.isaward.sub$BODINJ == 1,
+        main = "Demanded vs Is Awarded: Injury")
+```
+
+From the plots of demand vs awarded by whether the case involves bodily injury, we do not see an interaction between injury and demand with regard to whether the case was awarded with damage. Both boxes appeared to be similar.
+
+
+#### Award Size Dataset Mutivariate
+
+```{r, fig.height=4, fig.width=9}
+df.awardsize.sub <- df.awardsize[which(df.awardsize$TOTDAM < 1e+06 &
+                                      df.awardsize$DEMANDED < 1e+06),]
+
+## Continuous
+# Demanded vs Awarded
+par(mfrow = c(1,3))
+plot(df.awardsize.sub$DEMANDED, df.awardsize.sub$TOTDAM, 
+        main = "Demanded vs Is Awarded", pch = 16, cex = 0.7,
+     xlab = "demanded", ylab = "Awarded")
+abline(lm(TOTDAM ~ DEMANDED, data = df.awardsize.sub), col = 2)
+# Trial Days vs Awarded
+plot(df.awardsize.sub$TRIDAYS, df.awardsize.sub$TOTDAM, 
+        main = "Trial Days vs Is Awarded", pch = 16, cex = 0.7,
+     xlab = "demanded", ylab = "Awarded")
+abline(lm(TOTDAM ~ TRIDAYS, data = df.awardsize.sub), col = 2)
+# Year
+boxplot(df.awardsize.sub$DEMANDED ~ df.awardsize.sub$YEAR, 
+        main = "Year vs Total Awarded", ylab = "Total Awarded",
+     xlab = "demanded", ylab = "Awarded")
+```
+
+In the dataset where we analyze the relationship between the covariates and the amount of damage that the plaintiffs were awarded (that is not zero). We can easily see positive relationship between money demanded and money awarded, and the same applies to the trial days’ vs awarded case. In terms of year, we see a similar distribution when comparing to the binary dataset. It appears that the years leading up to 1999 shared more common ground than the cases before that, which were often award the plaintiff with larger amounts.
+
+
+```{r, fig.height=6, fig.width=9}
+## Discrete
+par(mfrow = c(2,3))
+# Injury
+boxplot(df.awardsize.sub$DEMANDED ~ df.awardsize.sub$BODINJ, 
+        main = "Injury", ylab = "Total Awarded")
+# Corp
+boxplot(df.awardsize.sub$DEMANDED ~ df.awardsize.sub$DECORP, 
+        main = "Corp", ylab = "Total Awarded")
+
+# Govt
+boxplot(df.awardsize.sub$DEMANDED ~ df.awardsize.sub$DEGOVT, 
+        main = "Govt", ylab = "Total Awarded")
+
+# Claim Type
+boxplot(df.awardsize.sub$DEMANDED ~ df.awardsize.sub$CLAIMTYPE, 
+        main = "Claim Type", ylab = "Total Awarded")
+
+# Plaintiffs
+boxplot(df.awardsize.sub$DEMANDED ~ df.awardsize.sub$TOTALNOPL, 
+        main = "No. Plaintiff", ylab = "Total Awarded")
+
+# Defendant
+boxplot(df.awardsize.sub$DEMANDED ~ df.awardsize.sub$TOTALNODE, 
+        main = "No. Defendant", ylab = "Total Awarded")
+```
+
+The plot suggested that if the defendant is a corporation, it pays more in damages on average than non-corporation defendants. In terms of claims type, the claims involving malpractice and premises liability are the more likely to receive a higher reward. The number of defendants appears to be positively associated with the total amount of damages awarded, and the number of plaintiff appears to be the highest amongst all other categories, but the difference is not very significant.
+
+
+```{r}
+# interaction
+par(mfrow = c(1,1))
+with(df.awardsize.sub[df.awardsize.sub$BODINJ == 0, ], 
+     plot(DEMANDED, TOTDAM, main = "Demanded vs Is Awarded", pch = 16, cex = 0.7))
+with(df.awardsize.sub[df.awardsize.sub$BODINJ == 0, ], 
+     abline(lm(TOTDAM ~ DEMANDED), col = 1))
+with(df.awardsize.sub[df.awardsize.sub$BODINJ == 1, ], 
+     points(DEMANDED, TOTDAM, pch = 16, cex = 0.7, col = 2),
+     abline(lm(TOTDAM ~ DEMANDED), col = 2))
+with(df.awardsize.sub[df.awardsize.sub$BODINJ == 1, ], 
+     abline(lm(TOTDAM ~ DEMANDED), col = 2))
+```
+
+The red dots in the scatter plot above shows the plot of total amount awarded vs the total amount demanded, colored by the value of whether there was a bodily injury involved in the case (if so, colored in red). Then we fit two regression models in our plot, and it appears that there is an interaction between demanded, effects and the total damage since their temporary regression lines intercepts.
+
+\newpage
+
+# Initial Modeling
+
+#### Binary Award Logistic Model
+```{r}
+glm.1 <- glm(is.Awarded ~  TRIDAYS + factor(DECORP) + factor(DEGOVT) + factor(YEAR) +
+               factor(CLAIMTYPE) + factor(TOTALNOPL) + factor(TOTALNODE) + factor(BODINJ)*DEMANDED, data = df.isaward, family = "binomial")
+pander(summary(glm.1))
+```
+
+Our initial logistic regression model for predicitng whether a case will be awarded with damages is modeled as:
+
+$logit(is.Awarded)$ = $\beta_{0}$ + $\beta_{1}$ * $TRIDAYS$ + $\beta_{2}$ * $DECORP$ + $\beta_{3}$ * $DEGOVT$ + $\beta_{4}$ * $YEAR$ + $\beta_{5}$ * $CLAIMTYPE$ + $\beta_{6}$ * $TOTALNOPL$ + $\beta_{7}$ * $TOTALNODE$ + $\beta_{8}$ * $BODINJ$ + $\beta_{9}$ * $DEMANDED$ + $\beta_{10}$ * $DEMANDED$:$BODINJ$ 
+
+The summary of our model suggest that parameters: Trial days, whether the defendant is the government, claim type premises liability, malpractice, fraud, and others, if there are at least three defendants, if there are two plaintiffs, whether the case involves injury, and damage demanded by the plaintiff are statistically significant. However, we are faced with the issue that the year category being not significant, and having several categories (recent years) having similar coefficients. This points towards what we have seen earlier in the EDA, and we may categorize the year in our modeling to improve fitness. Also, we know that the DEMAND variable is not normally distributed, and it contains large values that are potential leverage points. Therefore, we will see if transformation on that model improves the goodness of fit. 
+
+From the parameters of the initial logistic model, we can see that neither of the variable of interest is statistically significant. However, we cannot make inference from this model without doing diagnostics to check model assumption and fitness.
+
+```{r}
+df.isaward$YEAR.recat = ifelse(df.isaward$YEAR >= 4, 1, 0)
+glm.1.a <- glm(is.Awarded ~  TRIDAYS + factor(DECORP) + factor(DEGOVT) + factor(YEAR.recat) +
+               factor(CLAIMTYPE) + factor(TOTALNOPL) + factor(TOTALNODE) + factor(BODINJ)*DEMANDED, data = df.isaward, family = "binomial")
+pander(summary(glm.1.a))
+
+# df.isaward$YEAR.recat = ifelse(df.isaward$YEAR >= 5, 1, 0)
+# glm.1.b <- glm(is.Awarded ~  TRIDAYS + factor(DECORP) + factor(DEGOVT) + factor(YEAR.recat) +
+#                factor(CLAIMTYPE) + factor(TOTALNOPL) + factor(TOTALNODE) + factor(BODINJ)*DEMANDED, data = df.isaward, family = "binomial")
+# pander(summary(glm.1.b))
+```
+
+We attempted to re-categorize year into several ways, but when we put year pre-1997 - 1998 into one category, and year 1999-2001 into the other, it improves our model fitness (decreases AIC) and the new parameter is statistically significant. Therefore, we will continue with the re-categorizing of year in the logistic model.
+
+#### Award Size Linear Model
+```{r}
+lm.1 <- lm(TOTDAM ~ TRIDAYS + factor(DECORP) + factor(DEGOVT) + factor(YEAR) +
+               factor(CLAIMTYPE) + factor(TOTALNOPL) + factor(TOTALNODE) + factor(BODINJ)*DEMANDED, data = df.awardsize)
+pander(summary(lm.1))
+# summary(lm.1)
+# mmps(lm.1)
+```
+
+
+Our initial linear regression model for predicting the amount that the plaintiff would be awarded in damages is modeled as:
+
+$TOTDAM$ = $\beta_{0}$ + $\beta_{1}$ * $TRIDAYS$ + $\beta_{2}$ * $DECORP$ + $\beta_{3}$ * $DEGOVT$ + $\beta_{4}$ * $YEAR$ + $\beta_{5}$ * $CLAIMTYPE$ + $\beta_{6}$ * $TOTALNOPL$ + $\beta_{7}$ * $TOTALNODE$ + $\beta_{8}$ * $BODINJ$ + $\beta_{9}$ * $DEMANDED$ + $\beta_{10}$ * $DEMANDED$:$BODINJ$
+
+From our model summary, we can see that the trial days, all the factors in year, claim type fraud and other, and the interaction term between whether the case involves injury and the amount demanded are significant parameters. Nonetheless, while this model provides us with some insights on the relationship between the predictor variables and co-variates, we cannot make any formal inference without diagnostics. We should take note that the DEMANDED and TOTDAM contain influential possible leverage points, and transformation on these variables could improve our model fitness.
+
+
+```{r}
+df.awardsize$YEAR.recat = ifelse(df.awardsize$YEAR >= 4, 1, 0)
+lm.1.a <- lm(TOTDAM ~ TRIDAYS + factor(DECORP) + factor(DEGOVT) + factor(YEAR) +
+               factor(CLAIMTYPE) + factor(TOTALNOPL) + factor(TOTALNODE) + factor(BODINJ)*DEMANDED, data = df.awardsize)
+# pander(summary(lm.1.a))
+```
+
+When re-categorizing year in this model, we fail to see improvment regardless of the cutoff of year, therefore we will continue to use year in our model as the factor of the origional categories.
+
+\newpage
+
+# Model Diagnostics and Transformation
+
+#### Binary Award Logistic Model
+```{r, fig.height= 5, fig.width= 9}
+mmps(glm.1.a)
+```
+
+
+```{r, fig.height= 4, fig.width= 9}
+par(mfrow = c(1,2))
+binnedplot(fitted(glm.1.a), resid(glm.1.a))
+plot(glm.1.a, which = 5)
+```
+
+Our marginal model plot shows general good fit of our logistic model, but our residual vs leverage plot points out that there are several potential outliers: Case 266, 965, and 1153. All three cases demanded more than 50 million dollars in compensation, but we do not have enough information to rule these points as outliers. Since the are very far apart from the rest of the data, we will see if log transformation on this variable will improve the goodness of fit.
+
+```{r, fig.height= 5, fig.width= 9}
+df.isaward$log.DEMANDED = log(df.isaward$DEMANDED)
+glm.2 <- glm(is.Awarded ~  TRIDAYS + factor(DECORP) + factor(DEGOVT) + factor(YEAR.recat) +
+               factor(CLAIMTYPE) + factor(TOTALNOPL) + factor(TOTALNODE) + factor(BODINJ)*log.DEMANDED, data = df.isaward, family = "binomial")
+# pander(summary(glm.2))
+
+mmps(glm.2)
+```
+
+
+```{r, fig.height= 4, fig.width= 9}
+par(mfrow = c(1,2))
+binnedplot(fitted(glm.2), resid(glm.2))
+plot(glm.2, which = 5)
+```
+
+Our log transformation has failed to significantly improve our model fitness. The AIC value increased while the binned residual plot appears to show little improvement. The previous leverage points are no longer an issue, but the transformation created new leverage points with high standardized residual. Therefore, we will not move forward with this transformation. 
+
+```{r, fig.height= 5, fig.width= 9}
+df.isaward$log.TRIDAYS = log(df.isaward$TRIDAYS)
+glm.2 <- glm(is.Awarded ~  log.TRIDAYS + factor(DECORP) + factor(DEGOVT) + factor(YEAR.recat) +
+               factor(CLAIMTYPE) + factor(TOTALNOPL) + factor(TOTALNODE) + factor(BODINJ)*log.DEMANDED, data = df.isaward, family = "binomial")
+# pander(summary(glm.2))
+
+mmps(glm.2)
+```
+
+
+```{r, fig.height= 4, fig.width= 9}
+par(mfrow = c(1,2))
+binnedplot(fitted(glm.2), resid(glm.2))
+plot(glm.2, which = 5)
+```
+
+When transforming both TRIDAYS and DEMANDED with log, our binned residual plot showed slight improvement in terms of being contained within the confidence band, and our residual vs leverage point appears to have smaller leverage. However, our marginal models plot suggested that this model is a poor fit on the data, and our AIC also increased. Thus we will not go with this transformation.
+
+```{r, fig.height= 5, fig.width= 9}
+glm.2 <- glm(is.Awarded ~  TRIDAYS + factor(DECORP) + factor(DEGOVT) + factor(YEAR.recat) +
+               factor(CLAIMTYPE) + factor(TOTALNOPL) + factor(TOTALNODE) + factor(BODINJ) + DEMANDED, data = df.isaward, family = "binomial")
+# summary(glm.2)
+# pander(summary(glm.2))
+
+mmps(glm.2)
+```
+
+
+```{r, fig.height= 4, fig.width= 9}
+par(mfrow = c(1,2))
+binnedplot(fitted(glm.2), resid(glm.2))
+plot(glm.2, which = 5)
+```
+
+We then want to check if the interaction term between injury and damage demanded can be dropped to improve model fitness. Our AIC shows no improvement (marginal difference in value, not significant enough to claim model improvement). Our residual plots also did not show improvement from our previous model. Thus we will keep the interaction term in our model.
+
+After multiple attempts, we decide to stick with our original model for predicting whether a case will be awarded with damage:
+
+$logit(is.Awarded)$ = $\beta_{0}$ + $\beta_{1}$ * $TRIDAYS$ + $\beta_{2}$ * $DECORP$ + $\beta_{3}$ * $DEGOVT$ + $\beta_{4}$ * $YEAR.recat$ + $\beta_{5}$ * $CLAIMTYPE$ + $\beta_{6}$ * $TOTALNOPL$ + $\beta_{7}$ * $TOTALNODE$ + $\beta_{8}$ * $BODINJ$ + $\beta_{9}$ * $DEMANDED$ + $\beta_{10}$ * $DEMANDED$:$BODINJ$
+
+
+#### Award Size Linear Model
+
+```{r, fig.height= 3, fig.width= 10}
+par(mfrow = c(1,4))
+plot(lm.1)
+```
+
+From our diagnostic plot for the linear model, we can see form the scale location plot that the constant variance assumption is violated here. We also do not see zero expectation or residual independence, as the residuals appears to be correlated in the residuals vs fitted plot. Our normality assumption is mostly met, but the plot suggested that there are several potential outliers. We can see that point 266, 207, 1013 are potential outliers with high leverage, but we do not have enough information to rule them as outliers.
+
+```{r}
+av.plots(lm.1)
+mmps(lm.1)
+```
+
+From the added variable plot we can see that the interaction term with DEMANDED appears to have very clustered residuals, and the marginal model plotting also suggests that our model is not an approiate fit. Therefore, we want to see if log transformation on the continuious variables would improve our model.
+
+
+```{r, fig.height= 3, fig.width= 10}
+lm.2.1 <- lm(log(TOTDAM) ~ TRIDAYS + factor(DECORP) + factor(DEGOVT) + factor(YEAR) +
+               factor(CLAIMTYPE) + factor(TOTALNOPL) + factor(TOTALNODE) + factor(BODINJ)*log(DEMANDED), data = df.awardsize)
+# summary(lm.2)
+par(mfrow = c(1,4))
+plot(lm.2.1)
+```
+
+```{r}
+av.plots(lm.2.1)
+mmps(lm.2.1)
+```
+
+After using both log transformation on TOTDAM and DEMANED, we see significant improvement in our residual plots. Our variance has stabilized and the residuals appears to be more evenly spread along both sides of the zero line. The residual also appears to be independent. However, the normal QQ plot has improved, but still contains a left tail with several potential outliers (744, 309, 499). Our residual vs Leverage plot has resolved the potential outlier with high leverage form the previous model. We now have some new potential outliers: 1041, 922, 449. However, with the limited information we cannot rule them out from the model.
+
+Our Added Variable plots and marginal model plots have also shown significnat improvement, but it suggests that a transformation on TRIDAYS can help improve our model fitness as well. Before doing that, we just want to experiment with only log transforming one variable.
+
+```{r, fig.height= 3, fig.width= 10}
+# log transform only response
+lm.2.2 <- lm(log(TOTDAM) ~ TRIDAYS + factor(DECORP) + factor(DEGOVT) + factor(YEAR) +
+               factor(CLAIMTYPE) + factor(TOTALNOPL) + factor(TOTALNODE) + factor(BODINJ)*DEMANDED, data = df.awardsize)
+# summary(lm.2)
+par(mfrow = c(1,4))
+plot(lm.2.2)
+```
+
+```{r}
+av.plots(lm.2.2)
+mmps(lm.2.2)
+```
+
+```{r, fig.height= 3, fig.width= 10}
+# Log transform only Demanded
+lm.2.3 <- lm(TOTDAM ~ TRIDAYS + factor(DECORP) + factor(DEGOVT) + factor(YEAR) +
+               factor(CLAIMTYPE) + factor(TOTALNOPL) + factor(TOTALNODE) + factor(BODINJ)*log(DEMANDED), data = df.awardsize)
+# summary(lm.2)
+par(mfrow = c(1,4))
+plot(lm.2.3)
+```
+
+```{r}
+av.plots(lm.2.3)
+mmps(lm.2.3)
+```
+
+As we can observe from the plots above, our model with transformation on only one of the variables (DEMANDED, TOTDAM) does not improve our model fitness. The residual assumptions are not satisfying and the marginal model plots are suggesting poor fit. 
+
+Next, we will use the model that transforms both TOTDAM and DEMANDED, and transform TRIDAYS to see if the model fitness improves.
+
+```{r, fig.height= 3, fig.width= 10}
+# Log transform only Demanded
+lm.2.4 <- lm(log(TOTDAM) ~ log(TRIDAYS) + factor(DECORP) + factor(DEGOVT) + factor(YEAR) +
+               factor(CLAIMTYPE) + factor(TOTALNOPL) + factor(TOTALNODE) + factor(BODINJ)*log(DEMANDED), data = df.awardsize)
+# summary(lm.2.4)
+par(mfrow = c(1,4))
+plot(lm.2.4)
+```
+
+```{r}
+av.plots(lm.2.4)
+mmps(lm.2.4)
+```
+
+Log transformation on TRIDAYS seems to stabilize the variance further from the previous model, and we do not observe any fitness issues in the marginal model and added variable plots. The fitness on the TRIDAYS improved with the transformation. Therefore, this is the best full model that includes the interaction term. But before we proceed to model inference, we want to see if the interaction term is necessary.
+
+```{r, fig.height= 3, fig.width= 10}
+# Log transform only Demanded
+lm.2.5 <- lm(log(TOTDAM) ~ log(TRIDAYS) + factor(DECORP) + factor(DEGOVT) + factor(YEAR) +
+               factor(CLAIMTYPE) + factor(TOTALNOPL) + factor(TOTALNODE) + factor(BODINJ) + log(DEMANDED), data = df.awardsize)
+# summary(lm.2.4)
+par(mfrow = c(1,4))
+plot(lm.2.5)
+```
+
+```{r}
+av.plots(lm.2.5)
+mmps(lm.2.5)
+cr.plots(lm.2.5)
+```
+
+When we removed the interaction term, our residual plots appear to be similar. The assumptions of constant variance, normality, zero expectation and independence is mostly met. Our added variable plot, marginal model plot and C-R plots does not show anything alarming. We then will use partial F-test to determine whether the interaction term is needed in the model.
+
+```{r}
+kable(anova(lm.2.1, lm.2.5, test="F"),caption = "Partial F-test")
+```
+
+From the partial F-test, we can see that with the small P-value, we favor the full model over the reduced. Therefore, we will keep the interaction term in our final model whose predictive value is the size of damage received by the plaintiff.
+
+$log(TOTDAM)$ = $\beta_{0}$ + $\beta_{1}$ * $log(TRIDAYS)$ + $\beta_{2}$ * $DECORP$ + $\beta_{3}$ * $DEGOVT$ + $\beta_{4}$ * $YEAR$ + $\beta_{5}$ * $CLAIMTYPE$ + $\beta_{6}$ * $TOTALNOPL$ + $\beta_{7}$ * $TOTALNODE$ + $\beta_{8}$ * $BODINJ$ + $\beta_{9}$ * $log(DEMANDED)$ + $\beta_{10}$ * $log(DEMANDED)$:$BODINJ$
+
+\newpage
+
+# Model Inference
+
+#### Binary Award Logistic Model
+Our final model is:
+$logit(is.Awarded)$ = $\beta_{0}$ + $\beta_{1}$ * $TRIDAYS$ + $\beta_{2}$ * $DECORP$ + $\beta_{3}$ * $DEGOVT$ + $\beta_{4}$ * $YEAR.recat$ + $\beta_{5}$ * $CLAIMTYPE$ + $\beta_{6}$ * $TOTALNOPL$ + $\beta_{7}$ * $TOTALNODE$ + $\beta_{8}$ * $BODINJ$ + $\beta_{9}$ * $DEMANDED$ + $\beta_{10}$ * $DEMANDED$:$BODINJ$
+
+```{r}
+pander(summary(glm.1.a))
+
+glm.result = cbind(round(exp(glm.1.a$coefficients),3), 
+                   round(exp(confint(glm.1.a)),3),
+                   ifelse(round(summary(glm.1.a)$coeff[,4],3) == 0,
+                          "<0.001", round(summary(glm.1.a)$coeff[,4],3)))
+colnames(glm.result) = c("AOR", "CI lb", " CI ub %", "Pval")
+rownames(glm.result) = c("Intercept", "Trial Days", "Is.Corporate", "Is.Gov't", "Is.after.1999",
+                         "premises liability claims", "malpractice claims", "fraud claims", 
+                         "rental claims", "other claims", "Two Plaintiffs", "Three or more Plaintiffs",
+                         "Two Defendant", "Three or more Defendants", "Injury Claims",
+                         "Damage Demanded", "Injury:Demanded")
+pander(glm.result)
+```
+
+We can interpret the final result in terms of adjusted odds ratio. To answer our research questions, we first look at relationship between the odds of being awarded damage and whether the defendant is corporation. In this model, we did not have enough evidence to suggest that the odds were any different when defendant is a corporation. We concluded that the relationship between the odds of being awarded damage and the amount of damage requested was not statistically significant. We did not have enough evidence to conclude that the relationship between the odds of being awarded damage and the amount demanded could be altered by whether the case involves bodily injuries. In cases with three or more plaintiffs, however, were associated with higher odds on average of being awarded damage (AOR = 1.982). Contrary to what we see in the EDA, our model suggested that between 1999 - 2001, the odds of a plaintiff being awarded damage was higher when compared to the cases before 1999 (AOR = 1.385). Note that when the defendant is the government, the odds of the plaintiff receiving any damage was decreased when comparing to the cases where the defendant is not the government (AOR = 0.546). Of all the claim types, motor vehicle cases had the highest odds of awarding damage to plaintiff because the AOR of all other claim types are less than 1, and claims of malpractice has the lowest odds for damage award (AOR = 0.254).
+
+
+```{r}
+lm.result = cbind(round((lm.2.4$coefficients),3), 
+                   round((confint(lm.2.4)),3),
+                  ifelse(round(summary(lm.2.4)$coeff[,4],3) == 0,
+                          "<0.001", round(summary(lm.2.4)$coeff[,4],3)))
+rownames(lm.result) = c("Intercept", "log(Trial Days)", "Is.Corporate", "Is.Gov't",
+                        "1997","1998","1999","2000","2001",
+                         "premises liability claims", "malpractice claims", "fraud claims", 
+                         "rental claims", "other claims", "Two Plaintiffs", "Three or more Plaintiffs",
+                         "Two Defendant", "Three or more Defendants", "Injury Claims",
+                         "log(Damage Demanded)", "Injury:log(Demanded)")
+colnames(lm.result) = c("AOR", "CI lb", " CI ub %", "Pval")
+pander(lm.result)
+```
+
+This model was built on cases that were awarded damage. Because our linear model was built with the log-transformed amount of damages awarded and requested, we could interpret the coefficients in terms of ratio. An increase in 1% of demanded damage from the plaintiffs were, on average, associated with an 0.68% increase in awarded damages when no bodily injures were involved in the case. However, the same 1% increase in demanded damage in cases with bodily injury claims were on average only associated with 0.49% in awarded damage. Nevertheless, cases with bodily injury claims on average were awarded 5.33 times amount in damage than the cases without such claims, holding all other variables constant. We did not have enough evidence to suggest that there was a relationship between the amount awarded and whether the case occurred in recent years. We also conclude that the relationship between the awarded damage amount and whether the defendant was a corporation was statistically insignificant. Additionally, our model did not have evidence that there was a relationship between the number of plaintiffs and the amount of damage awarded. Note that an increase in 1% of trial length was on average associated with an 0.425% increase in money awarded, and that all the other claim types other than motor vehicle claims received less in damage award.
+
+Therefore, to address our initial hypothesis, we concluded that a more recent trail and cases with three or more plaintiffs are predictive of a higher probability that damages were awarded. We did not have enough evidence to support that the relationship exists with the other variables that we have proposed. 
+
+In terms of the amount awarded, we concluded that there existed a relationship between the damage requested and the damage awarded, and whether the case involved a bodily injury claim alters this relationship. For cases with bodily injury claims, the amount demanded had a weaker effect on the total damages. We did not found any statistically significant relationships between the other hypothesized variables and the amount rewarded.

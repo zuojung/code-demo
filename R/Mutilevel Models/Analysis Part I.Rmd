@@ -1,0 +1,372 @@
+---
+title: "Mutilevel Analysis on the Battleship Numberline Study Part I"
+author: "Zuojun Gong"
+date: "November 18, 2016"
+output: pdf_document
+---
+
+```{r, include=FALSE}
+library(knitr) # We need the knitr package to set chunk options
+library(arm)
+library(MASS)
+library(lattice)
+library(ggplot2)
+library(lme4)
+library(foreign)
+
+# Set default knitr options for knitting code into the report:
+opts_chunk$set(echo=FALSE,  # change to FALSE to keep code out of the knitted document
+               cache=TRUE, # do not re-run code that has already been run
+               autodep=TRUE, # assure that caching dependencies are updated correctly
+               cache.comments=FALSE, # do not re-run a chunk if only comments are changed
+               message=FALSE, # change to FALSE to keep messages out of the knitted document
+               warning=FALSE  # change to FALSE to keep warnings out of the knitted document
+               )
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+
+
+# EDA
+```{r}
+# Read into Data
+game.data = read.csv("dec-data.csv")
+
+# Alter Dates
+# Thu Nov 10 17:50:02 2011 UTC
+game.data$currentTrialStartTime = as.POSIXct(game.data$currentTrialStartTime, tz = "UTC", format = "%a %b %d %H:%M:%S %Y")
+
+game.data$currentTrialEndTime = ifelse(game.data$currentTrialEndTime != -1, 
+                                       as.POSIXct(game.data$currentTrialEndTime, tz = "UTC", format = "%a %b %d %H:%M:%S %Y"), NA)
+game.data$currentTrialEndTime = as.POSIXct(game.data$currentTrialEndTime, tz = "UTC", origin="1970-01-01")
+```
+
+There are total of 20 questions of numbers between zero and one, and there are total of 8257 attempts on the questions. We have data from 414 participants in our experiment and they were involved in 15 types of experiments that each contains one or several types of questions. The subjects were given at most 10 seconds the respond to the questions and their accuracy of their solution is judged and they were given the feedback. Additionally, the subjects are able to keep track of their total average accuracy and the number of questions answered right as well. In this experiment, we also track data including whether the guidance is enable, their response time, how well they answered the questions, and the decimal value of their guesses.
+
+```{r}
+# 1. How many questions does each player try?
+# eda.table.1: Count of Players by Question 
+# eda.count.1: Type of Questions that Each Player tried
+eda.table.1 = table(game.data$SID, game.data$currentQuestion)
+eda.count.1 = rowSums((ifelse(eda.table.1 > 0,1,0)))
+
+
+# 2. How are the “experiments” related to questions or to players?
+# eda.table.2: Count of Players by Experiment
+# eda.count.2: Type of Experiment that Each Player had
+eda.table.2 = table(game.data$SID, game.data$experimentName)
+eda.count.2 = rowSums((ifelse(eda.table.2 > 0,1,0)))
+
+# eda.table.2b: Count of Questions by Experiment
+# eda.count.2b: Type of Experiment that Each Question had
+eda.table.2b = table(game.data$currentQuestion, game.data$experimentName)
+eda.count.2b = rowSums((ifelse(eda.table.2b > 0,1,0)))
+
+# eda.table.2c: Count of Experiment by Questions
+# eda.count.2c: Type of Questions that Each Experiment had
+eda.table.2c = table(game.data$experimentName, game.data$currentQuestion)
+eda.count.2c = rowSums((ifelse(eda.table.2c > 0,1,0)))
+
+# 3. How are players related to ip numbers or partial ip numbers?
+# eda.table.3: Count of Player by IP Address
+# eda.count.3: IP Address that Each Player had
+eda.table.3 = table(game.data$SID, game.data$ip)
+eda.count.3 = rowSums((ifelse(eda.table.3 > 0,1,0)))
+# hist(eda.count.3,breaks = 10, main = "IP Address by Players",
+#      xlab = "IP Address per Player")
+
+# eda.table.3b: Count of Player by IP2 Address
+# eda.count.3b: IP2 Address that Each Player had
+eda.table.3b = table(game.data$SID, game.data$ip2)
+eda.count.3b = rowSums((ifelse(eda.table.3b > 0,1,0)))
+# hist(eda.count.3b,breaks = 10, main = "IP2 Address by Players",
+#      xlab = "IP2 Address per Player")
+
+# eda.table.3c: Count of Player by IP3 Address
+# eda.count.3c: IP3 Address that Each Player had
+eda.table.3c = table(game.data$SID, game.data$ip3)
+eda.count.3c = rowSums((ifelse(eda.table.3c > 0,1,0)))
+# hist(eda.count.3b,breaks = 10, main = "IP3 Address by Players",
+#      xlab = "IP3 Address per Player")
+
+
+# 4. What is the distribution of proportion-correct scores for players?
+# One. Try aggergate
+eda.freq.table.4 = aggregate(game.data[,c("SID","resp")], by = list(game.data$SID), FUN = mean)
+eda.freq.4 = eda.freq.table.4[,"resp"]
+
+# 5. What fraction of players get each question right
+eda.table.5 = table(game.data$currentQuestion, game.data$hitType)
+eda.count.5 = eda.table.5[,"Perfect Hit!!"] / rowSums(eda.table.5)
+
+
+## Do not include in report ## 
+eda.data.5b = game.data[which(game.data[,"isGuidesEnabled"] == FALSE),]
+eda.table.5b = table(eda.data.5b$currentQuestion, eda.data.5b$hitType)
+eda.count.5b = eda.table.5b[,"Perfect Hit!!"] / rowSums(eda.table.5b)
+
+
+
+eda.data.5c = game.data[which(game.data[,"isGuidesEnabled"] == TRUE),]
+eda.table.5c = table(eda.data.5c$currentQuestion, eda.data.5c$hitType)
+eda.count.5c = eda.table.5c[,"Perfect Hit!!"] / rowSums(eda.table.5b)
+
+# 6. What is the distribution of reaction times across players? Across questions?
+eda.data.6 = game.data[which(game.data$hitType != "Time Out!!"),]
+eda.data.6 = game.data[which(game.data$reacTime != max(game.data$reacTime)),]
+#hist(game.data[, "reacTime"])
+#hist(eda.data.6[, "reacTime"], main = "Histogram of Reaction Times")
+
+```
+
+
+```{r, ig.width = 9, fig.height = 4,fig.align="center", fig.cap= "Univariate Analysis between the relationship of Questions and Players, Experiments and Players, Experiment and Questions, Porportion Correctness across Players, Question Accuracy and Reaction Times"}
+par(mfrow=c(2,3))
+hist(eda.count.1,breaks = 10, main = "Questions Tried by Players",
+     xlab = "Questions Tried per Player")
+hist(eda.count.2,breaks = 10, main = "Experiments by Players",
+     xlab = "Experiment Tried per Player")
+barplot(eda.count.2b, main = "Experiments by Questions",
+     xlab = "Experiment", col="white")
+
+hist(eda.freq.4,breaks = 20, main = "Proportion-Correct across Players",
+     xlab = "Proportion-Correct Scores")
+barplot(eda.count.5, main = "Question Accuracy",
+     xlab = "Question", ylab = "Accuracy", ylim = c(0,0.6))
+boxplot(reacTime ~ currentQuestion, data = eda.data.6,
+        main = "Reactime by Questions", xlab = "Questions", ylab = "React Time" )
+```
+
+Nearly a third of the players attempted all 20 questions, and the rest of the players tried a relatively smaller amount of questions, with more than a third ranging between one to five questions. We can see that most of the players had only one experiment, and only 7% of the players had more than one type of experiment during the study. All of the experiments included all types of questions. When looking at the relationship between players and their IP address, our results suggest that 373 players used only one IP address to play this game, whereas 383 players have the same partial IP addresses. This suggest that some of the players played the game while using different IP addresses, and therefore we want to decide whether we want to take that into factor and control for the IP address when we model our data. Especially considering we don't know if the change of IP addresses has an impact on player experience and performance.
+
+When we examine the distribution of proportion-correct scores for all the players, we can see that most of the players have a low accuracy in making a correct answer - a perfect hit, since histogram appears to be right skewed. In terms of fraction of the answers that are correct for each of the questions, we can see that it appears to decrease as it approaches to the middle, with the exception of 0.5. Upon examining if guide played a role in the improved accuracy, we determined that it is very unlikely that the guide marks was a factor in high accuracy at 0.5 since the histogram appears to be similar between the total accuracy and the unguided accuracy.
+
+When examining the reaction time across all players, we first remove the case where the reaction time was 46.6 seconds, as it is a leverage point for our graphical analysis. Given the subset of the data, we can see that across the players there is a lot of variation in the reaction time across players, but the variation in the reaction time across questions appears to be very little.
+
+```{r}
+par(mfrow=c(2,2))
+edaSixPlayerReact = function() {
+  players = unique(eda.data.6[,"SID"])
+  players.group = split(players, sample(1:4, length(players), replace = T))
+  for (index in 1:4) {
+    graph.data = eda.data.6[which(eda.data.6[,"SID"] %in% players.group[[index]]),]
+    boxplot(reacTime ~ SID, data = graph.data, xlab = "Questions", ylab = "React Time", pch=16,cex=0.2)
+  }
+}
+
+edaSixPlayerReact()
+```
+
+\newpage
+
+# Logistic regression for question difficulty
+
+```{r, fig.cap= "Binned Residual Plot for Logistic Regression on Question Diffculity"}
+# Fit model
+logit.correct.1 = glm(resp ~ factor(currentQuestion) + 0, data = game.data, family = "binomial")
+
+# Measure goodness of fit
+par(mfrow = c(1,1))
+binnedplot(predict(logit.correct.1),resid(logit.correct.1))
+
+```
+
+First, we fit a logistic regression model giving the probability that a question will be answered correctly, using the difficulty of the question as a factor. Our binned residual plot shows poor fit for our data, as most of the residuals display a patter and is not close to the zero line. The parameters of our model is the inverse logit of the probability that a given question is answered correctly. For example, our model predicts that the probability of answering question 0.1 right is 0.3411. By taking the intercept out from the model, we make it easier to compare the coefficients across all current questions, which is a factor variable. This allow us to compare the probability of any given factor to the null: P(correct) = 0.5 rather comparing to the P(correct|currentQuestion = 1). Therefore it is much easier for interpretation. 
+
+```{r, fig.cap= "Coefficients against the fraction of participants who got the corresponding question right"}
+# (b) Plot the coefficients against the fraction of participants who got the corresponding question right.
+# Try both the raw fraction of particpants, and the logit of the fraction. Provide the better plot,
+# explain why it is better, and interpret the plot.
+par(mfrow=c(1,1))
+plot(logit(eda.count.5), logit.correct.1$coefficients, pch = 16, col = 1, main = "Question: Coefficient vs logit(fraction correct)",
+     xlab = "logit(fraction correct)", ylab = "Coefficient of Esitmate")
+abline(0,1,col=2)
+```
+
+We tried both using the raw fraction of the participants' accuracy and the logit of the accuracy, and determined that the logit provide us with a better plot. We argue that the coefficient of estimates of our logistic model directly translate to the predicted probability of participant correctness on a particular question, in an inverse logit manner. In other words, the predicted probability of correctness of our model is the inverse logit of the coefficient of estimate. Since the raw fraction of participant correctness is an estimator of the probability of correctness, the logit of the fraction is comparable to our coefficient of estimate.
+
+Our plot suggests that the predicted probability from our model is the same as the fraction of players who got the question right. This means that our model is using the average of correctness for each question as estimator, and our estimation is unbiased.
+
+
+```{r, message=FALSE, echo=FALSE, results= "hide"}
+# (c) Try replacing, or augmenting, currentQuestion with other variables in the data set. Provide (i) a
+# short paragraph describing what method or mixture of methods you used to find the best among
+# all of these models; and (ii) a paragraph interpreting that model that would be useful to Dr.
+# Lomas.
+
+# We do full model with non-significant var removal, using AIC as a crietion
+logit.2b.full = glm(resp ~ factor(currentQuestion) + factor(isGuidesEnabled) + factor(currentLevelNo) + avgAccuracy + reacTime, data = game.data, family = "binomial")
+
+fit2b = eval(stepAIC(logit.2b.full, scope=list(lower=.~ 1, upper=.~factor(currentQuestion) + factor(isGuidesEnabled) + factor(currentLevelNo) + avgAccuracy + reacTime,k=2))$call)
+```
+
+We then attempt to improve our model by variable selection. We first selected several variables that from the datasets that can help contribute extra information to our model. In addition to the type of question, we also considered the whether guide is enabled, the current level number, the average accuracy of the player at the time, and the reaction time of the player. Then we used stepwise AIC to search for a possible model that minimizes the AIC. After the procedure, we find out that dropping current level number will improve our model, and the chi-squared test suggest that there is no evidence against the smaller model, thus we will go with the reduced model.
+
+We interpret our parameters for the logistic regression by using the divide by four rule. We can interpret the intercept as: Given a player answers question one without guide enable, with zero percent average accuracy, and zero seconds of reaction time, he has a probability of invlogit(-7.70516) = 0.00045 getting the answer right. The coefficient Question 0.13 divided by four means that holding all other variable constant, the probability of getting question 0.13 right is 0.11 lower than the probability of getting question 0.10 right. This can be applied to all the factor coefficients for questions in our model. If the guide is enabled, a player has 0.107 high probability of having the correct answer, holding all other variables constant. And for each additional average accuracy percentage, it is correlated with a 0.02 increase in probability of answering correctly, holding all other variables constant. And for each additional reaction time in seconds, the probability of answering correctly increase by 0.0074, holding all other variables constant. This model suggests that individual performance is an important factor in answer accuracy.
+
+\newpage
+
+# Logistic regression for player proficiency
+
+```{r, fig.cap= "Binned Residual Plot for Logistic Regression on player proficiency"}
+# (a) Fit a logistic regression model giving the probability that a player will provide a correct answer,
+# using SID as a factor, and omitting the intercept. Summarize the fit. Note: glm is estimating over
+# 400 parameters, and it may take a few minutes for it to fit the model.
+logit.player.1 = glm(resp ~ factor(SID) + 0, data = game.data, family = "binomial")
+
+par(mfrow = c(1,1))
+binnedplot(predict(logit.player.1),resid(logit.player.1), xlim = c(-20,5))
+```
+Then, we want to examine the relationship between the the probability that a player will provide a correct answer and player proficiency by fitting a logistic regression model. Our binned plot shows a better fit of this model compared to the previous one. This is consistent with our hypothesis during the EDA: there was very little variation in the average fraction of a question being answered right, but there was more variation in the average fraction of a player's correctness. The coefficient of estimate is the inverse logic of the predicted probability of a player's accuracy. For instance, player 161461 is estimated to have a probability of 0.6874 answering a question right.
+
+```{r, fig.cap= "Coefficients against the proportion correct for each player"}
+par(mfrow=c(1,1))
+plot(logit(eda.freq.4), logit.player.1$coefficients, pch = 16, col = 1, main = "Player:Coefficient vs logit(fraction correct)",
+     xlab = "logit(fraction correct)", ylab = "Coefficient of Esitmate")
+abline(0,1,col=2)
+```
+ Similar to the previous model with current question as a factor, we tried both using the raw fraction of the proportion correct for each player and the logit of the accuracy, and determined that the logit provide us with a better plot. We argue that the coefficient of estimates of our logistic model directly translate to the predicted probability of participant answers correctly on any question, in an inverse logit manner. In other words, the predicted probability of correctness of our model is the inverse logit of the coefficient of estimate. Since the raw proportion correct for each player is an estimator of the probability of correctness for individuals, the logit of the fraction is comparable to our model's coefficient of estimate.
+
+Our plot suggests that the predicted probability from our model is the same as the fraction of players who got the question right. This means that our model is using the average of correctness for each question as estimator, and our estimation is unbiased. Note that our plot does not include the average fraction correct for those players who never got a single question right, therefore they are not represented in this plot.
+
+
+\newpage
+# Mixed Effects Models
+
+First, we fit a mixed effects logistic regression predicting the probability of a correct response, using question diffculity as a fixed effect factor, omitting the intercept, and with a random intercept grouped by player ID.
+```{r, warning=FALSE,results="hide"}
+glm.mix.1 = glmer(game.data$resp ~ 0 + factor(game.data$currentQuestion) + (1|factor(game.data$SID)), data = game.data, family = "binomial")
+```
+
+
+```{r, fig.cap= "fixed effects from this model against the fraction of players who got the corresponding question correct"}
+par(mfrow = c(1,1))
+plot(logit(eda.count.5),fixef(glm.mix.1), pch=16, cex=0.7, main = "Fixed Effects vs Question Accuracy",
+     xlab = "logit(Fraction of Players Correct)", ylab = "Model Fixed Effects")
+abline(0,1,col=2)
+```
+
+The fixed effect of our model represents the effect of questions on probabilities of answering correctly across all individuals, and from our plot we can see that coefficient of the fixed effect of our model is smaller than logit(Fraction of Players Correct on Question). Our model suggests that the effect of questions on the probability of player answering correctly is lower than the fraction of players that answers correctly. This means that the effect of the questions is smaller than what it appears from the unbiased estimator, and that individual effects play an important role in the answer accuracy.
+
+```{r, fig.cap= "random effects against the proportion correct for each player"}
+par(mfrow = c(1,1))
+plot(logit(eda.freq.4), ranef(glm.mix.1)[[1]][,1], pch=16, cex=0.7, main = "Random Effects vs Player Accuracy",
+     xlab = "logit(Fraction of Questions Correct)", ylab = "Model Random Effects")
+abline(0,1,col=2)
+```
+
+The random effect of our model represents the effect of individuals on the probability of answering accuracy. In the mix model we partially polled the individuals' effects, and the plot suggest that the individual’s effects are more significant in determining how question answer accuracy than the questions themselves. For instance, the for participant one, the probability of this person answering each question correct respectively can be calculated by adding the random effect to fixed effect, and take the inverse logit.
+
+We then try to improve our model by replacing or augmenting currentQuestion with other variables, judging by the AIC, BIC and DIC and the residual plots. 
+```{r, warning= FALSE, message=FALSE,results="hide"}
+M1 = glm.mix.1
+M2 = glmer(game.data$resp ~ 0 + factor(currentQuestion) + factor(isGuidesEnabled) + factor(currentLevelNo) + avgAccuracy + reacTime + (1|factor(game.data$SID)),              data = game.data, family = "binomial")
+M3 = glmer(game.data$resp ~ 0 + factor(currentQuestion) + factor(isGuidesEnabled) + avgAccuracy + reacTime + (1|factor(game.data$SID)),
+           data = game.data, family = "binomial")
+M4 = glmer(game.data$resp ~ 0 + factor(isGuidesEnabled) + avgAccuracy + reacTime + (1|factor(game.data$SID)),
+           data = game.data, family = "binomial")
+
+scaled.avgAccuracy = scale(game.data$avgAccuracy)
+scaled.reacTime = scale(game.data$reacTime)
+
+M5 = glmer(game.data$resp ~ 0 + factor(game.data$isGuidesEnabled) + scaled.avgAccuracy + scaled.reacTime + (1|factor(game.data$SID)),
+           data = game.data, family = "binomial")
+
+M6 = glmer(game.data$resp ~ 0 + factor(game.data$isGuidesEnabled)  + scaled.reacTime + (1 + scaled.avgAccuracy|factor(game.data$SID)),
+           data = game.data, family = "binomial")
+
+p1AIC = anova(M1,M2,M3,M4,M5,M6)
+p1.dic.1 = display(M1)
+p1.dic.2 = display(M2)
+p1.dic.3 = display(M3)
+p1.dic.4 = display(M4)
+p1.dic.5 = display(M5)
+p1.dic.6 = display(M6)
+
+p1.DIC = c(as.numeric(p1.dic.1$DIC),as.numeric(p1.dic.2$DIC),
+           as.numeric(p1.dic.3$DIC),as.numeric(p1.dic.4$DIC),
+           as.numeric(p1.dic.5$DIC),as.numeric(p1.dic.6$DIC))
+
+p1.aicbicdic.table = rbind(p1AIC$AIC,p1AIC$BIC,p1.DIC)
+row.names(p1.aicbicdic.table) = c("AIC","BIC","DIC")
+colnames(p1.aicbicdic.table) = c("M1","M2","M3","M4", "M5", "M6")
+```
+
+```{r}
+kable(p1.aicbicdic.table, caption = "AIC, BIC, DIC Compairson for the Six models")
+```
+
+First of all, we only consider models that converges and have reasonable eigenvalue ratio. Then from the valid models, We used model AIC, BIC and DIC to with selected variables to determine which model is the best option. We have six models, and eventually we ruled out the models that includes current questions, as they do not converge. We also scaled average accuracy and reaction time to improve eigenvalue ratio, and eventually we are picking between two models. M5 uses participant ID as varying intercept and use whether Guides is Enabled, scaled average accuracy and scaled reaction time as fixed effects. M6 uses participant ID as varying intercept and scaled average accuracy as varying slope, and whether Guides is Enabled and scaled reaction time as fixed effects. It appears that M5 is better in AIC and BIC, however M6 is better in DIC. Upon examining the residual plots, we determine that M5 is a better fit for our data. 
+
+Given M5, we want to see whether adding a second random intercept corresponding to ip, ip2, or ip3 helps.
+
+
+```{r, warning= FALSE, message=FALSE,results="hide"}
+M5.ip = glmer(game.data$resp ~ 0 + factor(game.data$isGuidesEnabled) + scaled.avgAccuracy + scaled.reacTime + (1|factor(game.data$SID))+(1|factor(game.data$ip)),
+           data = game.data, family = "binomial")
+
+M5.ip2 = glmer(game.data$resp ~ 0 + factor(game.data$isGuidesEnabled) + scaled.avgAccuracy + scaled.reacTime + (1|factor(game.data$SID))+(1|factor(game.data$ip2)),
+           data = game.data, family = "binomial")
+
+M5.ip3 = glmer(game.data$resp ~ 0 + factor(game.data$isGuidesEnabled) + scaled.avgAccuracy + scaled.reacTime + (1|factor(game.data$SID))+(1|factor(game.data$ip3)),
+           data = game.data, family = "binomial")
+
+
+M5.ip.a = glmer(game.data$resp ~ 0 + factor(game.data$isGuidesEnabled) + scaled.avgAccuracy + scaled.reacTime +(1|factor(game.data$ip)),
+           data = game.data, family = "binomial")
+
+M5.ip2.b = glmer(game.data$resp ~ 0 + factor(game.data$isGuidesEnabled) + scaled.avgAccuracy + scaled.reacTime + (1|factor(game.data$ip2)),
+           data = game.data, family = "binomial")
+
+M5.ip3.c = glmer(game.data$resp ~ 0 + factor(game.data$isGuidesEnabled) + scaled.avgAccuracy + scaled.reacTime + (1|factor(game.data$ip3)),
+           data = game.data, family = "binomial")
+
+
+
+p1AIC = anova(M5.ip,M5.ip2,M5.ip3,M5.ip.a,M5.ip2.b,M5.ip3.c)
+p1.dic.1 = display(M5.ip)
+p1.dic.2 = display(M5.ip2)
+p1.dic.3 = display(M5.ip3)
+p1.dic.4 = display(M5.ip.a)
+p1.dic.5 = display(M5.ip2.b)
+p1.dic.6 = display(M5.ip3.c)
+
+p1.DIC = c(as.numeric(p1.dic.1$DIC),as.numeric(p1.dic.2$DIC),
+           as.numeric(p1.dic.3$DIC),as.numeric(p1.dic.4$DIC),
+           as.numeric(p1.dic.5$DIC),as.numeric(p1.dic.6$DIC))
+
+p1.aicbicdic.table = rbind(p1AIC$AIC,p1AIC$BIC,p1.DIC)
+row.names(p1.aicbicdic.table) = c("AIC","BIC","DIC")
+colnames(p1.aicbicdic.table) = c("M5.ip","M5.ip2","M5.ip3","M5.ip.a", "M5.ip2.b", "M5.ip3.c")
+```
+
+
+```{r}
+kable(p1.aicbicdic.table, caption = "AIC, BIC, DIC Compairson for Three models with IP and SID, and Three without SID")
+```
+
+Adding the IP address does not improve our model. And by having both the IP address and the SID in our model, we have redundent information, as we discovered in EDA that most IP addresses are unique. We can see that by removing the SID from the model, all models including IP addresses improve. However, this improvement is not sufficient to show that the model is better than the previous model that does not include IP address, therefore we decide to continune with our model M5.
+
+\newpage
+
+# Summary
+We used the data collected from the battleship numberline game that contains 8257 trails from 414 participants. We included information such as player ID, name of the experiment, question type, player reaction time, whether guide is enabled, name of the level, whether the response is correct, average reaction time, average precision and etc. We want to see if we can use covariates to predict the probability of a player giving the correct answer on a given question. Particularity, we want to see if the difficulty of the question has an impact on the probability of the player providing the right answer. 
+
+Our exploratory analysis provided us some evidence of correlation between the variables. We observed that the fraction of players that answered the question correctly varies by the question slightly, and the highest accuracy occurs when the number is 0.5. We also observed that player's accuracy on all questions is distributed with a right skew. Most of the participants had an accuracy closer to zero. We also investigated the reaction times across players and across questions, and found out that individual players vary greatly in reaction times but overall reaction time on questions are similar.
+
+Our initial logistic models investigated the relationship between the difficulty of the question and the probability of the question being answered correctly, and the probability of a player answering any question correctly, considering information from other variables. Our models provide us with an insight that the question difficulty, current level number, average accuracy and reaction time in effect in predicting the probability of a player answering the question correctly. However, the diagnostics suggest that this model has a poor fit on the data. Our logistic regression with player ID as a covariate fits the data better. We speculate that the difficulty of the questions does not play as important of a role in helping us to predict the probability correct answers. Additionally, we are interested to see how the individual proficiencies of the participants affect the probability of giving correct answers. 
+
+We want to use a partial pooling model to estimate the effect, and we achieve that by fitting a mixture model on our data set with random effects (i.e. varying intercepts). Our initial mixture model predicts the probability of answering correctly, with question difficulty as a fixed effect factor, and the individual player as random effects. This model uses question difficulty as a fixed information for all players, but it also takes in consideration from how the individual players preform when answering the questions. Our model suggests that there is a bigger influence on the probability of correct answers from the player's individual performance than from the difficulty of the question itself. We then continued to search for a better mixture model by minimizing the AIC, BIC and DIC of the model as well as finding a model that converges. We also used scaling on continuous variables to improve our model fitness. We discussed the possibility of using IP address instead of player ID, but decided against it due to its lack of model improvement.
+
+After model selection, we determined that our final model is a mixture model that uses player ID as random effects, and uses whether the guide is enabled, the scaled average accuracy of the player, and the scaled reaction time of the player as fixed effects. Our model's fixed effect parameters suggest that on average, enabling the guide is associated with a 7.8 percent increase in probability of a player getting the correct answer. Every percentage increase in player average accuracy is associated with an additional 1.77 percent increase in probability of a player getting the correct answer. And for every second increase in player reaction time, the average probability of a player getting the correct answer increases by 0.12 percent. Our model concludes no significant relationship between the predicted probability and the difficulty of the question, and thus we cannot conclude that there is a relationship between the probability of a player answering the question correctly and the difficulty of the question.
+
+\newpage
+# Appendix I
+Gelman, A. & Hill, J. (2007). Data Analysis Using Regression and Multilevel/Hierarchical Models. NY:
+Cambridge Univ Press.
+
+Lomas, D., Patel, K., Forlizzi, J.L., and Koedinger, K.R. (2013). Optimizing Challenge in an Educational
+Game Using Large-Scale Design Experiments. Paper presented at CHI 2013, Paris, France. Obtained online
+at http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.480.2493&rep=rep1&type=pdf
+
+Lynch, Scott M. (2007). Introduction to Applied Bayesian Statistics and Estimation for Social Scientists.
+New York: Springer.

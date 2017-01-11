@@ -1,0 +1,487 @@
+---
+title: "Exam 2"
+author: "Zuojun Gong"
+date: "Friday, April 10, 2015"
+output: html_document
+---
+```{r Import data from file,echo=FALSE,results='hide',warning=FALSE}
+## Set Directory
+setwd("C:/Users/Zuojun/Desktop/36-402/Exam2")
+neur = read.csv("neur.csv")
+library(mixtools)
+library(plyr)
+```
+
+### Introduction 
+
+Brain is the central command of a mammal's body and everything about their lives evolves around it. However, discovering how the brain operates has always been a mysterious and complicated subject because of mammals' brains' complexity. In this study the researchers aim to find out how nerve cells in a monkey's brain communicate and process information through electrical impulse transmitting. In particular, we want to discover how some of the neurons in the motor region of its brain reacts or controls hand movements. We say these neurons has directional tuning. In such neurons, we observe that when the monkey moves its hand, electrical impulses was detected from the neurons. Each of these neurons has a preferred direction, which reacts most with movement matching such direction, and it reacts the least with a movement at the opposite direction. In this report, we aim to discover the directional tuning neurons from the motor region of the monkey brain through statistical methods.
+
+### Exploratory Data Analysis
+
+In order to preform factor analysis we must have a dataset where the mean and variance for 0 and 1. We first check our model variable distribution through summary report and we discovered that the all variables does not have a mean of 0. Therefore, we will scale the dataset and prepare for model building.
+
+```{r scaling, echo=FALSE,results='hide'}
+summary(neur)
+neur = scale(neur)
+```
+
+### Model Building: Factor Models
+
+We know from factor models, we explain the entire dataset X in F, w, and epsilon. Where F is the matrix of factor scores, w is the matrix of factor loadings, and epsilon being the matrix of noise. We know that the matrix of factor loadings describes how the different variables in our dataset correlates with the different underlying factors. The matrix of factor scores are the scores of each case on each factor. In other words, in what way does each data entry relates to each factor. We think that the directional tuning neurons' behaviors in accordance to hand movement, measured by electrical spikes, is similar to a factor model. In our research, we hypothesis the neuron reacts to motions with spikes, and the average number of spikes over a short interval is a+b*v. The vector b is a vector of preferred direction, which responds with the highest level of spikes to the "preferred direction" and the lowest level of spikes to the opposite direction. The vector v is a direction vector, denotes the direction of monkey's hand movement. The constant a denotes the potential normal levels of spikes in a given neuron. We believe that this is related to a factor model. We can see the preferred direction as factor loadings and the direction vector as factor scores. With recording of neuron spikes due to movement, we can compute the estimated direction vector from our factor model.
+
+However, it is not obvious what the optimal number of factor of our factor model is, therefore we preform cross-validation on the log likelihood on factor models to determine our optimal number of factors. By comparing the log-likelihood of different factor models, we can discover the best model and the optimal number of factors.
+
+```{r Cross-validation for factor models - Question 2, results='hide',echo=FALSE}
+
+# Cross validation to determine the number of factors 
+
+# First we quote the charles function from previous homework, it calculates the loglikelihood for a factor model fitted on a given dataset, 
+# The function takes in two parameters fm and x, where fm is a factor model and x is a vector
+# And returns log-likelihood
+charles <- function(fm, x) {
+    x <- scale(x) # It scales x 
+
+    p <- nrow(fm$loadings) # then it finds the number of variables of loadings in fm
+    stopifnot(ncol(x) == p) # it will stop if the number of column of x is different from 
+                            #the number of variables of loadings in fm
+
+    v <- fm$loadings %*% t(fm$loadings)# Then it prerorms matrix mutiplication between the loadings of fm 
+                                       #and the transformed of   loadings of fm -- a variance-covariance matrix(WtW)
+    diag(v) <- 1 # Then it sets all diaginoal, the phi, as one in order to scale the noise
+
+    stopifnot(require(mixtools)) # it will stop if mixtools is not loaded in R workspace
+
+    return(sum(logdmvnorm(x,sigma=v)))# Then it returns the sum of log-density for the mutivariate normal distribution 
+                                      #with variance matrix equal to the previous V matrix, given scaled X dataset
+}
+
+# The function returns a sum, which is the log-likelihood of a given factor model and a dataset
+
+cv.factor.loglike = function(data=neur, factor.vec=seq(1,10,1),nfolds=5) { 
+  n = nrow(data)
+  log.like.matrix = matrix(NA, ncol=length(factor.vec),nrow=nfolds)
+  sd.err = rep(NA,length=length(factor.vec))
+  for (fact in 1:length(factor.vec)){
+    # For each factor we create a different set of data for cross validation
+    fold.labels <- sample(rep(1:nfolds, length.out=n))
+    for (fold in 1:nfolds) {
+      # we preform cross-validation with the given number of factor, with algorithm similiar to the textbook
+      test.rows <- which(fold.labels == fold)
+      train = data[-test.rows,]
+      test = data[test.rows,]
+      current.model = factanal(train,factors=factor.vec[fact],scores="regression")
+      estimated = charles(current.model,test)
+      log.like.matrix[fold,fact] = estimated
+      }
+    sd.err[fact] =  sd(log.like.matrix[,fact]) # we also calculate the standard error for our cv loglikelihood for uncertainity
+    }
+  log.like = colMeans(log.like.matrix)
+  result = rbind(log.like,sd.err)
+  return(result)
+}
+
+cv.factor.loglikelihood = cv.factor.loglike() 
+cv.factor.loglikelihood
+
+# Then we find out the factor that has the largest loglikelihood 
+which(cv.factor.loglikelihood==max(cv.factor.loglikelihood))
+
+```
+
+```{r visualization for the factor model cross-validations,echo=FALSE}
+
+# We then visuiualize the cross-validated log-likelihood
+plot(cv.factor.loglikelihood[1,],xlab="Number of Factors", ylab="CV Log-likelihood",main="CV error for Factor number",pch=16,ylim=c(-17500,-16000))
+lines(cv.factor.loglikelihood[1,],lty=1,lwd=1,col="green")
+arrows(1:10,cv.factor.loglikelihood[1,]+cv.factor.loglikelihood[2,],1:10,cv.factor.loglikelihood[1,]-cv.factor.loglikelihood[2,],code=3,length=0.1,angle=90,col='red')
+
+
+```
+
+From our cross-validaiton result for log-likelihood, we determine that it is best for us to choose the two factor model since it has the highest log-likelihood value relative to all other models, indicating that this model have a higher probability of making the right predictions based on our observations. We then construct a factor model with two factors, and examine the preferred direction, which is the factor loadings, of our dataset. 
+
+
+```{r Fit a two factor model on the data,results='hide',echo=FALSE}
+
+# We fit the two factor model
+neur.factor.two = factanal(neur,factors = 2,scores="regression")
+
+# Then we examine the p-value of this model to determine if the number of factors is sufficient to explain our dataset
+neur.factor.two$PVAL >= 0.05
+
+```
+
+```{r two factor model loading visualization,echo=FALSE}
+# Then we grapically visualize the preferred direction, in our case, factor loading. 
+plot(neur.factor.two$loadings, type ='n', main="Preferred direction (factor loading) of neurons")
+text(neur.factor.two$loadings[,1], neur.factor.two$loadings[,2], labels=colnames(neur),cex=0.8)
+
+```
+
+We can observe that the preferred directiorns for all 96 neurons spread out on the two-dimensional plane of factor loading 1 and factor loading 2. Each neuron's preferred direction is denoted by their neuron index number, and their coordinates on the two-dimensional plane represents their two factor loadings values. We can see that all "directions" are covered by different neuron's preferred directions, and it is coherent with our interpertation of prefered direction for neurons. 
+
+We now look at the bootstrapped 90% confidence intervals for factor loadings. 
+```{r two factor model loading bootstrap CI, echo=FALSE, cache=TRUE}
+
+# Bootstrapping with sampling by cases
+# First we resample by case
+resample <- function(x) { sample(x,size=length(x),replace=TRUE) }
+# This function resamples the rows of our data and return the simulated new data frame
+resample.cases.nd <- function() {
+  sample.rows <- resample(1:nrow(neur))
+  return(neur[sample.rows,])
+}
+
+# This function provides the loadings for the one-factor model for a input dataframe. It takes in a dataframe (data) and it returns the loadings of this given dataframe fitted with a one-factor model -- Given that our data is a variation of stock data
+est.neur.factor<- function(data) {
+  factor.fit = factanal(data,factors=2,scores="regression")
+  loadings.1 = factor.fit$loadings[,1]
+  loadings.2 = factor.fit$loadings[,2]
+  loadings.all = rbind(loadings.1,loadings.2)
+  return(loadings.all)
+}
+
+# this function inputs the bandwidth and condifent interval alpha and returns the bootstrapped confidence interval for the corrlations between amyglada and orientation and acc and orientation
+neur.cases.factor.cis <- function(B,alpha) {
+  tboot <- replicate(B, est.neur.factor(resample.cases.nd()))
+  low.quantiles <- apply(tboot,1,quantile,probs=alpha/2)
+  high.quantiles <- apply(tboot,1,quantile,probs=1-alpha/2)
+  low.cis.1 <- 2*neur.factor.two$loadings[,1] - high.quantiles[1]
+  high.cis.1 <- 2*neur.factor.two$loadings[,1] - low.quantiles[1]
+  cis.fact.1 <- rbind(low.cis.1,high.cis.1)
+  low.cis.2 <- 2*neur.factor.two$loadings[,2] - high.quantiles[2]
+  high.cis.2 <- 2*neur.factor.two$loadings[,2] - low.quantiles[2]
+  cis.fact.2 <- rbind(low.cis.2,high.cis.2)
+  result = rbind(cis.fact.1,cis.fact.2)
+  #colnames(result) <- as.character(c(alpha/2,1-alpha/2))
+  return(result)
+}  
+
+
+neur.factor.bs.confit = neur.cases.factor.cis(B=1000,alpha=0.1)
+
+```
+
+```{r visuialize factor loadings with bootstrapped confidence intervals,echo=FALSE}
+par(mfrow=c(2,1))
+plot(neur.factor.two$loadings[,1],xlab="Factor Loading index",ylab="Factor loadings",main="bootstrapped confidence interval on factor one loadings", pch=16,cex=0.8,ylim=c(-2,2))
+arrows(1:96,neur.factor.bs.confit[1,],1:96,neur.factor.bs.confit[2,] ,code=3,length=0.1,angle=90,col='red')
+
+plot(neur.factor.two$loadings[,2],xlab="Factor Loading index",ylab="Factor loadings",main="bootstrapped confidence interval on factor two loadings", pch=16,cex=0.8,ylim=c(-2,2))
+arrows(1:96,neur.factor.bs.confit[3,],1:96,neur.factor.bs.confit[4,] ,code=3,length=0.1,angle=90,col='red')
+
+
+```
+
+We want to visualize our factor score on a two dimensional plane with x-axis being Factor 1 and y-axis being Factor 2.
+
+```{r Visualize two factor model directions - axis analysis,echo=FALSE}
+
+# we want to visualize it in a plane of factor 1 and factor 2
+par(mfrow=c(1,2))
+# Factor one coloring, red is factor one negative, blue is factor one posotive
+plot(neur.factor.two$scores, xlab="Factor 1 scores", ylab="Factor 2 scores",type="b",
+     pch=16, cex=0.8, col="dark blue", main=" Factor score one coloring")
+points(neur.factor.two$scores,col=c(3+sign(neur.factor.two$scores[,1])),pch=16)
+
+# Factor two coloring, cyan is factor two negative, yellow is factor two posotive
+plot(neur.factor.two$scores, xlab="Factor 1 scores", ylab="Factor 2 scores",type="b",
+     pch=16, cex=0.8, col="dark blue", main="Factor score two coloring")
+points(neur.factor.two$scores,col=c(6+sign(neur.factor.two$scores[,2])),pch=16)
+
+```
+
+We used different colors in the graph to represent signs of values in factor one and factor two. We can observe that most of the factor scores, which is the direction vectors, are clustered in 8 clusters. This is consistent with the fact that the monkey is required to move in 8 different directions. However, we cannot determine what the actual direction is from our data or graph. We believe that our visualized factor score (movement velocity) is not corresponding to a fixed direction. Nonetheless, we believe that the relationships and differences between each cluster of factor score is relative. In other words, we do not need to find out the specific directions of factor scores to continue our analysis, and our conclusions is valid even without knowing the specific directions. 
+
+Therefore, we want to see what influence rotation will have on our dataset. In particular, we want to find out that if we use a rotated velocity vector v, what influence it would have on our preferred direction b. In this case, we rotate the velocity vector 30 degrees counter-clockwise, we want to see its effect on the factor loadings.
+
+
+```{r rotation matrix,echo=FALSE}
+# First we construct the rotation on velocity vector, by pi/6 which is 30 degrees
+rot.matrix = rbind(c(c(cos(pi/6)),c(-sin(pi/6))),c(c(sin(pi/6)),c(cos(pi/6))))
+
+# Then we apply the rotation matrix onto our factor model 
+H.rot = neur.factor.two$scores %*% t(rot.matrix)  # rotated score - vectors of movement
+y.rot = neur.factor.two$loadings %*% t(rot.matrix) # rotating loadings - preferred direction
+
+
+```
+
+```{r Visiually examine the rotation effect,echo=FALSE}
+
+### we first plot the origional graph of factor score one vs factor score two, given their direction
+par(mfrow=c(2,2))
+# Factor one coloring, red is factor one negative, blue is factor one posotive
+plot(neur.factor.two$scores, xlab="Factor 1 scores", ylab="Factor 2 scores",type="p",
+     pch=16, cex=0.8, col="dark blue", main=" Factor score one coloring")
+points(neur.factor.two$scores,col=c(3+sign(neur.factor.two$scores[,1])),pch=16)
+# then we choose a fixed point to examine our rotation effect
+points(neur.factor.two$scores[1,1],neur.factor.two$scores[1,2],col=1,pch=16,cex=1)
+segments(0,0,neur.factor.two$scores[1,1],neur.factor.two$scores[1,2],lty=1,col=1)
+#segments(0,0,H.rot[1,1],H.rot[1,2],lty=2,col=2)
+legend("topright",pch=16,lty=1,col=c(1),c("Fixed point"),cex=0.6)
+
+# Factor two coloring, cyan is factor two negative, yellow is factor two posotive
+plot(neur.factor.two$scores, xlab="Factor 1 scores", ylab="Factor 2 scores",type="p",
+     pch=16, cex=0.8, col="dark blue", main="Factor score two coloring")
+points(neur.factor.two$scores,col=c(6+sign(neur.factor.two$scores[,2])),pch=16)
+# then we choose a fixed point to examine our rotation effect
+points(neur.factor.two$scores[1,1],neur.factor.two$scores[1,2],col=1,pch=16,cex=1)
+segments(0,0,neur.factor.two$scores[1,1],neur.factor.two$scores[1,2],lty=1,col=1)
+legend("topright",pch=16,lty=1,col=c(1),c("Fixed point"),cex=0.6)
+
+
+### Then we plot the rotated graph of factor score one vs factor score two
+# Factor one coloring, red is factor one negative, blue is factor one posotive
+plot(H.rot, xlab="Factor 1 scores", ylab="Factor 2 scores",type="p",
+     pch=16, cex=0.8, col="dark blue", main=" Factor score one coloring-rotated")
+points(H.rot,col=c(3+sign(neur.factor.two$scores[,1])),pch=16)
+# then we choose a fixed point to examine our rotation effect
+points(neur.factor.two$scores[1,1],neur.factor.two$scores[1,2],col=1,pch=16,cex=1)
+points(H.rot[1,1],H.rot[1,2],col=2,pch=16,cex=1)
+segments(0,0,neur.factor.two$scores[1,1],neur.factor.two$scores[1,2],lty=1,col=1)
+segments(0,0,H.rot[1,1],H.rot[1,2],lty=2,col=1)
+legend("topright",pch=16,lty=c(1,2),col=c(1),c("Fixed point","rotated point"),cex=0.6)
+
+# Factor two coloring, cyan is factor two negative, yellow is factor two posotive
+plot(H.rot, xlab="Factor 1 scores", ylab="Factor 2 scores",type="p",
+     pch=16, cex=0.8, col="dark blue", main="Factor score two coloring-rotated")
+points(H.rot,col=c(6+sign(neur.factor.two$scores[,2])),pch=16)
+points(neur.factor.two$scores[1,1],neur.factor.two$scores[1,2],col=1,pch=16,cex=1)
+points(H.rot[1,1],H.rot[1,2],col=1,pch=16,cex=1)
+segments(0,0,neur.factor.two$scores[1,1],neur.factor.two$scores[1,2],lty=1,col=1)
+segments(0,0,H.rot[1,1],H.rot[1,2],lty=2,col=1)
+legend("topright",pch=16,lty=c(1,2),col=c(1),c("Fixed point","rotated point"),cex=0.6)
+
+```
+
+We can see from the figure above the rotation effect of our factor score, which is velocity vector, by 30 degrees counter-clockwise. In the first row of graphs we have the original graph and colored by the signs of their factor score values, and in the second row of graphs we applied the same coloring from the first graph and we can observe that all factor scores are rotated by 30 degrees. In a hypothetical situation where the velocity vectors have assigned directions, we can interpret this rotation as adjusting the velocity vector by 30 degrees to our desired direction due to offset. However, since the observed data is not going to change, we want to observe how the preferred directions will act. 
+
+In factor models, we know that if we rotate both factor loadings and factor scores rotates the same degrees to the same direction, the matrix multiplication of the rotated scores and loading is the same as the results before rotation. We hypothesize that if the factor loadings, which is the preferred direction, rotates the 30 degrees counter-clockwise, it will yield the same matrix multiplication result with factor scores as prior to rotation.
+
+
+``` {r visalization of rotation effect on factor loadings, echo=FALSE}
+## Then we examine the rotated factor loadings
+par(mfrow=c(1,2))
+plot(neur.factor.two$loadings, main="Factor loadings",col="blue",pch=16,cex=0.7)
+points(neur.factor.two$loadings[1,1],neur.factor.two$loadings[1,2],col=2,pch=16,cex=1)
+segments(0,0,neur.factor.two$loadings[1,1],neur.factor.two$loadings[1,2],lty=1,col=2)
+legend("topright",pch=16,lty=1,col=c(2),c("Fixed point"),cex=0.6)
+
+# text(neur.factor.two$loadings[,1], neur.factor.two$loadings[,2], labels=names(neur),cex=0.8)
+
+plot(y.rot, main="Factor loadings - rotated",col="green",pch=16,cex=0.7)
+points(neur.factor.two$loadings[1,1],neur.factor.two$loadings[1,2],col=2,pch=16,cex=1)
+points(y.rot[1,1],y.rot[1,2],col=2,pch=16,cex=1)
+segments(0,0,neur.factor.two$loadings[1,1],neur.factor.two$loadings[1,2],lty=1,col=2)
+segments(0,0,y.rot[1,1],y.rot[1,2],lty=2,col=2)
+legend("topright",pch=16,lty=c(1,2),col=c(2),c("Fixed point","rotated point"),cex=0.6)
+
+```
+
+We picked a fixed point in the pre-rotation factor loadings and colored it red and we highlight the same point in our rotated loadings scatter plot. We can observe from the second graph that our factor loadings rotated 30 degrees counterclockwise. We examined through calculation that this rotation does not yield a different result than what we have piror to rotation. This implies that rotation will not change how we interpert factor score estimates and factor loadings regardless of rotation. Our interpertation of the factor score estimates and factor loadings are relative -- we look for the relationship between each other but not their relationship with pre-determined values or directions. Therefore, we do not need to know what is the actual direction of our velocity vector estimates, and all our inference and estimates are relative to each other without any set starting direction. 
+
+```{r examine that rotation does not influence matrix mutiplication result, echo=FALSE,results='hide'}
+
+# We want to find out if both rotated loadings and score and pre-rotated loadings and score yields the same results
+muti.rotated = H.rot %*% t(y.rot)
+muti.origin = neur.factor.two$scores %*% t(neur.factor.two$loadings)
+# we want to find if there is any mis match in results given 3 digits of significance
+which((round(muti.rotated,3) == round(muti.origin ,3))==FALSE)
+
+# It does!
+
+```
+
+With that conclusion, we want to disocver the procedure of the experiment. In particular, we want to find out when the distinct break between the trails where the subject monkey change its hand movement direction. We look into our factor scores across both factors.
+
+```{r Visualization of intended direction (factor score),echo=FALSE}
+
+# We want to visualize an estimate of the intended direction v~ at each time point
+
+neur.time.index = c(1:nrow(neur))
+
+par(mfrow=c(1,1))
+
+# Factor 1
+plot(neur.time.index ,neur.factor.two$scores[,1],xlab="Time Index",ylab="Intended Direction", 
+     main="Intended Direction vs Time",cex=0.5,col="red",type="b",pch=16)
+
+# Factor 2
+points(neur.time.index ,neur.factor.two$scores[,2],xlab="Time Index",ylab="Intended Direction", 
+     main="Intended Direction vs Time",cex=0.5,col="blue",type="b",pch=16)
+
+```
+
+In the graph above, factor one scores is denoted by color red and factor two scores is denoted by color blue. We can see from the figure that factor scores of factor one and factor two behave in clusters, and across time the clusters have different patterns and changes, which indicates that the monkeys changed the direction of their hand movement. We want to find out when these distinct breaks happen during our experiment. Since we interpert our direction of movement as factor scores, which is a two-dimensional plane with factor one being the x-axis and factor two being the y-axis, we can interpert the relative distance between factor scores as an angle. 
+
+
+```{r visualize the difference in directions in terms of angle, echo=FALSE}
+
+# construct the angle variable using atan2(y,x), the arc tangent, to find the angle from a given y and x
+movement.angle = atan2(neur.factor.two$scores[,2],neur.factor.two$scores[,1])
+
+# visualize the movement angel across time
+plot(neur.time.index ,movement.angle,xlab="Time Index",ylab="Movement Angle (radians)", 
+     main="Movement angle vs Time",cex=0.5,col="red",type="b",pch=16)
+points(neur.time.index ,movement.angle,pch=16,col=4,cex=0.5)
+
+```
+
+In the graph above, the x-axis in the graph is the time index, and the y-axis is the radiant computed from arctangent of our factor scores. Negative values indicates that the movement is occurring at the 'lower quadrant' of the two-dimensional plane. Each point represent an angle of movement that the monkey is required to do over a short period of time, and each cluster indicates the same movements is being repeated over the time period. Therefore, each different cluster represents a distinct break where the monkey change its direction of movement. The exception is around time index 200-250, 530-630 where over some of these time span the points are on the opposite end of the y-axis. This is because in our graph -3.14 and 3.14 radiant is the same direction, the movement is 180 degrees from our relative starting point of 0 radiant. Even if the points are on both extremes of the y-axis, they are still movements around the same angle. Therefore we can consider them also as one cluster.
+
+### Model Building: Mixture Models
+
+We want to explore our models beyond the factor model. In factor analysis we assume that our latent variables are being continuously adjusted with the distributions of observables changes continuously. However, we want to discover through mixture model if some of the latent variables are categorical or ordinal. First, we begin to fit a three mixture model. This is approiate because any linear factor model with q factors is equivalent to some mixture model with one more clusters, because the two models have the same means and covariances ((Bartholomew, 1987, pp. 36-38). Following this rule, the three cluster model is can match the covariance matrix of 2 factor model very well and is likely to have a good log-likelihood.
+
+```{r three cluster model,cache=TRUE,results='hide'}
+# First we fit a three mixture model
+mix.mdl.3 = npEM(neur,mu0=3)
+```
+
+```{r Quoted hint functions,echo=FALSE}
+## The code below is quoted from the professor 
+# Sum a vector of very small numbers, using the fact that
+  # sum(x) = max(x) * sum(x/max(x))
+  # so
+  # log(sum(x)) = max(log(x)) + log(sum(exp(log(x) - max(log(x)))))
+  # This reduces numerical "underflow" issues when dealing with very small
+  # numbers
+    # See also "Laplace approximation" for exponential sums or integrals
+# Inputs: vector of numbers to sum, whether the numbers have already been
+  # logged, whether to deliver sum(x) or log(sum(x))
+# Output: either sum(x) or log(sum(x))
+sum.small <- function(x, initial.log=TRUE, return.log=TRUE) {
+    # If we're not given the logs of the numbers initially, discard any
+    # zeroes (since they don't contribute to the sum) and take the log
+    if (! initial.log) {
+        x <- x[x>0]
+        x <- log(x)
+    }
+    # What's the largest summand (after logging)?
+    largest <- max(x)
+    # Adjust all the summands down by this
+    x <- x-largest
+    # Add everything up in logs --- you can double check that this will be
+    # exactly sum(x) if all the arithmetic is done exactly
+    total <- largest + log(sum(exp(x)))
+    # If we're not returning the log sum, undo the log
+    if (! return.log) {
+        total <- exp(total)
+    }
+    # and return
+    return(total)
+}
+
+# This function takes in a mixture model and a dataset
+# and it computes the loglikehood of the mixture mode, and the density of all variables in the matrix
+
+loglik.np <- function(npmix, data) {
+    stopifnot(require(mixtools)) # make sure the mixtools and plyr packages are imported from library
+    stopifnot(require(plyr))
+    n.clusters <- length(npmix$lambdahat) # findout the number of clusters through mixture weights
+    p <- length(npmix$blockid) # number of variables a vector of coordinates that are assumed to be identically distributed
+    stopifnot(ncol(data)==p) # ensure the number of variables match the length of block id
+    loglik.3d.array <- array(NA, dim=c(p,n.clusters,nrow(data))) # result is in a 3d array
+    for (var in 1:p) {
+        for (cluster in 1:n.clusters) {
+          # calculate the density for each observation in each cluster
+            loglik.3d.array[var,cluster,] <-
+                log(density.npEM(x=npmix, u=data[,var], component=cluster,
+                                 block=var)$y)
+        }
+    }
+    # we add up the log-likelihood over all variables apperaing in each cluster
+    loglik.2d.array <- apply(loglik.3d.array,MARGIN=c(2,3),sum)
+    loglik.2d.weighted <- sweep(loglik.2d.array, MARGIN=1,
+                                STATS=log(npmix$lambdahat), FUN="+") # we weight the log-likelihood with lambda weights
+    loglik.1d <- apply(loglik.2d.weighted,2,sum.small) # then we sum up the weighted log-likelihood of each cluster, using
+                                                      # the sum of small number function as assistance
+    return(list(sum(loglik.1d),loglik.3d.array)) 
+    # we return a 3d array, the first list being the log-likelihood of mixture model, and the second list includes all densities for each observation in each cluster of data
+}
+
+
+```
+
+And then we prefrom cross-validaiton to find out the log-likelihood of our mixture model with it's standard error.
+
+```{r Cross-validation loglikelihood for mixture models with three clusters, cache=TRUE,echo=FALSE,results='hide'}
+
+# Cross validation of log-likelihood of mixture models
+# This function takes in a dataframe, a couple of component values, and the folds for the cross-validation
+# It loops through the number of components and for each component number it proforms five fold cross validation
+# The function returns the log-likelihood for each cross-validaiton
+cv.mixture.loglike = function(data=neur, comp.vec=seq(1,10,1),nfolds=5) { 
+  n = nrow(data)
+  log.like.matrix = matrix(NA, ncol=length(comp.vec),nrow=nfolds) # matrix stores all log-likelihood for all folds, all clusters
+  sd.err = rep(NA,length=length(comp.vec)) # vector stores standard error for the log-likelihood
+  for (fact in 1:length(comp.vec)){ 
+    # we run our cross-validation across all number of clusters and we aim to preform cross validation for each of them
+    fold.labels <- sample(rep(1:nfolds, length.out=n))
+    for (fold in 1:nfolds) {
+      # We preform cross-validation for the given number of clusters
+      test.rows <- which(fold.labels == fold)
+      train = data[-test.rows,]
+      test = data[test.rows,]
+      #print(c(fact,fold)) # For debugging
+      current.model = npEM(train,mu0=comp.vec[fact]) # Building the model
+      estimated  = loglik.np(npmix=current.model,data=test) # Using the loglik.np to compute log-likelihood for given model
+      log.like.matrix[fold,fact] = as.numeric(estimated[1]) # enter the log-likelihood into the result marix
+      }
+    sd.err[fact] =  sd(log.like.matrix[,fact]) # enter standard error into the vector 
+    }
+  log.like = colMeans(log.like.matrix)
+  result = rbind(log.like,sd.err)
+  return(result)
+}
+
+mix.mdl.3.loglike = cv.mixture.loglike(data=neur,comp.vec=3)
+
+```
+
+```{r cross-validation results for 3 mixture model,echo=FALSE,results='hide'}
+mix.mdl.3.loglike
+```
+
+The log-likelihood for our three mixture model is -9349.2908 with standard error 500.3004. 
+# comment more
+
+We then decide to see how a eight-cluster mixture model will preform on our dataset. Eight-cluster model is valid due to the same reasons as three-cluster model, and it has a higher number of clusters than factors. Also, the eight clusters is resonable because each cluster may indicate each directional vectors. 
+
+```{r eight cluster model,cache=TRUE,results='hide'}
+# First we fit a three mixture model
+mix.mdl.8 = npEM(neur,mu0=8)
+```
+
+Then we find out the cross-validated log-likelihood in order to compare it with the previous models on its goodness-of-fit.
+
+
+```{r Cross-validation loglikelihood for mixture models with eight clusters, cache=TRUE,echo=FALSE,results='hide'}
+# we use the cross-validation function from the previous part, where we calculated the cv-loglikelihood for 3 cluster models
+
+mix.mdl.8.loglike = cv.mixture.loglike(data=neur,comp.vec=8)
+mix.mdl.8.loglike
+```
+
+The log-likelihood for our eight mixture model is -11210.4754 with standard error  334.3583. 
+
+### Model Comparsion and Model Selection
+
+Now we have three models, and we want to find out our optimal model through model comparsion. We compare the cross-validated log-likelihood across all three models, as these values can provide us a good estimate of how the goodness-of-fit of each model is. 
+
+```{r model comparsion via cv log-likelihood, echo=FALSE}
+
+par(mfrow=c(1,1))
+plot(x=1:3,main="comparing the log-likelihood across three models",ylab="log-likelihood",xaxt="n",y=c(cv.factor.loglikelihood[1,2],mix.mdl.3.loglike[1,1],mix.mdl.8.loglike[1,1]),pch=16)
+axis(1, at=1:3, labels=c("Two-Factor","Three Component Mixture", "Eight Component Mixture"))
+
+```
+
+We can see from our plot above that three component mixture model has the highest log-likelihood amongst all three models, indicating that it has the best goodness-of-fit across all three models. Since our log-likelihood is computed through cross-validation, this indicates that the three mixture clustre model is better at predicting new data. 
+
+### Conclusion
+
+We examined three different models constructed on our dataset: two factor mode, three cluster mixture model and eight cluster mixture model. The two factor model provides us more direct graphical visualization with regard to clustered velocity vectors, allowsus to see the movements better on a two dimensional plane, and allows us to make more direct inference on the preferred direction of neuron or directional tuning. However, the cross-validation log-likelihood for this model does not prefrom as well as the three-component mixture model and the eight component mixture model. Therefore, it does not make a good fit on a new set of data. In this case, we choose the three component mixture model as our final model.
+
+Since the three component mixture model have three clusters, it suggests that there is three discrete or categorical latent variables in our data, which is different than the two-dimensional plane interpertation we previously have with the two factor model. It may possibily be that the preferred direction can have something to do other than the monkey's movement, or the movement speed may influence how much the neurons produce spikes in the monkey's brain. It is possible for us to discover the preferred directions for the neurons, but the preferred directions may have to combine with some extra variables. 

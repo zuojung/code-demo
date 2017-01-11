@@ -1,0 +1,505 @@
+---
+title: "Mutilevel Analysis on the Battleship Numberline Study Part II"
+author: "Zuojun Gong"
+date: "December 16, 2016"
+output: pdf_document
+---
+
+```{r, include=FALSE}
+library(knitr) # We need the knitr package to set chunk options
+library(pander)
+library(arm)
+library(MASS)
+library(lattice)
+library(ggplot2)
+library(lme4)
+library(foreign)
+library(LMERConvenienceFunctions)
+
+
+# Set default knitr options for knitting code into the report:
+opts_chunk$set(echo=FALSE,  # change to FALSE to keep code out of the knitted document
+               cache=TRUE, # do not re-run code that has already been run
+               autodep=TRUE, # assure that caching dependencies are updated correctly
+               cache.comments=FALSE, # do not re-run a chunk if only comments are changed
+               message=FALSE, # change to FALSE to keep messages out of the knitted document
+               warning=FALSE  # change to FALSE to keep warnings out of the knitted document
+               )
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+
+
+```{r}
+# Read into Data
+game.data = read.csv("dec-data.csv")
+
+# Alter Dates
+# Thu Nov 10 17:50:02 2011 UTC
+game.data$currentTrialStartTime = as.POSIXct(game.data$currentTrialStartTime, tz = "UTC", format = "%a %b %d %H:%M:%S %Y")
+
+game.data$currentTrialEndTime = ifelse(game.data$currentTrialEndTime != -1, 
+                                       as.POSIXct(game.data$currentTrialEndTime, tz = "UTC", format = "%a %b %d %H:%M:%S %Y"), NA)
+game.data$currentTrialEndTime = as.POSIXct(game.data$currentTrialEndTime, tz = "UTC", origin="1970-01-01")
+```
+
+
+## Thinking about the response variable reacTime
+
+```{r, fig.height=3, fig.width=9, fig.cap= "Distribution of the ReacTime varaiable: Origional vs log-Transformed"}
+par(mfrow = c(1,2))
+hist(game.data$reacTime, main = "Origional Data", xlab = "")
+hist(log(game.data$reacTime), main = "Log-Transformed", xlab = "")
+```
+
+When comparing the distribution between the original reaction time variable and the log-transformed variable, we could see that the original data was skewed to the right with several large leverage points. Since we were building a standard hierarchical model with normal errors and normal random effects, it was reasonable to have our response variable to be normally distributed.
+
+```{r}
+# Examine how accurately is reactime following to the 
+# sum(game.data[which(game.data$reacTime < 10), "hitType"] == "Time Out!!")
+# sum(game.data[which(game.data$reacTime > 10), "hitType"] != "Time Out!!")
+# 
+# table(game.data[which(game.data$hitType != "Perfect Hit!!"), "resp"] == 1)
+# table(game.data[which(game.data$hitType == "Perfect Hit!!"), "resp"] == 0)
+tmp.data <- game.data[which(game.data$reacTime < 10),]
+```
+
+As we take a closer look at the consistency between reacTime and HitType, we found out that the time limit was not very adhered to in the data. The inconsistency was in timing cutoff. Of all the cases that have reacTime being recorded under 10 seconds, which was under the time limit, `r length(tmp.data[which(tmp.data$hitType == "Time Out!!"), "reacTime"])` of entries were marked as "Time Out!!" despite having reac time under 10 seconds. When we examine the reactime, it appears that most cases had the reac time around 9.9 seconds, with several other cases to as low as 8.6 seconds. However, the reverse case where reaction time was greater than 10 seconds and not marked as time out does not exist. It was possible that this was caused by communication or process delay, but the real reason unknown.
+
+```{r}
+pander(summary(tmp.data[which(tmp.data$hitType == "Time Out!!"), "reacTime"]))
+```
+
+Given the game mechanism, we know once the game was timed out, the player was unable to answer the question. This will create a censor effect in our data, where we do not know the exact time it takes for the player to respond, but only knowing that the person took more than 10 seconds. The cutoff in our data could be seen in the log-transformed histogram of reac time in figure 1. Our residual plots will appear to have a sharp cutoff around log(10) and it will not appear as random as we expect them to. Given this situation, it might affect our random effects model because it "draws" the players whose response times were closer to each other by enforcing the same cutoffs, epically for players who takes longer (closer to 10 seconds) to respond on average.
+
+```{r}
+# False Hit type for react time under 10 seconds
+# Timed out instances
+
+# we make all timed out instances to 10 seconds
+game.data[which(game.data$hitType == "Time Out!!"), "reacTime"] = 10
+game.data$lrt = log(game.data$reacTime)
+```
+
+We decided to make all Timed Out instances react time to 10 seconds in order to keep the to formalize these cases. It would be unfair to exclude them from the dataset, since timed out usually suggests that the person was unable to provide a solution within 10 seconds, and this was equivalent to providing an incorrect answer. Thus, by making all timed out cases react time to 10 seconds, we corrected the issue in cases where timeout occurred right before 10 seconds, and cases where reactime was still recorded after the timeout. Also, it was helpful to know that all timed out cases in our dataset were marked as incorrect, which was consistent with the game design.
+
+## Ordinary linear regression for question effects
+```{r, fig.height=2.5, fig.width=9, fig.cap="Diagnostics for Linear Model of lrt ~ CurreutQuestion"}
+q2.lm = lm(game.data$lrt ~ factor(game.data$currentQuestion) + 0)
+par(mfrow = c(1,4))
+plot(q2.lm, pch=16, cex=0.6)
+# summary(q2.lm)
+```
+
+First, we fit a linear model on the log reaction time by using the type of current question as factors. From our linear model's diagnostics plots, we could see that this model mostly satisfies zero expectation, residual independence and constant variance assumption of the residuals. As expected, we see a clear cutoff on the upper end of the residual plots caused by the timing cutoff. We could see from the normal QQ plot that the residuals does not fit the normality assumption well, and it has tails on both end of the curve. In terms of model parameters, each factor corresponds to a question, and its parameter was the log of expected time to answer that specific question. In our example, the unbiased estimate was given by the average log-reaction time of each question. To put the parameter into perspective, for example, our model suggests that the expected log response time for question 0.1 was 1.1455. By taking the intercept out of the model, it was easier to compare the coefficients across all current questions instead of having to compute the relative values by using the reference intercept. 
+
+
+```{r, fig.height=2, fig.width=8, fig.cap="Expected Log-Reaction Time vs Question Easiness, average reaction time, log of the average reaction time, and the target value of the questions"}
+# (b) Plot the coefficients in this model against each of the following:
+# • Item easiness (the proportion of players attemping the item, who got it right (resp=1))
+# • The mean of all reaction times on this question
+# • The log of the mean reaction time on this question
+# • The target value for this question (currentQuestion as a numeric variable)
+# Summarize the results, and provide and comment on any interesting plots (you do not have to
+# provide plots that aren’t interesting!).
+
+# Calculates the number of questions answered right
+eda.table.5 = table(game.data$currentQuestion, game.data$hitType)
+eda.count.5 = eda.table.5[,"Perfect Hit!!"] / rowSums(eda.table.5)
+
+par(mfrow = c(1,4))
+# • Item easiness (the proportion of players attemping the item, who got it right (resp=1))
+plot(eda.count.5, q2.lm$coefficients, main = "E(lrt) vs Correct Portion",
+     ylab = "lrt", xlab = "Correct Portion", cex = 1, pch = 16)
+# • The mean of all reaction times on this question
+plot(aggregate(game.data$reacTime, list(game.data$currentQuestion), mean)[, 2], 
+     q2.lm$coefficients, main = "E(lrt) vs Average Reactime",
+     ylab = "lrt", xlab = "Average Reactime", cex = 1, pch = 16)
+# • The log of the mean reaction time on this question
+plot(log(aggregate(game.data$reacTime, list(game.data$currentQuestion), mean)[, 2]), 
+     q2.lm$coefficients, main = "E(lrt) vs log(mean ReacTime)",
+     ylab = "lrt", xlab = "Average lrt", cex = 1, pch = 16)
+# • The target value for this question (currentQuestion as a numeric variable)
+plot(as.numeric(names(table(game.data$currentQuestion))), 
+     q2.lm$coefficients, main = "E(lrt) vs Target Value",
+     ylab = "lrt", xlab = "Target Value", cex = 1, pch = 16, type = "b")
+
+createEasiness = function(df, eda.count.5) {
+  for (index in 1:nrow(df)) {
+    question = df[index, "currentQuestion"]
+    df[index, "ez"] = eda.count.5[which(names(eda.count.5) == question)]
+  }
+  return(df)
+}
+
+game.data = createEasiness(game.data, eda.count.5)
+```
+
+In order to visualize the relationship between coefficients of the model and other variables, we created scatter plots of coefficient against the questions’ easiness (portion of players who got the question right), mean of all reaction time and log reaction time and the numeric value of the question. It was not obvious whether there existed a relationship between the expected log reaction time vs corrected portion and target value. The expected log react time vs Average React time was very similar to the plot where we took the log of the average reaction time. Also, it was interesting to see that the expected log reaction time did not appear to have an obvious relationship with the average reaction time, this was possibly caused by the difference in sample sizes in each question. This also indicated that the average of log response time was not the same as the log of average response time. 
+
+```{r, message=FALSE, result = "hide", echo = FALSE, warning=FALSE}
+# (c) Use an automatic variable selection procedure to find the best model that doesinclude currentQuestion
+# as a factor, but does not include SID in any form.
+# i. Show or tell what variable selection method(s) you used, and what were the smallest and
+# largest models you considered.
+# Automatic Variable selection
+# We do full model with non-significant var removal, using AIC as a crietion
+###
+lm.2c.full = lm(lrt ~ factor(resp) + factor(currentQuestion) + factor(isGuidesEnabled) + factor(currentLevelNo) + avgAccuracy + totalStarCount + currentAccuracy + itemsPlayed + bestTime + ez, data = game.data)
+
+fit2c = eval(stepAIC(lm.2c.full, scope=list(lower=.~ factor(currentQuestion) + 0, upper=.~ factor(resp) + factor(currentQuestion) + factor(isGuidesEnabled) + factor(currentLevelNo) + avgAccuracy + totalStarCount + currentAccuracy + itemsPlayed + bestTime + ez,k=2), trace = FALSE)$call)
+```
+
+We preformed variable selection with stepwise AIC with both forward and backwards search. The smallest model that we considered was previous model with log reaction time as the response variable and current question as predictor variable. The largest model we have considered used log reaction time as the response variable, and current question, whether guide was enabled, the current level number, the average accuracy of the subject at the time of answer, the total star count, the current accuracy of the subject, number of items played, and the best time as predictor variables.
+```{r, fig.cap="Table"}
+# ii. Show the final model and write a short paragraph interpreting the fitted model and parameter
+# estimates etc. in the fitted model. Remember, you are writing for Dr. Lomas, so provide a
+# clear interpretation that will be useful to him in understanding the relationships between
+# predictors and outcome in the model.
+glm.result = cbind(round(exp(fit2c$coefficients),3), 
+                   round(exp(confint(fit2c)),3),
+                   ifelse(round(summary(fit2c)$coeff[,4],3) == 0,
+                          "<0.001", round(summary(fit2c)$coeff[,4],3)))
+colnames(glm.result) = c("AOR", "CI lb", " CI ub %", "Pval")
+pander(glm.result)
+```
+
+Since we used log transformation on the response variable, we transformed our model's coefficient of estimate exponentially. We cound interpret the intercept of our model output as the average log reaction time for players who gave the wrong answer on question 0.1, without guide enabled, who was on level 1, whose average and current accuracy was zero, and best time was zero, was expected to respond in 1.612 seconds. On average, the questions with the correct response took 1.13 times longer than the questions that were answered wrong. We could interpret each of the current question factor as its average response time ratio between question one and the selected question, controlling for other variables. For instance, we could interpret question 0.13's parameter as on average, the adjusted response time for answering this question was 1.035 times of the average time to answer question 0.1. The expected response time for questions with guide enabled was 4.9% higher than the questions without, controlling for other variables. For the each of the level parameter, we could interpret them as their adjusted time ratio in relation to the average response time for level 1 questions. For example, the expected response time for level 5 questions was 0.916 times of the expected response time for level 1 questions, controlling for other variables. Every percentage increase in player's average accuracy, we were expecting a 0.5% increase in his or her adjusted response time, and for every percentage increase in the player's current accuracy, we were expecting a 0.5% decrease in his or her adjusted response time. For every second increase in player's best time, the expected response time for this player increase by 24.1%, controlling for other variables.
+
+```{r}
+# iii. if resp, or easiness, or CurrentQuestion as a numeric variable, is in the final model, does
+# eacgh of their relationships with lrt make sense? Explain why or why not.
+```
+Note that it would be reasonable to treat easiness as a numeric variable, but nonsensical to treat resp and CurrentQuestion as numeric variables. If we were to treat current question as a numeric variable, we would be assuming that there was an ordinal relationship between each question in terms of reaction time. However, our previous plot disproved that, as the reaction time for all questions appeared to be uncorrelated. It would be unnecessary to treat resp as a numeric variable since it was a binary variable with two possible outcomes. We could treat easiness as a numeric variable because it was a continuous measure with ordinal relationship between the variables -- the higher the value the easier the question.
+
+
+## Ordinary linear regression for player effects
+
+```{r, fig.height=2.5, fig.width=9, fig.cap="Diagnostics for Linear Model of lrt ~ SID"}
+# (a) Fit a linear model for lrt, using SID as a factor, and omitting the intercept. Summarize and
+# interpret the fit.
+lm.3 = lm(game.data$lrt ~ factor(game.data$SID) + 0)
+par(mfrow = c(1,4))
+plot(lm.3, cex = 0.7, pch = 16)
+```
+
+The diagnostics plot of our model suggested several minor violations in linear model residual assumptions. Scale location plot showed that the residual variance did not appear to be constant. Besides the line of cutoff, it appeared that the zero expectation assumption was mostly met, and our residual appeared to be independent. The normality assumption was not fully met, and it had tails on both ends. We also observed couple potential outliers (point 4410, 4346, 3084, 1781, 3399 and 5811). We could interpret our model's parameter as the expect log response time for each player, which in this case was estimated by the average log response time. For example, the expected log response time for player 161461 was 0.85121.
+
+
+```{r}
+glm.mix.1 = glmer(game.data$resp ~ -1 + factor(game.data$currentQuestion) + (1|factor(game.data$SID)), 
+                  data = game.data, family = "binomial")
+```
+
+```{r, fig.height=8, fig.width=8, fig.cap="Expected Log-Reaction Time vs player fluency, random effects from the glm model, average reaction time and log of the average reaction time, of the players"}
+# (b) Plot the estimated coefficients of this model agaist each of the following:
+par(mfrow = c(2,2))
+# • proportion correct: The proportion of items attempted by that player, which the player got
+# right.
+eda.freq.table.4 = aggregate(game.data[,c("SID","resp")], by = list(game.data$SID), FUN = mean)
+eda.freq.4 = eda.freq.table.4[,"resp"]
+plot(eda.freq.4, lm.3$coefficients, main = "E(lrt) vs Proportion Correct",
+     pch = 16, cex = 0.7, xlab= "", ylab = "E(lrt)")
+# • The player random effects from the model glmer.resp <- glmer(resp ˜ cq - 1 +
+# (1|SID),family=binomial), where cq <- factor(currentQuestion).
+ranef.glm.mix.1 = ranef(glm.mix.1)$`factor(game.data$SID)`
+plot(ranef.glm.mix.1[,1], lm.3$coefficients, main = "E(lrt) vs Random Effects",
+     pch = 16, cex = 0.7, xlab= "", ylab = "E(lrt)")
+
+# • The mean reaction time of each player, over all the questions that player tried
+eda.freq.table.6 = aggregate(game.data[,c("SID","reacTime")], by = list(game.data$SID), FUN = mean)
+eda.freq.6 = eda.freq.table.6[,"reacTime"]
+plot(eda.freq.6, lm.3$coefficients, main = "E(lrt) vs Average Reaction Time",
+     pch = 16, cex = 0.7, xlab= "", ylab = "E(lrt)")
+lines(seq(0, 10, length.out = 101), log(seq(0, 10, length.out = 101)), col = 2)
+# • The log of the mean reaction time
+plot(log(eda.freq.6), lm.3$coefficients, main = "E(lrt) vs log Average Reaction Time",
+     pch = 16, cex = 0.7, xlab= "", ylab = "E(lrt)")
+abline(0,1,col= 2)
+# Summarize the results, and provide and comment on any interesting plots.
+```
+
+Figure 5 provided us with insights with regard to how the expected log response time of the subjects was related to other variables. We could see that there does not seem to be a relationship between player's fluency and his or her log response time. From the plot between the random effects from the muti-level model (where we used current question as fixed effect and player ID as varying intercept, and correctness as response variable) and the expected player log response time, we could see a possible pattern. This suggested that there may exist a relationship between the average log-reaction time of each player and this player's ability to answer the question correctly, controlling for the type of question. The expected log reaction time and the expected log average reaction time for each player showed some pattern with points drifting below the y=log(x) and the y=x line. This was caused by the smaller number of questions being answered by each player, thus making the two averages appeared closer on the plot. We still can conclude that the average log reaction time for each player was not the same as the log average reaction time. 
+
+## Mixed Effects Models
+
+```{r}
+# Our primary interest is in what factors affect the reaction time of each player on each question It is
+# quite likely that questions answered by the same person will be dependent on each other through that
+# player’s ability. For these reasons, we will focus on questions as fixed effects and players as random
+# effects.
+# (a) Fit a standard mixed effects linear regression model predicting lrt, using currentQuestion as a
+# fixed effect factor, omitting the intercept, and with a random intercept grouped by SID (that is,
+# all these should be implemented in your model). Summarize and interpret the fit.
+lm.q4.mix = lmer(game.data$lrt ~ -1 + factor(game.data$currentQuestion) + (1|factor(game.data$SID)), 
+                  data = game.data)
+```
+
+```{r}
+r.marg <- function(m) {
+  y <- m@frame[,1]
+  yhat <- model.matrix(m) %*% fixef(m)
+  return(y-yhat)
+}
+
+r.cond <- function(m) {residuals(m)}
+
+r.reff <- function(m) {r.marg(m) - r.cond(m)}
+
+# suitable fitted values to plot them against...
+# (you can plot them against other things as well...
+
+yhat.marg <- function(m) { model.matrix(m) %*% fixef(m) }
+
+yhat.cond <- function(m) {
+  y <- m@frame[,1]
+  y - r.cond(m)
+}
+
+yhat.reff <- function(m) { yhat.marg(m) + r.cond(m) }
+
+
+# basic ungrouped residual plots
+
+resplots <- function(r,yhat,res.label) {
+  # makes basic ungrouped residual plots of standardized residuals...
+  oldpar <- par(mfrow=c(2,2))
+  if (missing(res.label)) {
+    r <- scale(r)
+    res.label <- "Standardized Residuals"
+  }
+  hist(r,xlab=res.label,main="")
+  qqnorm(r)
+  qqline(r,col="red")
+#  abline(0,1,col="Red")
+  plot(yhat,r,xlab="Fitted Values",ylab=res.label)
+  abline(h=0)
+  abline(h=3,col="Red")
+  abline(h=-3,col="Red")
+  par(oldpar)
+  invisible()  
+}
+```
+
+```{r, fig.height=2.5, fig.width=8, fig.cap="Diagnostics Plot for Mixed Model"}
+M2 = lm.q4.mix
+par(mfrow = c(1,3))
+plot(yhat.marg(M2),r.marg(M2),xlab="Marginal Fitted Values",ylab="Marginal Residuals", 
+     main = "M2:Marginal Fitted Values vs Residuals", pch=16, cex=0.7)
+abline(h=0,lwd = 2, col = 2)
+
+plot(yhat.cond(M2),r.cond(M2),xlab="Conditional Fitted Values",ylab="Conditional Residuals", 
+     main = "M2:Conditional Fitted Values vs Residuals", pch=16, cex=0.7)
+abline(h=0,lwd = 2, col = 2)
+
+plot(yhat.reff(M2),r.reff(M2),xlab="M2: Random Effect Fitted Values",ylab="Random Effect Residuals", 
+     main = "M2: Random Effect Fitted Values vs Residuals", pch=16, cex=0.7)
+abline(h=0,lwd = 2, col = 2)
+
+par(mfrow = c(1,3))
+qqnorm(r.marg(M2), main="M2: QQplot for Marginal Residuals")
+qqline(r.marg(M2),col=2)
+
+qqnorm(r.cond(M2), main="M2: QQplot for Conditional Residuals")
+qqline(r.cond(M2),col=2)
+
+qqnorm(r.reff(M2), main="M2: QQplot for Random Effect Residuals")
+qqline(r.reff(M2),col=2)
+
+# xyplot(r.reff(M2)~yhat.reff(M2)|as.factor(game.data$SID), main="M2: Random Effect Fitted vs Residuals by SID")
+
+```
+
+Our mix model’s marginal and conational residuals appeared to have zero expectation and constant variance, suggesting that the model was an appropriate fit on the data. Our normality assumption was not fully met, with tails on both end of the normal line. The fixed effect of our model represented the expected log-response time from all subjects at each questions, taking the difference between individuals into account. For example, we conclude that the expected log reaction time for players to answer question 0.1 is 1.186 when grouping by individuals. The random effect of our model represented the effect of individuals on the log reaction time on the question. For example, individual 164461's random effect suggested that when controlling for the question, the subject was expected to have 0.3022 seconds shorter log reaction time than the average log reaction time across all players.
+
+```{r,  fig.height=4, fig.width=8, fig.cap="Mixed Model Parameters vs Data Average"}
+par(mfrow = c(1,2))
+plot(q2.lm$coefficients ,fixef(lm.q4.mix), main = "Model Fixed Effect vs log Reaction Time",
+     xlab = "Average Log Reactime", ylab = "Fixed Effects", cex = 0.8, pch =16)
+abline(0,1,col=2)
+
+ranef.lm.q4.mix = ranef(lm.q4.mix)$`factor(game.data$SID)`
+plot(lm.3$coefficients, ranef.lm.q4.mix[,1], main = "Model Random Effect vs log Reaction Time",
+     xlab = "Average Log Reactime", ylab = "Random Effects", cex = 0.8, pch =16)
+abline(0,1,col=2)
+```
+
+Our model suggested that the effect of questions on players' log response time was higher than the average log response time on each question across all players. This meant that the effect of the question was larger than what it appeared from the unbiased estimator in our linear model, and that the individual effects played a less important role in estimating the log response time. Our model's random effect suggested that in almost all cases, the random effect had less influence on the log reaction time than the average log reaction time on each player across all players. We also observed a pattern in the random effects, suggesting that we may require more information in our model to capture the underlying reason. For subjects with smaller average log reaction time, it appeared that their random effects were closer to the average, and for subjects with larger log reaction time, their random effect appeared to be more different than the average.
+
+
+```{r, message=FALSE, results="hide"}
+# (b) Use an automatic variable selection method to try to improve this model.
+# i. Show or tell what variable selection method(s) you used, and what the smallest and largest
+# models (both fixed and random effects) you considered were.
+lm.q4.full <- lmer(lrt ~ factor(resp) + factor(currentQuestion) + factor(isGuidesEnabled) + factor(currentLevelNo) + avgAccuracy + totalStarCount + currentAccuracy + itemsPlayed + bestTime  + (1|SID), data=game.data,  REML=F)
+
+bic_best.1 <-
+fitLMER.fnc(lm.q4.full ,method="BIC")
+```
+
+```{r, warning=FALSE}
+lm.q4.small = lmer(game.data$lrt ~  (1|factor(game.data$SID)), 
+                  data = game.data)
+
+q4.model.anova = anova(lm.q4.mix,lm.q4.small,lm.q4.full,bic_best.1)
+```
+We used back-fit fixed effects and forward-fit random effects of an LMER model (from the LMERConvenienceFunctions package in R) to search for the best model under the BIC criteria. We started with the largest model: log reaction time as the response variable, with whether the player responded the question correctly, the current question, whether guide is enabled, the current level, average accuracy, total star count, accuracy of the current session, items player, and the best time of the player as fixed effects, and we used individual players as random effects. We then compare the full model, along with the searched result, with our smallest model, which was a mixed effect model with no fixed effects and individual players as random effect. 
+
+From our anova table, we can see that under BIC criteria, the model selected by the automatic model selection has the best BIC, and the AIC of the model came close with the initial full model, but still with considerable improvement. Therefore, we selected the model with whether the player responded the question correctly, current level, average accuracy, current accuracy and player best time as fixed effects, and individual players as random effects.
+
+
+```{r}
+pander(q4.model.anova)
+```
+
+```{r}
+# ii. Show the final model and write a short paragraph interpreting the fitted model and parameter
+# estimates etc. in the fitted model. Remember, as before, you are writing for Dr. Lomas.
+ranef.bic.best.1 = ranef(bic_best.1)$SID
+```
+
+Our model's fixed effects suggested that when considering individual players' difference, the response time was expected to be 10% higher when the question was answered correctly. Each of the current level factor corresponded to the difference in response time with that of the current level one's. For example, we expect that it would take on average 9.6% longer to respond level 2 questions than to respond level 1 questions. For each additional percentage in player accuracy (in percentage), we expected an average 0.38% increase in response time, and for each additional percentage in current accuracy, we expected the average response time to be 0.46% shorter. For each additional second in player's best time, we expect that player's response time to be 20.1% higher, when taking individual players' average response time into account. The model's random effects summarized the effects of individual player's response time on the response time of the question. For instance, subject 161461 on average had a 11.71% less response time on questions, controlling for the variables that we had discussed in the fixed effects.
+
+\newpage
+
+## Models combining reaction time and correctness of response
+
+```{r}
+# Many researchers believe that reaction time and correctness of response should be related in some
+# way. For example, perhaps, as the question gets harder to answer correctly, the reaction time should
+# go up. Or perhaps reaction time is not so much related to correctness of response as it is to how
+# “engaging” the player finds the game to be.
+# (a) Review your work from Section 1 (and possibly some of your work from Project Part I;) and try
+# to determine whether one of these theories (or some other theory), about the connection between
+# reaction time and correctness of response, is suggested. Write a short paragraph, with figures or
+# other displays if needed, giving evidence for your conclusion(s).
+```
+
+In our modeling in the previous part, we concluded that there existed a relationship between the scaled reaction time and the probability of answering correctly. In particular, for every second increase in player reaction time, the average probability of a player getting the correct answer increases by 0.12 percent. This was reinforced in our current analysis when we modeled the log reaction time as the response variable. The mixed model results suggested that having a correct response was associated with a longer reaction time, and for players with higher average accuracy, their response time was also expected to be longer. Thus, we concluded that it is entirely possible that the correctness of response was related to the reaction time in some way.
+
+```{r, fig.height=4, fig.width=6, fig.cap = "From the figure we can see that log probability may be a reasonable predictor of log response time"}
+# (b) van der Linden (2009, p. 254)3
+# suggests, essentially, that we make the logit of the probability
+# of a correct response one of the predictors for the response time model. We can get the
+# logits of the success probability for each question encountered by each player with lp <-
+# predict(glmer.resp), where glmer.resp is the model referred to in section 3 above.
+lp <- predict(glm.mix.1)
+par(mfrow = c(1,1))
+plot(game.data$lrt,lp, pch=16, cex = 0.7, main="Log Probability vs Log Time",
+     ylab = "Log P(Correct)", xlab = "Log React Time")
+abline(lm(lp~game.data$lrt), col = 2)
+
+# i. Using graphs and an ordinary linear regression model, explore the relationship between lrt
+# and lp. Is lp a good predictor of lrt? Is the direction of the relationship what you would
+# expect?
+```
+
+```{r, include = FALSE, fig.cap="Diagnostics for Linear model: LP  ~ LRT"}
+par(mfrow = c(1,4))
+plot(lm(lp~game.data$lrt), pch =16,cex = 0.7)
+```
+
+The plot suggested that log probability of correctness may be a good predictor of the log response time on the questions, as the two were hypotheized to be positivey corrlated. We attempted to expand the model by including log probability, correct response, current question, whether guide was enabled, the current level number, the average accuracy of the subject at the time of answer, the total star count, the current accuracy of the subject, number of items played, and the best time as covariates. After stepwise AIC selection, we decided to retain our full model. However, we had some concerns with our model fitness from our diagnostics plot. We can observe that the variance was not constant and the normal residual assumption was not quite met. 
+
+```{r}
+game.data$lp = predict(glm.mix.1)
+# ii. Use a variable selection procedure to try to improve the linear model you fitted in part (i).
+# Summarize and interpret the fit of your final model.
+lm.5.full = lm(lrt ~ factor(resp) + factor(currentQuestion) + factor(isGuidesEnabled) + factor(currentLevelNo) + avgAccuracy + totalStarCount + currentAccuracy + itemsPlayed + bestTime + lp, data = game.data)
+
+fit5 = eval(stepAIC(lm.5.full, scope=list(lower=.~ lp, upper=.~ factor(resp) + factor(currentQuestion) + factor(isGuidesEnabled) + factor(currentLevelNo) + avgAccuracy + totalStarCount + currentAccuracy + itemsPlayed + bestTime + lp,k=2), trace = FALSE)$call)
+
+```
+
+
+```{r, fig.height=2.5, fig.width=9, fig.cap="Diagnostics for Auto Selected Linear model"}
+par(mfrow = c(1,4))
+plot(fit5, pch =16,cex = 0.7)
+```
+
+```{r}
+# (c) A basic problem with the linear regression in part (b) (i) here, is that it assumes that lp is fixed
+# and known, but in fact lp is only estimated (through estimates of fixed and random effects in the
+# model glmer.resp). The multilevel Bayesian model in Figure 1 (below) tries to correct this, by
+# modeling lrt and resp at the same time, using the same components as the models in part (b) (i).
+
+# i. Write, using the most precise mathematical language that you can use, the model represented
+# in Figure 1. It is not necessary to write out the prior distributions, just get the structure
+# of the model at levels 1 and 2 as clear and correct as possible. Feel free to use the code
+# in Figure 1 as well as the modeling components in part (b) (i), to figure this out.
+```
+
+
+Level 1:
+$lrt_i$ = $\beta_{1}$ * ($Question_{i}$ + $\alpha_{[j]i}$) * $\rho$ + $\epsilon^{2}$
+
+where $\sigma^{2}$ ~ $N(0,1)$, $\rho$ ~  $\sigma^{2}$ ~ $N$(0,$\sigma^{2}$), $\rho$ ~ $N(0,1)$
+and $\sum$ $Question$ = 0
+
+Level 2:
+$\alpha_{j}$ = $\beta_{0}$ + $\tau^{2}$
+where $\tau^{2}$ ~ $N$(0,$\eta^{2}$)
+
+
+```{r}
+# ii. Unfortunately the mcmc fit does not run very fast—it takes about two hours for a typical
+# useful run. Rather than make you wait for the runs, I have produced three fitted model objects,
+# joint.mcmc.test, joint.mcmc.0 and joint.mcmc.1, using the code in Figure 2.
+# You can load these fitted models into your R session by copying the file fitted-mcmc.RData
+# from the Project Part 2 directory into your working directory on your laptop, and issuing
+# the command4 load("fitted-mcmc.RData") in R.
+load("fitted-mcmc.RData")
+library(R2jags)
+library(rube)
+```
+
+```{r}
+# A. Inspect the fitted model objects joint.mcmc.0 and joint.mcmc.1 with the print()
+# and p3() commands, and any other tools if they seem useful. Does it look like, for
+# either fit, the Markov chain has converged to its stationary distribution? Why or why
+# not? Are the estimates from either run useful and reliable? Why or why not? Provide
+# evidence for your conclusions.
+```
+
+Upon inspecting both simulation results, we can see that the model fitted under joint.mcmc.1 appeared to be better than joint.mcmc.0. All the parameters converged to stationary distribution and the autocorrelation appeared to satisfy the markov assumption of independence. This was not achieved by joint.mcmc.0. Not only were the rhats high on the parameters, suggesting non-convergence, the autocorrelation plot showed poor fit under the markov chain assumption. Therefore, the results in joint.mcmc.0 was not reliable.
+
+```{r}
+# B. The setup for fitting joint.mcmc.1 was slightly different from the setup for fitting
+# joint.mcmc.0. Describe the difference, and explain why this might have contributed
+# to a different level of success for one fit vs the other.
+```
+It appeared that joint.mcmc.1 was set up with more prior assumption in the residual distributions than joint.mcmc.0. In particular, model 1 drew the residuals based on the 95% confidence interval of the same residuals after simulation in model 0. Therefore, model 1 may have been better because it was improved from model zero by drawing the simulated results, this creating a better initial state that lead to convergence. Similar to burning off the previous data.
+
+```{r}
+# iii. Choose whichever of joint.mcmc.0 or joint.mcmc.1 was the more successful and reliable
+# fit, and interpret the fitted model. Compare it with the fitted model in part (b) (i). Is the
+# conclusion about the relationship between lrt and lp the same5?
+
+# pander(print(joint.mcmc.1))
+```
+
+
+The parameters of the markov chain suggested that the probability of answering the question correct did have a relationship with the response time that it took. In particular, the relationship was positively correlated. Thus, our simulated result matches with the conclusion that we reached in part b.
+
+
+
+
+
+
+
+
+\newpage
+  
+# Appendix I
+
+Gelman, A. & Hill, J. (2007). Data Analysis Using Regression and Multilevel/Hierarchical Models. NY:
+Cambridge Univ Press.
+
+Lomas, D., Patel, K., Forlizzi, J.L., and Koedinger, K.R. (2013). Optimizing Challenge in an Educational
+Game Using Large-Scale Design Experiments. Paper presented at CHI 2013, Paris, France. Obtained
+online at http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.480.2493&rep=rep1&type=pdf
+
+Lynch, Scott M. (2007). Introduction to Applied Bayesian Statistics and Estimation for Social Scientists.
+New York: Springer.
+
+
+

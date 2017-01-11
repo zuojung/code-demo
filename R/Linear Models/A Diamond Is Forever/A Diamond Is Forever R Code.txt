@@ -1,0 +1,666 @@
+########################################################################
+###################### DA EXAM 2- Zuojun Gong ##########################
+########################################################################
+
+##################### Import Data From File ############################
+setwd("C:/Users/Zuojun/Desktop/36-401/DA Exam 2")
+library(MASS)
+data = read.table("data.txt")
+#data.new = read.table("data.new.txt")
+#data.new.1 = read.table("data.new.nooutlier.txt")
+
+########################################################################
+
+################# Univariate EDA ##################
+
+## Naming Variables
+
+Price = data$price
+Weight = data$carat
+Cut = data$cut
+Color = data$color
+Clarity = data$clarity
+Length = data$x
+Width = data$y
+Height = data$z
+Top = data$top
+Body = data$body
+
+## Numericalize variables
+
+n = length(Price)
+
+Cut.num = c(1:n)
+for (i in 1:n){
+  if (Cut[i] == "Fair"){
+    Cut.num[i] = 1
+  }
+  else if(Cut[i] == "Good"){
+    Cut.num[i] = 2
+  }
+  else if(Cut[i] == "Very Good"){
+    Cut.num[i] = 3
+  }
+  else if(Cut[i] == "Premium"){
+    Cut.num[i] = 4
+  }
+  else if (Cut[i] == "Ideal"){
+    Cut.num[i] = 5
+  }
+}
+
+Color.num = as.numeric(Color)
+
+Clarity.num = c(1:n)
+for (i in 1:n){
+  if (Clarity[i] == "I1"){
+    Clarity.num[i] = 1
+  }
+  else if(Clarity[i] == "SI1"){
+    Clarity.num[i] = 2
+  }
+  else if(Clarity[i] == "SI2"){
+    Clarity.num[i] = 3
+  }
+  else if(Clarity[i] == "VS1"){
+    Clarity.num[i] = 4
+  }
+  else if(Clarity[i] == "VS2"){
+    Clarity.num[i] = 5
+  }
+  else if(Clarity[i] == "VVS1"){
+    Clarity.num[i] = 6
+  }
+  else if(Clarity[i] == "VVS2"){
+    Clarity.num[i] = 7
+  }
+  else if(Clarity[i] == "IF"){
+    Clarity.num[i] = 8
+  }
+}
+
+Color.num = c(1:n)
+for (i in 1:n){
+  if (Color[i] == "J"){
+    Color.num[i] = 1
+  }
+  else if(Color[i] == "I"){
+    Color.num[i] = 2
+  }
+  else if(Color[i] == "H"){
+    Color.num[i] = 3
+  }
+  else if(Color[i] == "G"){
+    Color.num[i] = 4
+  }
+  else if(Color[i] == "F"){
+    Color.num[i] = 5
+  }
+  else if(Color[i] == "E"){
+    Color.num[i] = 6
+  }
+  else if(Color[i] == "D"){
+    Color.num[i] = 7
+  }
+}
+
+## summary tables and tables of distributions
+
+summary(Price);sd(Price)
+summary(Carat);sd(Carat)
+
+table(Cut)
+table(Color)
+table(Clarity)
+
+
+summary(Length);sd(Length)
+summary(Width);sd(Width)
+summary(Height);sd(Height)
+summary(Top);sd(Top)
+summary(Body);sd(Body)
+
+
+## histograms 
+
+par(mfrow=c(3,3))
+hist(Price,breaks=10,col="blue",xlab="Price (in dollars)", main="Price",cex.main=1)
+hist(Weight,col="red",xlab="Weight (in Carat)", main="Weight",cex.main=1)
+
+#hist(Cut.num,breaks=5,col="green",xlab="Cut", main="Cut",cex.main=1)
+#hist(Color.num,breaks=10,col="purple",xlab="Color", main="Color",cex.main=1)
+#hist(Clarity.num,breaks=10,col="violet",xlab="Clarity", main="Clarity level",cex.main=1)
+
+hist(Length,col="purple",xlab="Length (in mm)", main="Length",cex.main=1)
+hist(Width,col="violet",xlab="Width (in mm)", main="Width",cex.main=1)
+hist(Height,col="orange",xlab="Height (in mm)", main="Height",cex.main=1)
+
+hist(Top,col="11",xlab="Top (in %)", main="Top",cex.main=1)
+hist(Body,col="13",xlab="Body (in %)", main="Body",cex.main=1)
+
+## Pairs Plot -- For reference
+vars.1=cbind(Price,Weight,Length,Width,Height,Top,Body)
+pairs(vars.1,panel=panel.smooth, lower.panel = panel.cor, main = "Pairs plot 1") 
+
+var.2=cbind(Price,Weight,Cut.num,Color.num,Clarity.num,Length,Width,Height,Top,Body)
+pairs(var.2,panel=panel.smooth,lower.panel = panel.cor, main = "Pairs plot 3")
+
+
+#### Summary measures for conditional distributions for Price
+
+## Cut
+
+summary(Price[Cut.num == 1]);sd(Price[Cut.num  == 1])
+summary(Price[Cut.num == 2]);sd(Price[Cut.num  == 2])
+summary(Price[Cut.num == 3]);sd(Price[Cut.num  == 3])
+summary(Price[Cut.num == 4]);sd(Price[Cut.num  == 4])
+summary(Price[Cut.num == 5]);sd(Price[Cut.num  == 5])
+
+## Color
+summary(Price[Color.num == 1]);sd(Price[Color.num  == 1])
+summary(Price[Color.num == 2]);sd(Price[Color.num  == 2])
+summary(Price[Color.num == 3]);sd(Price[Color.num  == 3])
+summary(Price[Color.num == 4]);sd(Price[Color.num  == 4])
+summary(Price[Color.num == 5]);sd(Price[Color.num  == 5])
+summary(Price[Color.num == 6]);sd(Price[Color.num  == 6])
+summary(Price[Color.num == 7]);sd(Price[Color.num  == 7])
+
+
+## Clarity 
+
+summary(Price[Clarity.num == 1]);sd(Price[Clarity.num  == 1])
+summary(Price[Clarity.num == 2]);sd(Price[Clarity.num  == 2])
+summary(Price[Clarity.num == 3]);sd(Price[Clarity.num  == 3])
+summary(Price[Clarity.num == 4]);sd(Price[Clarity.num  == 4])
+summary(Price[Clarity.num == 5]);sd(Price[Clarity.num  == 5])
+summary(Price[Clarity.num == 6]);sd(Price[Clarity.num  == 6])
+summary(Price[Clarity.num == 7]);sd(Price[Clarity.num  == 7])
+summary(Price[Clarity.num == 8]);sd(Price[Clarity.num  == 8])
+
+## Box-Plots
+
+par(mfrow=c(1,3))
+
+# Price by Cut
+boxplot(Price[Cut.num ==1],Price[Cut.num ==2],Price[Cut.num ==3],Price[Cut.num ==4],Price[Cut.num ==5],main = "Price by Cut", names = c("Fair","Good","Very Good","Premium","Ideal"),ylab="Price")
+
+# Price by Color
+
+boxplot(Price[Color.num ==1],Price[Color.num ==2],Price[Color.num ==3],Price[Color.num ==4],Price[Color.num ==5],Price[Color.num ==6],Price[Color.num ==7],main = "Price by Color", names = c("J","I","H","G","F","E","D"),ylab="Price")
+
+# Price by Clarity 
+
+boxplot(Price[Clarity.num ==1],Price[Clarity.num ==2],Price[Clarity.num ==3],Price[Clarity.num ==4],Price[Clarity.num ==5],Price[Clarity.num ==6],Price[Clarity.num ==7],Price[Clarity.num ==8],main = "Price by Clarity", names = c("I1","SI1","SI2","VS1","VS2","VVS1","VVS2","IF"),ylab="Price")
+
+##################### Initial Modeling #############################
+
+##### Variable categorization #####
+
+reg.line=lm(Price~Weight+Cut.num+Color.num+Clarity.num+Length+Width+Height+Top+Body)
+summary(reg.line)
+
+#### Cut -- Use Ideal vs Non-Ideal
+
+## Cut as ordered categoriacl var
+reg.line = lm(Price~Weight+Cut.num+Color.num+Clarity.num+Length+Width+Height+Top+Body)
+summary(reg.line)
+
+## Cut as categorical var -- Ideal as reference 
+
+Cut.num.1 = factor(Cut.num,levels=c(5,1,2,3,4))
+reg.line.cut.1= lm(Price~Weight+Cut.num.1+Color.num+Clarity.num+Length+Width+Height+Top+Body)
+summary(reg.line.cut.1)
+
+## Cut as categorial var: Ideal vs non-ideal, non-Ideal as reference -- USE 
+
+Cut.num.2=Cut.num
+Cut.num.2.1=ifelse(Cut.num==5,1,0)
+Cut.num.2.2=ifelse(Cut.num!=5,1,0)
+reg.line.cut.2= lm(Price~Weight+Cut.num.2.1+Color.num+Clarity.num+Length+Width+Height+Top+Body)
+summary(reg.line.cut.2)
+
+
+#### Color -- Use J-G,F-D,J-G as reference
+
+## Color as ordered categoriacl var
+
+reg.line = lm(Price~Weight+Cut.num+Color.num+Clarity.num+Length+Width+Height+Top+Body)
+summary(reg.line)
+
+## Color as categorical var -- Color G as reference
+
+Color.num.1 = factor(Color.num,levels=c(4,1,2,3,5,6,7))
+reg.line.color.1= lm(Price~Weight+Cut.num+Color.num.1+Clarity.num+Length+Width+Height+Top+Body)
+summary(reg.line.color.1)
+
+## Color as categorical var: J-H, G-F,E-D - G-F as refernce 
+
+Color.num.2.1=ifelse(Color.num<4,1,0)
+Color.num.2.2=ifelse(Color.num>=4&Color.num<6,1,0)
+Color.num.2.3=ifelse(Color.num>=6,1,0)
+reg.line.color.2=lm(Price~Weight+Cut.num+Color.num.2.1+Color.num.2.3+Clarity.num+Length+Width+Height+Top+Body)
+summary(reg.line.color.2)
+
+
+## Color as categorical var, J-H,G-D, G-D as reference
+
+Color.num.3.1=ifelse(Color.num<4,1,0)
+Color.num.3.2=ifelse(Color.num>=4,1,0)
+reg.line.color.3=lm(Price~Weight+Cut.num+Color.num.3.1+Clarity.num+Length+Width+Height+Top+Body)
+summary(reg.line.color.3)
+
+## Color as categorical var, J-G,F-D,J-G as reference -- USE
+
+Color.num.4.1=ifelse(Color.num<5,1,0)
+Color.num.4.2=ifelse(Color.num>=5,1,0)
+reg.line.color.4=lm(Price~Weight+Cut.num+Color.num.4.2+Clarity.num+Length+Width+Height+Top+Body)
+summary(reg.line.color.4)
+
+## Clarity -- Use categorical var: <=3,4-5,>5, <=3 as reference 
+
+## Clarity as orderered categorical var
+
+summary(reg.line)
+
+## Clarity as categorical Var
+
+Clarity.num.1=factor(Clarity.num,levels=c(2,1,3,4,5,6,7,8))
+reg.line.clarity.1= lm(Price~Weight+Cut.num+Color.num+Clarity.num.1+Length+Width+Height+Top+Body)
+summary(reg.line.clarity.1)
+
+## Clarity as categorical var: <=3,>3, >3 as reference 
+
+Clarity.num.2.1=ifelse(Clarity.num<=3,1,0)
+reg.line.clarity.2= lm(Price~Weight+Cut.num+Color.num+Clarity.num.2.1+Length+Width+Height+Top+Body)
+summary(reg.line.clarity.2)
+
+
+## Clarity as categorical var: <=2,>2, >2 as reference 
+
+Clarity.num.3.1=ifelse(Clarity.num<=2,1,0)
+reg.line.clarity.3= lm(Price~Weight+Cut.num+Color.num+Clarity.num.3.1+Length+Width+Height+Top+Body)
+summary(reg.line.clarity.3)
+
+## Clarity as categorical var: <=4,>4, <=4 as reference 
+
+Clarity.num.4.1=ifelse(Clarity.num>4,1,0)
+reg.line.clarity.4= lm(Price~Weight+Cut.num+Color.num+Clarity.num.4.1+Length+Width+Height+Top+Body)
+summary(reg.line.clarity.4)
+
+
+## Clarity as categorical var: <=3,4-5,>5, <=3 as reference --use
+
+Clarity.num.5.1=ifelse(Clarity.num>=4&Clarity.num<=5,1,0)
+Clarity.num.5.2=ifelse(Clarity.num>5,1,0)
+Clarity.num.5.3=ifelse(Clarity.num<=3,1,0)
+reg.line.clarity.5= lm(Price~Weight+Cut.num+Color.num+Clarity.num.5.1+Clarity.num.5.2+Length+Width+Height+Top+Body)
+summary(reg.line.clarity.5)
+
+
+## Result without interaction
+
+reg.line.1=lm(Price~Weight+Cut.num.2.1+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+Length+Width+Height+Top+Body)
+summary(reg.line.1)
+
+###### Interactions
+
+## Cut and Color
+
+# Type 1
+par(mfrow=c(1,1))
+boxplot(Price[Cut.num.2.2==1&Color.num.4.1==1],Price[Cut.num.2.1==1&Color.num.4.1==1],Price[Cut.num.2.2==1&Color.num.4.2==1],Price[Cut.num.2.1==1&Color.num.4.2==1],main="Interaction plot-Cut and Color",names=c("Non-Ideal&<5","Ideal&<5","Non-Ideal&>=5","Ideal&>=5"),ylab="Price")
+abline(v=2.5,lty=2,col=2)
+segments(1,mean(Price[Cut.num.2.2==1&Color.num.4.1==1]),2,mean(Price[Cut.num.2.1==1&Color.num.4.1==1]),lty=1,col=2)
+segments(1,mean(Price[Cut.num.2.2==1&Color.num.4.2==1]),2,mean(Price[Cut.num.2.1==1&Color.num.4.2==1]),lty=1,col=4)
+
+# Type 2 -- USE
+
+par(mfrow=c(1,2))
+boxplot(Price[Cut.num.2.2==1],Price[Cut.num.2.1==1],main="Interaction plot-Cut and Color",names=c("Non-Ideal Cut","Ideal Cut"),ylab="Price (in $)")
+segments(1,mean(Price[Cut.num.2.2==1&Color.num.4.1==1]),2,mean(Price[Cut.num.2.1==1&Color.num.4.1==1]),lty=1,col=2)
+segments(1,mean(Price[Cut.num.2.2==1&Color.num.4.2==1]),2,mean(Price[Cut.num.2.1==1&Color.num.4.2==1]),lty=1,col=4)
+legend("topleft",c("Color <=G ","Color>G"),col=c(2,4),lwd=1)
+
+## Clarity and Body -- USE
+
+plot(Body,Price,pch=c(4,20,22),col=c(2,3,4),xlab="Body (in %)",ylab="Price",main="Interaction plot-Clarity and Body")
+line.interaction.1 = lm(Price[Clarity.num.5.1==1]~Body[Clarity.num.5.1==1])
+abline(line.interaction.1,lwd=2,col=2)
+line.interaction.2 = lm(Price[Clarity.num.5.2==1]~Body[Clarity.num.5.2==1])
+abline(line.interaction.2,lwd=2,col=3)
+line.interaction.3 = lm(Price[Clarity.num.5.3==1]~Body[Clarity.num.5.3==1])
+abline(line.interaction.3,lwd=2,col=4)
+legend("topleft",c("Clarity <=3 ","4<Clarity<6","Clarity>=6"),col=c(2,3,4),lwd=1,pch=c(4,20,22))
+
+
+
+## Weight and X 
+
+par(mfrow=c(1,3))
+
+weight.x = Weight*Length
+line.weight.x=lm(weight.x~Weight+Cut.num.2.1+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+Length+Width+Height+Top+Body)
+plot(line.weight.x$res,reg.line.1$res,pch=16,xlab="Interaction Resiuals post-muticollinearity removal",ylab="Residual from Pre-Interaction model",main="Interaction between Weight and Length")
+abline(h=0,lty=2,col=2)
+
+## Weight and Y
+
+weight.y = Weight*Width
+line.weight.y=lm(weight.y~Weight+Cut.num.2.1+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+Length+Width+Height+Top+Body)
+plot(line.weight.y$res,reg.line.1$res,pch=16,xlab="Interaction Resiuals post-muticollinearity removal",ylab="Residual from Pre-Interaction model",main="Interaction between Weight and Width")
+abline(h=0,lty=2,col=2)
+
+## Weight and Z 
+
+weight.z = Weight*Height
+line.weight.z=lm(weight.z~Weight+Cut.num.2.1+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+Length+Width+Height+Top+Body)
+plot(line.weight.z$res,reg.line.1$res,pch=16,xlab="Interaction Resiuals post-muticollinearity removal",ylab="Residual from Pre-Interaction model",main="Interaction between Weight and Height")
+abline(h=0,lty=2,col=2)
+
+# reg.line.1=lm(Price~Weight+Cut.num.2.1+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+Length+Width+Height+Top+Body)
+
+
+## Model ready for diagnostics 
+
+reg.line.ready=lm(Price~Weight+Cut.num.2.1+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+Length+Width+Height+Top+Body+Cut.num.2.1*Color.num.4.2+Clarity.num.5.1*Body+Clarity.num.5.2*Body+Weight*Length+Weight*Width+Weight*Height)
+summary(reg.line.ready)
+
+######################### Diagnostics ############################
+
+###### Outlier Detection and removal
+
+## 
+x = cbind(1,Weight,Cut.num.2.1,Color.num.4.2,Clarity.num.5.1,Clarity.num.5.2,Length,Width,Height,Top,Body,Cut.num.2.1*Color.num.4.2,Clarity.num.5.1*Body,Clarity.num.5.2*Body+Weight*Length+Weight*Width+Weight*Height)
+
+H = x%*%solve(t(x)%*%x)%*%t(x)
+
+n.x = nrow(x)
+p.x = ncol(x)
+SSE = sum(reg.line.ready$res^2)
+MSE = SSE/(n.x-p.x)
+
+res = reg.line.ready$res
+del.res = res*sqrt(n.x-p.x-1)/(SSE*(1-diag(H))-res^2)
+sort(del.res)[1:10];sort(del.res)[(n.x-10):n.x]         ## 237,8,73,97,186,270,229    334,20,34,13
+alpha = 0.05
+qt(1-alpha/(2*n.x),n.x-p.x-1)
+
+mean.h=p.x/n.x                                         ## 13,
+which(diag(H)>2*mean.h)
+sort(diag(H))[(n.x-10):n.x]
+order(diag(H))[(n.x-10):n.x]
+
+#############################################
+#redjusting Data after outlier removal
+
+data = read.table("data.new.txt")
+## Naming Variables
+
+Price = data$price
+Weight = data$carat
+Cut = data$cut
+Color = data$color
+Clarity = data$clarity
+Length = data$x
+Width = data$y
+Height = data$z
+Top = data$top
+Body = data$body
+
+## Numericalize variables
+
+n = length(Price)
+
+Cut.num = c(1:n)
+for (i in 1:n){
+  if (Cut[i] == "Fair"){
+    Cut.num[i] = 1
+  }
+  else if(Cut[i] == "Good"){
+    Cut.num[i] = 2
+  }
+  else if(Cut[i] == "Very Good"){
+    Cut.num[i] = 3
+  }
+  else if(Cut[i] == "Premium"){
+    Cut.num[i] = 4
+  }
+  else if (Cut[i] == "Ideal"){
+    Cut.num[i] = 5
+  }
+}
+
+Color.num = as.numeric(Color)
+
+Clarity.num = c(1:n)
+for (i in 1:n){
+  if (Clarity[i] == "I1"){
+    Clarity.num[i] = 1
+  }
+  else if(Clarity[i] == "SI1"){
+    Clarity.num[i] = 2
+  }
+  else if(Clarity[i] == "SI2"){
+    Clarity.num[i] = 3
+  }
+  else if(Clarity[i] == "VS1"){
+    Clarity.num[i] = 4
+  }
+  else if(Clarity[i] == "VS2"){
+    Clarity.num[i] = 5
+  }
+  else if(Clarity[i] == "VVS1"){
+    Clarity.num[i] = 6
+  }
+  else if(Clarity[i] == "VVS2"){
+    Clarity.num[i] = 7
+  }
+  else if(Clarity[i] == "IF"){
+    Clarity.num[i] = 8
+  }
+}
+
+Color.num = c(1:n)
+for (i in 1:n){
+  if (Color[i] == "J"){
+    Color.num[i] = 1
+  }
+  else if(Color[i] == "I"){
+    Color.num[i] = 2
+  }
+  else if(Color[i] == "H"){
+    Color.num[i] = 3
+  }
+  else if(Color[i] == "G"){
+    Color.num[i] = 4
+  }
+  else if(Color[i] == "F"){
+    Color.num[i] = 5
+  }
+  else if(Color[i] == "E"){
+    Color.num[i] = 6
+  }
+  else if(Color[i] == "D"){
+    Color.num[i] = 7
+  }
+}
+
+## Also, we ensured all variables are coherent with outlier removal
+
+#############################################
+
+############ Tranformed model ###############
+
+reg.line.ready=lm(Price~Weight+Cut.num.2.1+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+Length+Width+Height+Top+Body+Cut.num.2.1*Color.num.4.2+Clarity.num.5.1*Body+Clarity.num.5.2*Body+Weight*Length+Weight*Width+Weight*Height)
+
+#Length+Width+Height ; log(Length)+log(Width)+log(Height)
+
+line = reg.line.ready
+line.tr = lm(log(Price)~Weight+Cut.num.2.1+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+log(Length)+log(Width)+log(Height)+Top+Body+Cut.num.2.1*Color.num.4.2+Clarity.num.5.1*Body+Clarity.num.5.2*Body+Weight*log(Length)+Weight*log(Width)+Weight*log(Height))
+
+###### Pre-transformed model #######
+
+par(mfrow=c(4,4))
+
+#residual vs fitted values
+plot(line$fit,line$res,pch=16,xlab="Fitted Income",ylab="Residuals",main="Fitted Values vs Residuals");abline(h=0,lty=2,col="red")
+#resudial vs index
+plot(line$res,pch=16,xlab="index",ylab="residuals",main="Residual vs index");abline(h=0,lty=2,col="red")
+#residual vs Weight
+plot(Weight,line$res,pch=16,xlab="Gender",ylab="Residuals",main="Weight vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs Cut
+plot(Cut.num.2.1,line$res,pch=16,xlab="Cut",ylab="Residuals",main="Cut vs Residuals");abline(h=0,lty=2,col="red")
+#resdiaul vs Color
+plot(Color.num.4.2,line$res,pch=16,xlab="Color",ylab="Residuals",main="Color vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs Clarity
+Clar = ifelse(Clarity.num.5.3==1,1,ifelse(Clarity.num.5.1==1,2,3))
+plot(Clar,line$res,pch=16,xlab="Clarity",ylab="Residuals",main="Clarity vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs Length
+plot(Length,line$res,pch=16,xlab="Length",ylab="Residuals",main="Length vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs Width
+plot(Width,line$res,pch=16,xlab="Width",ylab="Residuals",main="Width vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs Height
+plot(Height,line$res,pch=16,xlab="Height",ylab="Residuals",main="Height vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs top
+plot(Top,line$res,pch=16,xlab="Top",ylab="Residuals",main="Top vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs body
+plot(Body,line$res,pch=16,xlab="Body",ylab="Residuals",main="Body vs Residuals");abline(h=0,lty=2,col="red")
+# residual of interaction: Cut-color
+boxplot(Cut.num.2.1,line$res,pch=16,col=Color.num.4.2+2,xlab="Cut*Color",ylab="Residuals",main="Cut*Color vs Residuals");abline(h=0,lty=2,col="red")
+# residual of interaction: Clarity - Body
+plot(Body,line$res,pch=16,col=Clar,xlab="Clarity*Body",ylab="Residuals",main="Clarity*Body vs Residuals");abline(h=0,lty=2,col="red")
+
+# residual of interaction: Weight * Length 
+Weight.Length = Weight*Length
+plot(Weight.Length,line$res,pch=16,col=Clar,xlab="Weight.Length",ylab="Residuals",main="Weight.Length vs Residuals");abline(h=0,lty=2,col="red")
+# residual of interaction: Weight * Width
+Weight.Width = Weight*Width
+plot(Weight.Width,line$res,pch=16,col=Clar,xlab="Weight.Width",ylab="Residuals",main="Weight.Width vs Residuals");abline(h=0,lty=2,col="red")
+# residual of interaction: Weight * Height
+Weight.Height = Weight*Height
+plot(Weight.Height,line$res,pch=16,col=Clar,xlab="Weight.Height",ylab="Residuals",main="Weight.Height vs Residuals");abline(h=0,lty=2,col="red")
+
+## Transformed model
+
+par(mfrow=c(4,4))
+
+#residual vs fitted values
+plot(line.tr$fit,line.tr$res,pch=16,xlab="log(Fitted Income)",ylab="Residuals",main="Log-Fitted Values vs Residuals");abline(h=0,lty=2,col="red")
+#resudial vs index
+plot(line.tr$res,pch=16,xlab="index",ylab="residuals",main="Residual vs index");abline(h=0,lty=2,col="red")
+#residual vs Weight
+plot(Weight,line.tr$res,pch=16,xlab="Gender",ylab="Residuals",main="Weight vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs Cut
+plot(Cut.num.2.1,line.tr$res,pch=16,xlab="Cut",ylab="Residuals",main="Cut vs Residuals");abline(h=0,lty=2,col="red")
+#resdiaul vs Color
+plot(Color.num.4.2,line.tr$res,pch=16,xlab="Color",ylab="Residuals",main="Color vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs Clarity
+Clar = ifelse(Clarity.num.5.3==1,1,ifelse(Clarity.num.5.1==1,2,3))
+plot(Clar,line.tr$res,pch=16,xlab="Clarity",ylab="Residuals",main="Clarity vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs Length
+plot(Length,line.tr$res,pch=16,xlab="log(Length)",ylab="Residuals",main="log-Length vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs Width
+plot(Width,line.tr$res,pch=16,xlab="log(Width)",ylab="Residuals",main="log-Width vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs Height
+plot(Height,line.tr$res,pch=16,xlab="log(Height)",ylab="Residuals",main="log-Height vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs top
+plot(Top,line.tr$res,pch=16,xlab="Top",ylab="Residuals",main="Top vs Residuals");abline(h=0,lty=2,col="red")
+#residual vs body
+plot(Body,line.tr$res,pch=16,xlab="Body",ylab="Residuals",main="Body vs Residuals");abline(h=0,lty=2,col="red")
+# residual of interaction: Cut-color
+plot(Cut.num.2.1,line.tr$res,pch=16,col=Color.num.4.2+2,xlab="Cut*Color",ylab="Residuals",main="Cut*Color vs Residuals");abline(h=0,lty=2,col="red")
+# residual of interaction: Clarity - Body
+plot(Body,line.tr$res,pch=16,col=Clar,xlab="Clarity*Body",ylab="Residuals",main="Clarity*Body vs Residuals");abline(h=0,lty=2,col="red")
+# residual of interaction: Weight * Length 
+Weight.lgLength = Weight*log(Length)
+plot(Weight.lgLength,line.tr$res,pch=16,col=Clar,xlab="Weight.log(Length)",ylab="Residuals",main="Weight.Length vs Residuals");abline(h=0,lty=2,col="red")
+# residual of interaction: Weight * Width
+Weight.lgWidth = Weight*log(Width)
+plot(Weight.lgWidth,line.tr$res,pch=16,col=Clar,xlab="Weight.log(Width)",ylab="Residuals",main="Weight.Width vs Residuals");abline(h=0,lty=2,col="red")
+# residual of interaction: Weight * Height
+Weight.lgHeight = Weight*log(Height)
+plot(Weight.lgHeight,line.tr$res,pch=16,col=Clar,xlab="Weight.log(Height)",ylab="Residuals",main="Weight.Height vs Residuals");abline(h=0,lty=2,col="red")
+
+
+##normal QQ plot and box-cox -- pre-transformed
+# normal qq plots & boxcox
+par(mfrow=c(1,4))
+qqnorm(line$res,main="QQNorm for Price");qqline(line$res,col="red")
+qqnorm(line.tr$res,main="QQNorm for transformed Model");qqline(line.tr$res,col="red")
+
+
+########################### Final Model Selection #######################################
+
+line.tr = lm(log(Price)~Weight+Cut.num.2.1+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+log(Length)+log(Width)+log(Height)+Top+Body+Cut.num.2.1*Color.num.4.2+Clarity.num.5.1*Body+Clarity.num.5.2*Body+Weight*log(Length)+Weight*log(Width)+Weight*log(Height))
+
+## test on Clarity 
+
+line.clar=lm(log(Price)~Weight+Cut.num.2.1+Color.num.4.2+log(Length)+log(Width)+log(Height)+Top+Body++Clarity.num.5.1+Clarity.num.5.2+Cut.num.2.1*Color.num.4.2+Clarity.num.5.1*Body+Clarity.num.5.2*Body+Weight*log(Length)+Weight*log(Width)+Weight*log(Height))
+aov(line.clar)
+
+F.stat.clar = ((1.2472+9.3551+0.0032+0.0268)/4)/(9.2930/318)
+F.stat.clar
+pf(F.stat.clar,4,318,lower.tail=FALSE)
+qf(0.9,4,318,lower.tail=TRUE)
+
+## test on Width and Length -- Remove 
+
+line.xy = lm(log(Price)~Weight+Cut.num.2.1+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+log(Height)+Top+Body+log(Length)+log(Width)+Cut.num.2.1*Color.num.4.2+Clarity.num.5.1*Body+Clarity.num.5.2*Body+Weight*log(Length)+Weight*log(Width)+Weight*log(Height))
+aov(line.xy)
+
+F.stat.xy = ((0.0128+0.0116+0.5556+1.0077)/4)/(9.2930/318)
+F.stat.xy
+pf(F.stat.xy,4,318,lower.tail=FALSE)
+qf(0.9,4,318,lower.tail=TRUE)
+
+## test on Lengt and Height
+
+line.xz = lm(log(Price)~Weight+Cut.num.2.1+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+log(Width)+Top+Body+log(Length)+log(Height)+Cut.num.2.1*Color.num.4.2+Clarity.num.5.1*Body+Clarity.num.5.2*Body+Weight*log(Length)+Weight*log(Width)+Weight*log(Height))
+aov(line.xz)
+
+F.stat.xz = ((0.3257+0.0015+0.5556+0.0825)/4)/(9.2930/318)
+F.stat.xz
+pf(F.stat.xz,4,318,lower.tail=FALSE)
+qf(0.9,4,318,lower.tail=TRUE)
+
+
+## Test on cut -- Remove
+
+line.cut = lm(log(Price)~Weight+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+log(Length)+log(Width)+log(Height)+Top+Body+Cut.num.2.1+Cut.num.2.1*Color.num.4.2+Clarity.num.5.1*Body+Clarity.num.5.2*Body+Weight*log(Length)+Weight*log(Width)+Weight*log(Height))
+aov(line.cut)
+
+F.stat.cut = ((0.0001+0.0048)/2)/(9.293/318)
+F.stat.cut
+pf(F.stat.cut,2,318,lower.tail=FALSE)
+qf(0.9,2,318,lower.tail=TRUE)
+
+## Test on Top and Body -- Remove
+
+line.topbody = lm(log(Price)~Weight+Cut.num.2.1+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+log(Length)+log(Width)+log(Height)+Top+Body+Cut.num.2.1*Color.num.4.2+Clarity.num.5.1*Body+Clarity.num.5.2*Body+Weight*log(Length)+Weight*log(Width)+Weight*log(Height))
+aov(line.topbody)
+
+F.stat.topbody = ((0.0185+0.0002+0.0032+0.0268)/4)/(9.2930/318)
+F.stat.topbody
+pf(F.stat.topbody,4,318,lower.tail=FALSE)
+qf(0.9,4,318,lower.tail=TRUE)
+
+
+## Test on remove Height -- Remove
+
+line.z = lm(log(Price)~Weight+Cut.num.2.1+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+log(Length)+log(Width)+Top+Body++log(Height)+Cut.num.2.1*Color.num.4.2+Clarity.num.5.1*Body+Clarity.num.5.2*Body+Weight*log(Length)+Weight*log(Width)+Weight*log(Height))
+aov(line.z)
+
+F.stat.z = ((0.0015+0.0825)/2)/(9.2930/318)
+F.stat.z
+pf(F.stat.z,2,318,lower.tail=FALSE)
+qf(0.9,2,318,lower.tail=TRUE)
+
+############################### 
+
+# Final models
+
+line.final.1 = lm(log(Price)~Weight+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+log(Height)+Top+Body+Clarity.num.5.1*Body+Clarity.num.5.2*Body)
+summary(line.final.1)
+
+line.final.2 = lm(log(Price)~Weight+Color.num.4.2+Clarity.num.5.1+Clarity.num.5.2+log(Length)+log(Width)+Weight*log(Length)+Weight*log(Width))
+summary(line.final.2)

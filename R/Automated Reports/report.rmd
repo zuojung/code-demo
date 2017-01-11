@@ -1,0 +1,56 @@
+---
+title: "Pittsburgh Crime Report"
+author: "Zuojun Gong"
+date: '`r format(Sys.time(), "%d %B, %Y")`'
+output: html_document
+---
+
+```{r, include=FALSE}
+library(RPostgreSQL)
+library(knitr) # We need the knitr package to set chunk options
+
+# Set default knitr options for knitting code into the report:
+opts_chunk$set(echo=FALSE,  # change to FALSE to keep code out of the knitted document
+               cache=TRUE, # do not re-run code that has already been run
+               autodep=TRUE, # assure that caching dependencies are updated correctly
+               cache.comments=FALSE, # do not re-run a chunk if only comments are changed
+               message=FALSE, # change to FALSE to keep messages out of the knitted document
+               warning=FALSE  # change to FALSE to keep warnings out of the knitted document
+               )
+
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+
+con <- dbConnect(PostgreSQL(), user = "zuojung", password = "J10bE81xdRd242p",
+                 dbname = "zuojung", host = "pg.stat.cmu.edu")
+```
+
+
+```{r}
+##################################################################
+query.two.weeks.ago = (
+"select zone, section.section_id, code, crime_type, count(*) as Two_Weeks_Ago from crime 
+left outer join section
+on crime.section_id = section.section_id
+left outer join neighborhood
+on crime.neighborhood_id = neighborhood.neighborhood_id
+where arrest_time > (select max(arrest_time) from crime) - interval '14 days'
+and arrest_time <= (select max(arrest_time) from crime) - interval '7 days'
+group by section.section_id, zone
+order by zone, section.section_id;")
+
+query.last.week = (
+"select zone, section.section_id, code, crime_type, count(*) as Previous_Week from crime 
+left outer join section
+on crime.section_id = section.section_id
+left outer join neighborhood
+on crime.neighborhood_id = neighborhood.neighborhood_id
+where arrest_time > (select max(arrest_time) from crime) - interval '7 days'
+group by section.section_id, zone
+order by zone, section.section_id;")
+
+table.two.weeks.ago = dbFetch(dbSendQuery(con, query.two.weeks.ago))
+table.last.week = dbFetch(dbSendQuery(con, query.last.week))
+
+table.two.weeks.ago
+table.last.week
+```

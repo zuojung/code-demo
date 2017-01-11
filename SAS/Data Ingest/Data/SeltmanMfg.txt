@@ -1,0 +1,2738 @@
+SH13050PD boxed yes
+200 ps
+01-Jun-2005 2 50
+PK90741LW boxed yes
+25 ps
+07-Apr-2004 8 50
+XD52101TO single yes
+PET
+28-Apr-2006 2 0
+BR23549PB boxed yes
+2 Steel
+07-Apr-2004 4 25
+QG76720TK boxed no
+25 ps
+PT01121PK boxed yes
+10 Bronze 2 copper 78 tin 22
+06-May-2005 2 50
+IJ30895QE single yes
+iron
+17-Nov-2005 5 80
+GM63676MV boxed yes
+50 Iron
+18-Jul-2005 3 66.666667
+RZ72176CJ single yes
+PS
+21-Aug-2006 8 50
+JT30484QQ boxed no
+200 pvc
+BE72741XL boxed yes
+2 Copper
+02-Oct-2005 2 50
+BN08712WE single yes
+alloy 3 tin 77 antimony 15 copper 8
+27-Aug-2004 5 60
+RJ14807SV boxed yes
+5 babbitt 3 tin 82 antimony 13 copper 5
+09-Mar-2005 4 25
+VZ67132HA single yes
+PVC
+22-Jun-2006 8 12.5
+KD92170YR boxed yes
+100 Steel
+12-Jan-2005 4 100
+MC50864HR boxed yes
+100 Steel
+23-Jun-2006 3 66.666667
+IM10643JJ boxed yes
+25 PVC
+12-Dec-2005 5 60
+RN66833EB boxed yes
+25 Alloy 2 copper 86 tin 14
+01-Apr-2004 7 42.857143
+SN10394JB boxed yes
+100 ps
+02-Sep-2004 7 14.285714
+MI71912WD boxed yes
+25 Babbitt 3 tin 82 antimony 13 copper 5
+18-Feb-2004 1 100
+MS57710XO single yes
+PS
+11-Jan-2004 5 60
+GX16750IT boxed yes
+20 Steel
+18-Mar-2005 3 100
+JZ26077VH boxed yes
+10 Steel
+05-Sep-2004 6 83.333333
+BL71170QV boxed no
+2 Bronze 2 copper 86 tin 14
+XE43018AQ boxed yes
+5 babbitt 3 tin 81 antimony 13 copper 6
+05-Aug-2004 2 0
+WX70583VB boxed yes
+50 Iron
+14-Jun-2006 3 100
+MO07747AY single yes
+alloy 2 copper 86 tin 14
+26-Nov-2003 6 66.666667
+WS50670AA boxed yes
+10 Copper
+20-May-2004 5 80
+NS70103CC boxed yes
+50 pete
+27-Sep-2006 6 33.333333
+PC09265QO single no
+steel
+UF28427JN boxed yes
+100 Brass 2 copper 87 zinc 13
+24-Mar-2006 3 66.666667
+RF86061YM boxed yes
+50 Copper
+22-Mar-2005 7 100
+VY91493ID single yes
+alloy 2 copper 68 zinc 32
+12-May-2005 1 0
+LI41212DB boxed no
+25 alloy 2 copper 88 zinc 12
+DX45093WC boxed yes
+2 ps
+01-Feb-2006 5 20
+QR53914WL boxed no
+100 Copper
+YS59262YC single yes
+alloy 3 tin 81 antimony 12 copper 7
+25-Jun-2005 7 42.857143
+VY59912EE single no
+alloy 2 copper 67 zinc 33
+AR01415XW single yes
+PET
+12-Jun-2004 8 50
+CA06298DF boxed yes
+20 ps
+05-Apr-2006 8 37.5
+LT05197EE boxed no
+100 ps
+DP72028SY boxed yes
+100 Brass 2 copper 73 zinc 27
+05-Oct-2004 8 50
+IQ23146ZF boxed yes
+5 iron
+16-Sep-2006 4 50
+VZ30360ZO boxed yes
+100 ps
+26-Dec-2003 8 37.5
+GY32475WU boxed yes
+10 Alloy 3 tin 85 antimony 9 copper 6
+13-Mar-2005 1 100
+MZ57118GZ boxed no
+50 alloy 2 copper 86 zinc 14
+CU57559HI single yes
+alloy 2 copper 85 tin 15
+23-Feb-2006 6 33.333333
+PB01449YP boxed yes
+50 ps
+19-Jul-2004 1 0
+KV25414JF boxed no
+20 Alloy 2 copper 70 zinc 30
+YA91736NP boxed yes
+100 Alloy 2 copper 74 zinc 26
+17-Apr-2006 3 66.666667
+XB01723SQ boxed no
+50 Iron
+ZJ87078GL boxed yes
+100 Iron
+16-Aug-2006 3 33.333333
+XB33541OM boxed yes
+100 babbitt 3 tin 85 antimony 8 copper 7
+08-Aug-2005 3 66.666667
+OL15428CM boxed yes
+25 ps
+01-May-2004 6 50
+ZH09948MQ single no
+alloy 2 copper 84 tin 16
+AZ38386QY boxed yes
+100 babbitt 3 tin 83 antimony 8 copper 9
+28-Jan-2005 2 100
+HV51859GC boxed yes
+50 pvc
+06-Mar-2004 6 33.333333
+PB74084QB boxed yes
+20 ps
+08-May-2005 8 50
+GT32374LF boxed yes
+2 Steel
+16-Dec-2004 5 80
+HU36462QC boxed yes
+100 alloy 3 tin 85 antimony 11 copper 4
+24-Dec-2003 5 20
+UV89303HF single yes
+PS
+29-Nov-2005 4 25
+WB49157SQ boxed yes
+2 ps
+06-Jan-2004 4 25
+GK70463PW single yes
+steel
+19-Dec-2003 1 0
+DV88652HB boxed no
+10 babbitt 3 tin 85 antimony 8 copper 7
+II31686EJ single no
+alloy 3 tin 81 antimony 11 copper 8
+XF10163UT boxed yes
+25 PS
+29-Jan-2004 3 0
+XI88620OT boxed no
+100 steel
+MO61244IJ boxed yes
+50 alloy 2 copper 83 zinc 17
+16-Mar-2005 1 100
+QZ88021BM boxed yes
+100 steel
+11-Mar-2004 4 50
+QQ98879ZZ single yes
+alloy 2 copper 83 zinc 17
+13-Oct-2004 3 33.333333
+YQ04368YN boxed yes
+50 Copper
+22-May-2004 2 0
+DI91597RD single yes
+PETE
+23-Jan-2005 2 50
+QJ28766CT boxed yes
+50 brass 2 copper 67 zinc 33
+05-Feb-2004 8 87.5
+TV94454UU boxed yes
+100 Steel
+22-Jun-2006 8 12.5
+UR82781EC boxed yes
+100 Bronze 2 copper 84 tin 16
+08-Mar-2004 6 16.666667
+IB41787QO boxed no
+100 pet
+DO28308PV boxed no
+50 Iron
+RU25872XQ boxed no
+100 PET
+VO99527JL boxed yes
+5 PS
+16-Mar-2004 3 66.666667
+NT23573CN boxed yes
+2 babbitt 3 tin 86 antimony 8 copper 6
+05-Feb-2005 1 0
+KX84916WQ boxed yes
+100 PETE
+08-Jan-2005 4 50
+MR82021UQ single yes
+alloy 2 copper 79 tin 21
+09-Mar-2005 3 66.666667
+ZI76520BY single yes
+iron
+05-Feb-2005 3 66.666667
+MW45763OT single yes
+alloy 2 copper 71 zinc 29
+08-Mar-2004 6 83.333333
+TH63743US boxed yes
+25 ps
+04-Nov-2003 3 66.666667
+MJ89320TE boxed yes
+25 brass 2 copper 75 zinc 25
+26-Feb-2004 3 33.333333
+UX28241LR boxed yes
+100 Bronze 2 copper 87 tin 13
+21-Mar-2006 2 50
+HP70214MM boxed yes
+2 pet
+19-Mar-2005 8 62.5
+HT94010IU boxed yes
+5 Alloy 3 tin 80 antimony 15 copper 5
+17-Mar-2004 8 87.5
+MV69697UN boxed yes
+20 babbitt 3 tin 84 antimony 8 copper 8
+08-Feb-2005 2 50
+UX95109WR boxed yes
+2 PVC
+03-Mar-2005 8 37.5
+BH55106MT boxed yes
+100 PVC
+15-May-2004 7 57.142857
+GT64065EK single yes
+PS
+23-Jan-2004 5 40
+DC63083PX boxed no
+100 Iron
+RT80742QI single no
+PS
+LB42996FA boxed yes
+25 babbitt 3 tin 88 antimony 8 copper 4
+15-Sep-2006 4 0
+BI28127ZM boxed no
+100 Bronze 2 copper 88 tin 12
+DU67062HN boxed yes
+25 pet
+02-May-2005 5 0
+OZ52187BA boxed yes
+5 ps
+21-May-2006 5 20
+ZG51127YJ boxed yes
+5 Babbitt 3 tin 81 antimony 15 copper 4
+15-Jun-2006 7 85.714286
+HG55521JH boxed yes
+25 alloy 2 copper 90 tin 10
+07-Nov-2004 7 85.714286
+RM76568JN single yes
+alloy 3 tin 87 antimony 9 copper 4
+22-Oct-2005 5 80
+ZF27165XQ single yes
+copper
+15-Feb-2005 4 50
+UC97198GR boxed yes
+2 babbitt 3 tin 86 antimony 10 copper 4
+19-Nov-2003 5 40
+RY19182YR single yes
+alloy 3 tin 85 antimony 10 copper 5
+23-May-2006 6 66.666667
+UT62235UB boxed yes
+100 steel
+07-Feb-2005 1 100
+KO81536KE single yes
+alloy 3 tin 83 antimony 11 copper 6
+30-Oct-2005 5 80
+DG50460AA single no
+steel
+MB63992XM boxed yes
+5 Iron
+23-Mar-2005 6 50
+DZ41730XN boxed yes
+10 Babbitt 3 tin 83 antimony 11 copper 6
+10-Sep-2004 6 50
+QS60094KP boxed no
+200 Copper
+BV38136JO single yes
+iron
+22-Feb-2006 4 100
+UQ55715DQ boxed yes
+10 PVC
+28-Nov-2005 2 50
+QM69052ZF boxed no
+25 PS
+TB19482UQ boxed no
+50 pvc
+YH13826IU boxed yes
+100 Copper
+23-Sep-2006 7 42.857143
+ZL93547VX single yes
+alloy 2 copper 78 zinc 22
+17-Sep-2005 6 83.333333
+BE57837FI boxed yes
+100 Alloy 3 tin 80 antimony 15 copper 5
+04-Apr-2005 6 83.333333
+RL20172EN boxed yes
+5 ps
+31-Jan-2006 8 25
+IU20735DT boxed yes
+5 PS
+29-Apr-2006 5 60
+MY01007CF single yes
+alloy 3 tin 80 antimony 11 copper 9
+14-Sep-2004 8 62.5
+RJ22460NO single yes
+PS
+22-Sep-2006 5 40
+LJ72953EN boxed no
+10 Babbitt 3 tin 79 antimony 14 copper 7
+DC49943UL boxed yes
+25 pvc
+29-May-2004 3 33.333333
+DL73570BU single no
+alloy 2 copper 91 tin 9
+TX79871YY boxed yes
+25 Brass 2 copper 76 zinc 24
+23-Aug-2006 2 50
+LV34650RT boxed no
+100 pet
+NT44202JC single yes
+alloy 3 tin 83 antimony 11 copper 6
+16-Jul-2006 4 75
+OW49984JG boxed yes
+50 pete
+06-Sep-2006 7 42.857143
+TT51482CS single no
+PET
+XT10621TM single yes
+PETE
+13-May-2005 3 66.666667
+YU11759NX boxed yes
+5 Bronze 2 copper 87 tin 13
+18-Feb-2005 2 100
+IF08699KJ boxed no
+25 Steel
+MS61447ZK single yes
+steel
+22-Sep-2006 4 50
+GZ96388KT boxed yes
+20 PETE
+25-Dec-2004 5 20
+NW16942KY single no
+iron
+YW54192QF single yes
+PS
+10-Aug-2005 1 0
+NY25856DR boxed yes
+10 ps
+13-Nov-2004 5 0
+HS98366IT boxed yes
+10 steel
+25-Mar-2006 2 100
+RS69330WG boxed yes
+10 Steel
+05-Jun-2004 5 60
+QG34369GQ boxed yes
+20 ps
+22-Dec-2004 1 100
+IZ14822RC boxed yes
+100 Iron
+15-Sep-2005 3 33.333333
+BW69407XK boxed yes
+25 pet
+02-Oct-2005 4 50
+SX75266DD single yes
+PS
+17-Apr-2004 6 16.666667
+EW35826BY single yes
+alloy 3 tin 82 antimony 14 copper 4
+26-Nov-2004 4 100
+AO06389VP single yes
+PS
+03-May-2004 6 83.333333
+FF37505TT boxed yes
+20 babbitt 3 tin 79 antimony 12 copper 9
+26-May-2005 4 75
+PH80563HC boxed yes
+2 ps
+18-Jan-2005 4 50
+NA43078DB single no
+copper
+LO71202XA boxed yes
+25 Iron
+15-May-2004 3 0
+JP19478AH boxed yes
+25 pvc
+22-Dec-2003 6 16.666667
+OK56929PA boxed yes
+200 Bronze 2 copper 91 tin 9
+24-Dec-2004 8 62.5
+DV36393IJ boxed no
+2 babbitt 3 tin 84 antimony 12 copper 4
+DN01160ET boxed yes
+5 ps
+28-Jul-2006 6 33.333333
+IX84630HH boxed yes
+25 ps
+29-Nov-2004 8 25
+JZ98928VL boxed no
+2 PS
+PS23558DP boxed yes
+100 Iron
+28-Feb-2006 3 66.666667
+VL91599JO boxed yes
+2 iron
+21-Sep-2006 6 50
+SA17356OC boxed yes
+10 brass 2 copper 74 zinc 26
+11-Mar-2006 6 50
+LA91060FI boxed yes
+5 copper
+18-Oct-2004 1 0
+PR96414LQ boxed yes
+10 iron
+05-Apr-2005 3 66.666667
+NH20300FF boxed yes
+25 Alloy 2 copper 77 zinc 23
+23-Dec-2003 7 57.142857
+IM16452PL boxed no
+5 alloy 3 tin 82 antimony 11 copper 7
+OT90130RC single yes
+alloy 3 tin 82 antimony 14 copper 4
+13-Jan-2004 3 100
+UY88853DV single yes
+PETE
+26-Oct-2005 1 100
+QJ69870DB boxed no
+100 ps
+XX42460TN boxed no
+100 Steel
+HE10657IC boxed no
+25 ps
+KC80017VU single yes
+PS
+09-Sep-2004 8 62.5
+YR87928NY boxed yes
+100 steel
+07-Apr-2005 7 28.571429
+RK44948FH single yes
+copper
+08-Mar-2004 8 100
+YE41393IU boxed yes
+20 Iron
+15-Jun-2006 3 33.333333
+KS31374BS single yes
+copper
+30-Aug-2005 2 100
+DX71361TN boxed yes
+100 Brass 2 copper 87 zinc 13
+13-May-2005 6 83.333333
+IJ83170ET boxed yes
+5 PVC
+21-Feb-2004 6 50
+SW83863RC boxed no
+10 ps
+SC43493FT boxed no
+100 Alloy 2 copper 90 zinc 10
+SP37950GE single yes
+PVC
+15-Jun-2005 3 33.333333
+JA14184GR boxed yes
+5 PS
+23-Apr-2004 1 0
+EB90432VV boxed yes
+100 Brass 2 copper 79 zinc 21
+11-Jul-2006 4 50
+KD68005PF boxed yes
+50 babbitt 3 tin 79 antimony 11 copper 10
+22-Jul-2006 3 66.666667
+GJ66843LP boxed yes
+100 bronze 2 copper 93 tin 7
+02-Mar-2004 5 60
+XD43646EI boxed yes
+25 Alloy 2 copper 87 tin 13
+17-Oct-2005 1 0
+QT87101EX boxed yes
+25 Brass 2 copper 71 zinc 29
+12-Feb-2006 2 0
+NV68931PD boxed yes
+100 iron
+17-Dec-2003 5 20
+FI30747CW boxed no
+100 copper
+XZ67261JT boxed yes
+10 steel
+26-Oct-2004 6 33.333333
+UA46363JJ boxed yes
+100 steel
+25-Feb-2005 8 87.5
+WA82526HT boxed no
+5 PS
+WG62452FH boxed yes
+100 ps
+24-Aug-2006 3 0
+UK54265TU boxed yes
+100 Babbitt 3 tin 87 antimony 9 copper 4
+10-Dec-2004 7 85.714286
+KM18287YR single yes
+PVC
+30-May-2006 4 0
+UK51805KC boxed yes
+100 ps
+27-Aug-2005 6 33.333333
+OL58623XD single yes
+PS
+07-Jul-2006 1 100
+DX49766NI boxed yes
+200 Steel
+11-Apr-2005 8 87.5
+XU42182FS boxed yes
+5 Copper
+22-Feb-2006 3 100
+KA16950UK single no
+PS
+ZT11977WI boxed no
+25 Brass 2 copper 75 zinc 25
+OZ48315AV boxed yes
+25 pvc
+03-Jul-2004 5 80
+IE13367SH single yes
+steel
+17-Apr-2006 3 66.666667
+JI70768UO single yes
+copper
+05-Oct-2005 7 28.571429
+LE11146VL boxed yes
+10 PS
+22-Dec-2003 4 75
+CX20206CG boxed yes
+10 Alloy 3 tin 86 antimony 7 copper 7
+19-Jun-2004 2 50
+LN35425MK boxed no
+200 Copper
+QE62019WZ boxed yes
+100 PS
+31-Dec-2003 7 28.571429
+DR28831TA boxed yes
+10 Alloy 2 copper 93 zinc 10
+28-Sep-2006 8 75
+WH25116UA single yes
+copper
+12-Nov-2005 5 60
+OI66897BN boxed yes
+25 babbitt 3 tin 76 antimony 15 copper 9
+18-Mar-2004 6 83.333333
+JS29300SJ single yes
+PS
+11-Feb-2005 8 50
+YD50500ZQ boxed yes
+25 brass 2 copper 72 zinc 28
+23-Apr-2006 1 0
+VZ26195IU single no
+PS
+NA26286UL boxed no
+100 Iron
+IT00049CZ single yes
+steel
+21-May-2006 1 0
+PM70764BA single no
+steel
+ZV73149KL boxed yes
+10 pvc
+30-Aug-2005 2 100
+UT31465WW boxed no
+100 ps
+RQ15020YC single yes
+PET
+26-Aug-2006 1 0
+WG62987KC boxed no
+2 ps
+BN34836ZY boxed yes
+5 Brass 2 copper 90 zinc 10
+12-Jul-2006 3 66.666667
+AP42711YA boxed no
+10 babbitt 3 tin 76 antimony 14 copper 10
+QC01328ZO boxed yes
+50 Alloy 3 tin 81 antimony 9 copper 10
+14-May-2004 4 75
+WU71949QH boxed no
+100 steel
+YB80070PC boxed yes
+25 ps
+17-Dec-2004 8 75
+RR63683DW boxed yes
+25 ps
+06-Jan-2005 3 0
+ZW22523OU single yes
+alloy 2 copper 84 tin 16
+15-Nov-2005 4 25
+ZK85186BL boxed no
+100 Brass 2 copper 87 zinc 13
+XV23790VP boxed yes
+25 ps
+23-Dec-2004 7 14.285714
+UQ02758WU boxed yes
+2 pete
+14-Dec-2004 3 33.333333
+FS98245RB boxed yes
+100 Steel
+11-Jan-2005 3 33.333333
+ES28360OP boxed no
+100 Iron
+MF79419GE boxed yes
+50 Iron
+08-Jan-2004 3 100
+RQ57252WR single no
+PS
+BI75206GJ boxed yes
+25 Copper
+09-Dec-2005 1 0
+VL19933QL boxed no
+20 alloy 3 tin 76 antimony 14 copper 10
+DN88659TZ single yes
+iron
+02-Jul-2004 3 100
+GO87492TD single yes
+PVC
+21-Feb-2004 3 33.333333
+DE09908AY boxed yes
+10 Steel
+31-May-2005 5 60
+HJ46847DD single no
+alloy 3 tin 89 antimony 7 copper 4
+JS03951RX boxed yes
+25 iron
+10-Mar-2004 8 37.5
+PC36769YV single yes
+PS
+30-Mar-2005 7 14.285714
+PV07716YW single yes
+PS
+27-Dec-2005 5 100
+XD24164BV boxed no
+50 pvc
+FE32512GD boxed no
+100 PET
+PB19834HR boxed yes
+100 Iron
+03-Oct-2005 4 75
+DP52969AN boxed yes
+100 Steel
+17-Dec-2004 3 66.666667
+NP45890JV boxed yes
+100 PS
+16-Apr-2005 8 0
+DF35732HA single yes
+iron
+16-Apr-2004 1 100
+VE98742NF boxed yes
+5 PS
+10-Mar-2004 3 33.333333
+QJ01042XA boxed yes
+25 ps
+09-May-2006 4 50
+BK15208PV boxed no
+100 Copper
+BM67285OZ boxed yes
+200 iron
+02-May-2006 7 42.857143
+JV75693ZH single yes
+PS
+06-Jan-2006 6 33.333333
+KY96237OX boxed yes
+20 Alloy 2 copper 83 zinc 17
+12-Feb-2006 1 0
+GT50267SJ boxed yes
+2 pete
+01-Nov-2005 2 50
+NR91293EG single yes
+copper
+23-Oct-2005 3 66.666667
+HM54169UP boxed no
+100 babbitt 3 tin 76 antimony 15 copper 9
+HH08624XV single yes
+alloy 3 tin 86 antimony 8 copper 6
+06-Mar-2005 1 100
+DF27213WK boxed yes
+25 Iron
+23-Aug-2004 2 50
+SY92662ZL boxed yes
+20 alloy 3 tin 85 antimony 7 copper 8
+02-Apr-2004 3 66.666667
+QZ29636QF single yes
+alloy 2 copper 73 zinc 27
+03-Apr-2005 4 75
+NB65852DS boxed yes
+100 copper
+04-Aug-2005 7 57.142857
+NT32460NY boxed yes
+2 pvc
+30-Mar-2004 5 0
+AH59480HZ boxed yes
+25 Copper
+19-Nov-2005 6 83.333333
+HS15360SE boxed no
+25 alloy 2 copper 78 zinc 22
+OE85726HW boxed yes
+50 Brass 2 copper 89 zinc 11
+14-Jan-2004 6 100
+OJ74512YP boxed yes
+100 PET
+11-Nov-2003 1 0
+DF92053QS boxed yes
+5 Alloy 2 copper 79 tin 21
+18-Jun-2005 7 57.142857
+VZ39326GR boxed yes
+100 Bronze 2 copper 92 tin 8
+19-Jan-2005 7 57.142857
+UC76396FI boxed no
+100 Copper
+KY23587WA boxed yes
+10 babbitt 3 tin 80 antimony 13 copper 7
+16-Dec-2004 1 0
+QB53107GN boxed yes
+10 Bronze 2 copper 85 tin 15
+02-Nov-2005 8 87.5
+XW47565HN boxed no
+100 pet
+AP70599PX boxed yes
+100 P
+29-Dec-2004 7 71.428571
+LX26509CC boxed yes
+5 Iron
+29-Jul-2005 8 75
+NT06814HJ boxed yes
+25 iron
+21-May-2006 2 50
+UJ26560IW boxed yes
+100 pvc
+28-Feb-2005 6 83.333333
+OZ78016IT single no
+PS
+BB02991UY boxed yes
+10 ps
+03-Mar-2004 6 16.666667
+BZ01314EC single no
+PVC
+IF06576GA boxed yes
+5 Steel
+12-Mar-2004 7 71.428571
+DA31075NG boxed no
+25 PS
+WG04954YL boxed no
+100 babbitt 3 tin 89 antimony 7 copper 4
+TG01778JC single yes
+steel
+08-Jul-2005 7 42.857143
+EF81460FD single yes
+copper
+09-Aug-2006 2 100
+GI76987YU boxed yes
+5 Alloy 2 copper 73 zinc 27
+17-Nov-2003 8 87.5
+LO31473LO boxed yes
+25 bronze 2 copper 82 tin 18
+11-Nov-2004 2 100
+AW01679QA single yes
+alloy 3 tin 84 antimony 9 copper 7
+07-Jun-2005 3 33.333333
+KA39083SV boxed yes
+50 ps
+15-Apr-2005 1 0
+SV66799LF boxed yes
+5 pet
+15-Dec-2004 2 50
+TN08637KE boxed yes
+200 Bronze 2 copper 96 tin 5
+04-Sep-2006 2 50
+PI92511AL boxed yes
+100 Iron
+06-May-2005 4 75
+BR06421WD single no
+alloy 3 tin 80 antimony 13 copper 7
+LA89505YL single no
+copper
+LS39510EV boxed yes
+5 iron
+11-Jul-2006 2 100
+LS02991GX boxed yes
+25 PS
+20-Jan-2006 2 0
+OK33898ZF boxed yes
+100 PET
+27-Dec-2003 5 0
+ZO47874RP boxed no
+100 Babbitt 3 tin 80 antimony 13 copper 7
+ZX58401JW boxed yes
+20 Alloy 2 copper 68 zinc 32
+19-Dec-2003 7 100
+UW48265NA single yes
+copper
+04-Jan-2005 3 66.666667
+XH64826ZP single no
+PS
+WI90061RO boxed yes
+25 Brass 2 copper 74 zinc 26
+04-Mar-2005 2 50
+YS10070WA boxed yes
+100 ps
+14-Oct-2004 6 16.666667
+RZ29738QO boxed yes
+2 PVC
+23-Jan-2004 5 20
+PX96412XM single no
+PS
+PQ82578LU boxed no
+100 babbitt 3 tin 82 antimony 14 copper 4
+PO49395PR boxed yes
+100 steel
+27-May-2005 8 50
+SN50111KO boxed yes
+5 Alloy 2 copper 92 tin 8
+18-May-2005 3 0
+FK37495AV boxed yes
+2 Babbitt 3 tin 85 antimony 8 copper 7
+05-Jul-2006 5 20
+YO42182HO boxed yes
+25 iron
+05-Jan-2006 4 75
+HM65989TL single no
+alloy 2 copper 71 zinc 29
+XI74678VQ boxed no
+25 babbitt 3 tin 85 antimony 8 copper 7
+QF61292MF boxed yes
+25 PETE
+11-Feb-2004 2 100
+VO44170OK boxed no
+100 PS
+TC53089OD single no
+alloy 3 tin 86 antimony 10 copper 4
+PO21664ZQ boxed yes
+50 Alloy 2 copper 80 tin 18
+15-Jan-2004 2 100
+YQ39954NZ single yes
+PS
+03-Sep-2005 3 33.333333
+DK84352WM boxed yes
+5 Copper
+10-May-2004 5 40
+DT77592NQ boxed yes
+100 ps
+10-Apr-2006 6 66.666667
+LG01776HC boxed no
+25 pvc
+PC68368JS boxed yes
+100 pvc
+20-May-2005 2 0
+SE21687QP boxed no
+200 brass 2 copper 77 zinc 23
+XV28539LT single yes
+alloy 2 copper 66 zinc 34
+14-Mar-2006 4 50
+CO99431EP boxed yes
+20 pete
+26-Nov-2004 1 0
+SL22914YK boxed no
+2 Iron
+LO90653SW boxed yes
+100 Iron
+20-Nov-2005 8 62.5
+IO62563IO boxed yes
+25 Iron
+10-Dec-2005 1 100
+ZY21393HB boxed yes
+100 Iron
+18-Sep-2004 4 50
+EN20821YC boxed yes
+5 Copper
+05-Sep-2006 1 100
+OM01469AD boxed no
+100 Iron
+NB47806PM boxed yes
+100 steel
+29-Jul-2004 2 100
+WB66555UY single yes
+copper
+21-Dec-2005 1 100
+JV66394ZM single yes
+steel
+20-Oct-2005 8 62.5
+MB36327YU single yes
+copper
+11-Feb-2005 7 57.142857
+KW94958EJ boxed yes
+2 ps
+18-Jul-2005 7 71.428571
+OL87870YW boxed yes
+2 Bronze 2 copper 86 tin 12
+28-Sep-2006 5 60
+PQ48859XB single yes
+alloy 3 tin 80 antimony 14 copper 6
+30-Jul-2005 5 80
+FK66396RO single yes
+alloy 3 tin 86 antimony 10 copper 4
+11-Sep-2004 4 75
+UW96917EB boxed no
+10 Alloy 2 copper 89 tin 11
+CJ87244SO single yes
+alloy 2 copper 69 zinc 31
+21-Aug-2005 2 50
+GX93491KC boxed no
+100 ps
+AP98065QK single no
+iron
+XY92636NT boxed yes
+10 iron
+21-Nov-2003 8 62.5
+HB17652PY boxed yes
+25 ps
+07-Apr-2004 2 50
+JX32064YK boxed yes
+25 brass 2 copper 77 zinc 23
+02-Feb-2004 7 57.142857
+GL04785PU boxed yes
+200 Bronze 2 copper 91 tin 9
+05-May-2006 1 0
+MW18614SV single yes
+steel
+27-May-2005 1 0
+XZ73340LL single no
+PS
+LW27711EZ single yes
+PS
+19-Aug-2004 7 14.285714
+YS94051QQ boxed yes
+100 alloy 2 copper 84 tin 16
+27-Sep-2005 8 12.5
+YO36404JC boxed yes
+25 PET
+19-Aug-2005 7 28.571429
+JK92618YI single yes
+iron
+08-Jul-2004 6 33.333333
+EM47525GD boxed yes
+200 pet
+10-Nov-2005 1 0
+FH71022VG boxed yes
+50 Bronze 2 copper 88 tin 12
+30-Jul-2006 1 100
+SM13349SE boxed yes
+2 PS
+05-May-2004 5 20
+XP68771DS boxed no
+100 pvc
+CR16654PF boxed yes
+100 Copper
+05-Apr-2004 8 87.5
+RK46682TK boxed no
+200 babbitt 3 tin 87 antimony 9 copper 4
+YW08176XE single yes
+PS
+07-Nov-2003 6 50
+XL03142OC boxed yes
+50 PS
+07-Sep-2006 5 60
+VF98637HF boxed yes
+25 steel
+22-Jun-2005 8 50
+JL23563AV boxed yes
+2 Alloy 3 tin 84 antimony 10 copper 6
+25-Nov-2003 5 80
+KZ86837NW boxed yes
+25 ps
+29-Dec-2005 3 33.333333
+XP97626CD boxed yes
+25 iron
+06-Dec-2005 1 100
+XI13871XK boxed yes
+10 Alloy 3 tin 82 antimony 12 copper 6
+21-Oct-2004 2 100
+WR95201HG boxed yes
+10 ps
+06-Jul-2006 8 62.5
+YO84386TK boxed yes
+50 ps
+02-Mar-2004 8 75
+RU69375MT single yes
+alloy 2 copper 79 zinc 21
+01-Jun-2005 7 28.571429
+KF95768UV boxed yes
+50 ps
+08-May-2006 2 50
+UN03034ME boxed yes
+5 pvc
+03-Feb-2004 3 33.333333
+HQ07416MN single yes
+PVC
+24-Mar-2006 3 66.666667
+IK32485EE single yes
+PVC
+22-Jun-2005 7 57.142857
+CE43529WN single yes
+PS
+14-Jun-2006 3 33.333333
+HZ67577FE boxed yes
+5 Steel
+30-Aug-2005 2 100
+HF84265KB boxed yes
+100 bronze 2 copper 84 tin 16
+08-Aug-2004 5 80
+AY48634IT boxed yes
+100 Steel
+20-Sep-2004 6 33.333333
+NI83949DX single no
+copper
+XW71116ZN single yes
+PS
+29-Oct-2005 1 100
+IH27970PF single yes
+alloy 3 tin 83 antimony 7 copper 10
+23-Jan-2006 5 20
+CS86213VE single yes
+PS
+15-Dec-2004 3 33.333333
+PF95124FT single yes
+PS
+17-Sep-2006 7 57.142857
+BI17427EL single yes
+PETE
+19-Oct-2005 3 66.666667
+YU23334PA boxed yes
+100 Iron
+28-Jan-2005 6 33.333333
+VV18630RO boxed yes
+5 iron
+18-Jul-2005 8 37.5
+OT38248UE boxed no
+100 Babbitt 3 tin 83 antimony 8 copper 9
+QT04148YL boxed yes
+25 PS
+24-May-2006 4 50
+ZA92468QJ boxed yes
+25 copper
+25-Aug-2004 1 0
+KV75518AL single yes
+PETE
+08-May-2004 2 50
+HV71915PW boxed yes
+10 pvc
+14-Jul-2004 8 12.5
+OC36889ZU boxed yes
+20 Alloy 3 tin 81 antimony 13 copper 6
+28-May-2006 4 25
+QM74821QC boxed no
+25 Babbitt 3 tin 82 antimony 14 copper 4
+VO85322BD single no
+PS
+PM59776LV boxed yes
+5 alloy 3 tin 83 antimony 7 copper 10
+15-Oct-2004 7 28.571429
+UO99367LZ boxed yes
+100 Iron
+16-Nov-2004 8 87.5
+FR13546QT boxed yes
+2 ps
+13-Jan-2006 1 0
+HB08385GO single yes
+iron
+14-Feb-2006 1 0
+CG43229YZ boxed yes
+100 steel
+03-Jul-2005 7 57.142857
+DW32521GO boxed no
+100 PETE
+PQ49536RC boxed yes
+100 ps
+01-Sep-2006 8 37.5
+NE21316LL boxed yes
+100 pet
+18-Aug-2006 2 50
+TW97250XQ single yes
+copper
+02-Dec-2005 3 66.666667
+RL65203NG boxed no
+25 babbitt 3 tin 82 antimony 10 copper 8
+WE91781JY boxed no
+100 PS
+NW37858DV boxed yes
+25 bronze 2 copper 87 tin 13
+26-Aug-2004 5 40
+YR09055KG boxed yes
+25 PS
+31-Dec-2004 6 50
+NS52318ED boxed yes
+5 pete
+22-Mar-2006 3 66.666667
+YP01013NZ boxed no
+20 ps
+WI04813EZ boxed yes
+10 pvc
+27-Sep-2004 7 14.285714
+FS75611ZI boxed no
+100 Steel
+CA57185IZ boxed yes
+50 iron
+16-Jun-2006 3 33.333333
+WJ26139MA single yes
+iron
+03-Jul-2006 1 100
+VX89802RL boxed no
+10 Babbitt 3 tin 84 antimony 10 copper 6
+OA16535QW single no
+PS
+KS59744OP boxed yes
+100 alloy 3 tin 82 antimony 8 copper 10
+20-May-2006 3 100
+FH87208CD boxed yes
+25 Bronze 2 copper 87 tin 13
+14-May-2006 2 100
+MP05994TG boxed no
+2 pvc
+NE24302HW single yes
+PS
+11-Nov-2004 5 80
+XS41086TY boxed yes
+100 Iron
+19-Aug-2004 7 100
+GO38314TQ single yes
+steel
+16-Apr-2004 3 66.666667
+PQ43813QR boxed yes
+50 ps
+26-Aug-2004 3 66.666667
+VE20744OL boxed yes
+100 ps
+11-May-2004 3 0
+NN20450XQ boxed yes
+5 Steel
+29-May-2006 1 0
+YK64990XW single no
+PS
+RR20896FX boxed yes
+100 Bronze 2 copper 78 tin 22
+15-Sep-2005 8 50
+WO72015MZ boxed yes
+25 Iron
+04-Apr-2006 8 62.5
+AX31577CR boxed yes
+100 Steel
+14-Aug-2004 4 100
+QZ47026AR boxed yes
+10 ps
+17-Jan-2004 8 50
+MS29140ZX boxed no
+25 ps
+IW53487WL single yes
+PET
+16-Mar-2006 4 50
+UL49643AS boxed yes
+5 PETE
+05-Dec-2003 2 100
+ZF44529CB boxed yes
+2 Iron
+22-May-2004 6 66.666667
+JO18346CF boxed yes
+5 Copper
+17-Jul-2006 2 50
+VI38633TP single yes
+copper
+16-Oct-2004 6 50
+DJ35238EY boxed no
+25 Iron
+MQ22095DS single yes
+steel
+05-Jan-2004 7 57.142857
+JR35333IM boxed no
+100 ps
+QS64636KK single no
+alloy 3 tin 87 antimony 9 copper 4
+ZX25804HN single yes
+alloy 2 copper 69 zinc 31
+30-Jan-2005 2 100
+MZ81216YW boxed no
+2 Brass 2 copper 85 zinc 15
+WX80946ED boxed no
+200 pet
+II18482WX boxed no
+50 copper
+XH48017WD boxed yes
+100 Steel
+28-May-2006 5 100
+VY95621OK boxed yes
+100 Alloy 2 copper 90 tin 10
+09-Jan-2006 6 66.666667
+MP59618ZZ boxed yes
+200 PVC
+06-May-2004 5 40
+IK31111DD boxed yes
+5 pvc
+04-Jul-2004 2 50
+IO78569DP boxed yes
+5 Brass 2 copper 90 zinc 10
+03-Sep-2004 7 57.142857
+MQ27163RI boxed no
+2 babbitt 3 tin 77 antimony 15 copper 8
+WM83554KI boxed yes
+2 steel
+20-Feb-2006 1 100
+OS54907KN boxed no
+100 Copper
+OY61684NZ boxed yes
+2 Brass 2 copper 77 zinc 23
+16-Apr-2006 2 50
+DW32918CN boxed yes
+25 pet
+19-Sep-2005 7 42.857143
+GW98410BJ single yes
+PS
+01-Jul-2004 3 0
+KK13295LM single yes
+iron
+01-Dec-2004 3 0
+BU87347XD boxed no
+5 PS
+LA99738GK boxed yes
+200 PS
+07-Oct-2005 7 14.285714
+WZ74917BM single yes
+copper
+10-Jan-2006 1 100
+XX68774YW boxed no
+25 bronze 2 copper 80 tin 20
+WO60644CU boxed yes
+50 Coppe
+20-Aug-2004 7 57.142857
+OW71410XX boxed no
+25 ps
+LH69411GW boxed no
+10 allo 3 tin 85 antimony 8 copper 7
+NJ26663JQ boxed yes
+100 pete
+09-Feb-2004 2 50
+PJ87345QA boxed yes
+100 PVC
+11-May-2004 8 0
+SQ22113JX boxed no
+20 babbitt 3 tin 79 antimony 15 copper 6
+WG75751XA single no
+PVC
+BQ91067NJ boxed yes
+25 ps
+05-Feb-2006 2 50
+VU23905NY boxed no
+5 pvc
+SV44261NL boxed no
+100 PVC
+HJ43324DH boxed yes
+50 steel
+12-Jun-2005 2 0
+LI66189CD boxed yes
+2 Copper
+07-Jul-2004 3 100
+JF51197LY boxed yes
+25 ps
+21-Mar-2004 3 33.333333
+YX43335PY boxed yes
+5 Alloy 3 tin 83 antimony 9 copper 8
+07-Apr-2004 8 50
+KA40227PC single no
+alloy 2 copper 89 tin 11
+PS69719ZB boxed yes
+100 alloy 2 copper 73 zinc 27
+16-Jun-2005 8 37.5
+MQ02518XD boxed no
+25 Copper
+RE55731MH boxed yes
+100 Alloy 3 tin 81 antimony 13 copper 6
+27-Apr-2006 8 75
+XJ50223TJ boxed yes
+25 copper
+15-Oct-2005 7 42.857143
+FG63620QK boxed no
+100 pvc
+ZK28592CR single yes
+alloy 3 tin 79 antimony 15 copper 6
+18-Feb-2005 3 66.666667
+KT72471TW boxed yes
+100 brass 2 copper 65 zinc 35
+19-Dec-2005 5 60
+TP38170MW single yes
+PVC
+16-Jan-2006 6 33.333333
+QH49494HK boxed yes
+200 Alloy 2 copper 68 zinc 32
+23-Mar-2004 4 50
+MC41033OJ boxed yes
+100 pete
+04-Jun-2005 1 0
+TW61380QU boxed yes
+100 pvc
+01-Oct-2004 3 66.666667
+CB71099CY boxed yes
+100 Babbitt 3 tin 84 antimony 12 copper 4
+02-Jun-2006 7 71.428571
+RZ34634HW boxed no
+10 steel
+TW74029VT single yes
+PVC
+16-Aug-2006 2 50
+WX52716FM boxed yes
+25 Copper
+14-Feb-2004 7 100
+BX13534FK boxed no
+10 Copper
+NV81700LA single yes
+alloy 2 copper 83 tin 17
+18-Apr-2006 8 62.5
+AN62963US boxed yes
+2 pet
+19-Jul-2006 2 100
+YA50311WL boxed yes
+10 PVC
+23-Sep-2006 4 50
+AF22191JW boxed no
+25 Alloy 3 tin 83 antimony 7 copper 10
+LV28510TS boxed yes
+200 ps
+27-Jul-2006 7 28.571429
+ZF03170NK boxed yes
+10 PET
+01-Dec-2004 8 25
+NK32455YF boxed yes
+25 Iron
+08-May-2005 2 50
+FR98492XU boxed no
+5 pete
+PD88902DQ boxed yes
+100 PS
+30-Apr-2004 8 75
+GR10955HG boxed yes
+100 pvc
+28-May-2004 1 0
+QZ34041JL boxed no
+100 Copper
+HQ13303AH boxed yes
+20 bronze 2 copper 88 tin 12
+16-Feb-2006 8 50
+YJ81062UN boxed yes
+200 Steel
+05-Apr-2005 4 50
+IZ63039CJ boxed yes
+10 Copper
+20-Aug-2005 7 42.857143
+TK08321IH single no
+copper
+UJ47973NJ boxed yes
+5 pete
+29-Apr-2006 3 0
+BO21779OX boxed yes
+50 Steel
+31-Jul-2006 1 0
+BB54951NP boxed yes
+100 iron
+04-Nov-2003 5 20
+AA65649ZQ boxed yes
+10 Copper
+17-Dec-2005 2 50
+JD12072BE boxed no
+50 bronze 2 copper 94 tin 6
+BA28046US single yes
+iron
+31-Oct-2005 7 42.857143
+OD95134QJ boxed yes
+100 alloy 3 tin 83 antimony 11 copper 6
+23-Mar-2005 8 62.5
+ZM52383GO boxed yes
+100 ps
+26-Jul-2006 8 25
+OB09925SY boxed yes
+10 Copper
+15-Dec-2004 3 66.666667
+KB42261MN boxed yes
+25 pvc
+16-Jul-2006 3 33.333333
+LC37844HQ boxed yes
+25 PS
+05/23/2005 1 100
+EI08694XJ boxed no
+100 ps
+AJ28578BX boxed yes
+10 pvc
+02/16/2005 1 100
+CN83887VC boxed yes
+50 steel
+10/21/2005 6 66.666667
+GA07544LN single yes
+alloy 3 tin 75 antimony 15 copper 10
+05/28/2005 8 50
+CT40628YN boxed yes
+100 Brass 2 copper 83 zinc 17
+04/19/2006 4 100
+TI38838JV single yes
+alloy 3 tin 79 antimony 14 copper 7
+05/18/2005 7 57.142857
+LY81596TD boxed yes
+10 Copper
+08/15/2005 6 33.333333
+TB47035PY boxed no
+200 pet
+TR32053DE boxed no
+10 babbitt 3 tin 83 antimony 8 copper 9
+OU70716DC boxed yes
+50 Copper
+03/22/2005 1 100
+CX89513PD boxed no
+2 babbitt 3 tin 85 antimony 8 copper 7
+JU72001BH boxed no
+10 Bronze 2 copper 79 tin 21
+DK39342QY boxed yes
+2 Alloy 2 copper 65 zinc 35
+03/31/2005 4 75
+KT40928JX boxed yes
+2 PS
+09/18/2005 5 20
+JY11703LZ single yes
+steel
+04/05/2006 6 50
+QE79356NA boxed no
+100 babbitt 3 tin 75 antimony 15 copper 10
+JA38933CD boxed yes
+50 alloy 3 tin 88 antimony 7 copper 5
+08/17/2006 6 50
+GC64002RL boxed yes
+25 Iron
+03/10/2004 4 100
+EK36887SY single yes
+alloy 3 tin 77 antimony 15 copper 8
+11/24/2005 8 62.5
+BU36074RT boxed yes
+25 pvc
+07/25/2005 7 85.714286
+SR36433BI boxed no
+5 ps
+VY86622FO boxed yes
+2 PET
+02/16/2004 5 40
+QP37261QQ single yes
+iron
+01/01/2006 5 80
+VJ41744KL single no
+copper
+WZ29899GS boxed no
+2 ps
+XS85519RG boxed yes
+25 Brass 2 copper 66 zinc 34
+11/14/2004 6 83.333333
+LR90844OX boxed yes
+25 PS
+07/15/2004 4 100
+RM05488RP single no
+PETE
+CL92833ZL boxed yes
+25 PVC
+07/26/2005 6 16.666667
+NO66645GC boxed no
+100 Copper
+YT73699MM single yes
+PETE
+12/27/2005 4 50
+ZJ89971EG boxed yes
+25 Copper
+04/25/2006 7 42.857143
+EG68591EL boxed yes
+10 PVC
+05/13/2006 5 20
+IJ49220ZU boxed yes
+100 ps
+12/21/2003 1 0
+NX10002XS boxed yes
+100 Babbitt 3 tin 82 antimony 12 copper 6
+02/14/2004 2 100
+GX90268XF boxed yes
+25 pvc
+01/11/2006 4 75
+SY27555PX boxed yes
+5 Alloy 3 tin 83 antimony 7 copper 10
+04/13/2004 6 50
+LH77143YO boxed yes
+20 Brass 2 copper 66 zinc 34
+03/29/2004 7 57.142857
+NM39403SK boxed yes
+50 ps
+09/13/2006 1 0
+SG92219XW boxed yes
+100 Copper
+02/12/2005 8 25
+GK72059AX single yes
+alloy 3 tin 87 antimony 9 copper 4
+06/26/2006 3 66.666667
+ZR22549YV boxed no
+100 pvc
+QQ39257CN boxed yes
+100 babbitt 3 tin 87 antimony 9 copper 4
+04/05/2006 3 33.333333
+WB28953FF boxed yes
+25 iron
+06/16/2006 7 57.142857
+AH52148SB boxed yes
+200 babbitt 3 tin 81 antimony 10 copper 9
+01/05/2004 1 0
+TW03731SA boxed yes
+10 Copper
+03/10/2005 7 42.857143
+EY57172JT boxed yes
+200 Babbitt 3 tin 80 antimony 15 copper 5
+11/02/2004 8 50
+SU09994SH boxed yes
+100 ps
+06/21/2004 6 16.666667
+SJ51827TL boxed no
+10 PVC
+UR43876JM boxed yes
+50 pvc
+07/01/2006 8 62.5
+GP50673QT single no
+steel
+TO74880PP single yes
+iron
+08/21/2006 2 100
+PW40317FD boxed yes
+25 babbitt 3 tin 84 antimony 7 copper 9
+10/20/2004 7 71.428571
+AQ80270RA boxed no
+2 pvc
+KL14684GT boxed yes
+200 Alloy 2 copper 79 zinc 21
+02/18/2006 1 0
+WH94726DZ boxed yes
+100 babbitt 3 tin 77 antimony 15 copper 8
+11/22/2003 6 50
+RX67768AW boxed yes
+10 PVC
+12/22/2005 5 40
+PJ01529RN boxed yes
+100 Steel
+07/12/2006 6 83.333333
+ND76225NR boxed yes
+100 Brass 2 copper 85 zinc 15
+03/27/2005 7 71.428571
+FL45855IV boxed yes
+100 ps
+02/12/2006 6 50
+QF03447WE boxed yes
+100 Steel
+01/23/2006 6 66.666667
+BY11080MW boxed yes
+5 ps
+01/29/2005 1 0
+UL71975IB boxed yes
+2 pvc
+02/04/2004 4 50
+TY61915PC boxed yes
+25 Bronze 2 copper 82 tin 18
+09/12/2005 4 100
+MT08742RD boxed no
+10 Bronze 2 copper 93 tin 7
+HM83008YX boxed no
+200 ps
+CQ60139EJ single yes
+alloy 3 tin 84 antimony 10 copper 6
+04/15/2004 7 57.142857
+VY95731LK boxed no
+200 Copper
+TB91615VZ boxed yes
+25 PVC
+06/21/2004 6 66.666667
+ZT40668QI boxed yes
+100 brass 2 copper 81 zinc 19
+03/10/2006 5 80
+LK21209YQ boxed yes
+100 Iron
+10/29/2004 4 50
+LX40846OB boxed no
+5 PS
+SK96620DO boxed yes
+25 PET
+12/02/2005 1 0
+OK91489ZZ boxed no
+200 ps
+JT90250AA boxed yes
+200 PS
+03/12/2004 2 0
+SR18089EI single yes
+PETE
+04/24/2006 5 20
+NM28861BH boxed yes
+50 pvc
+10/25/2004 6 16.666667
+HC26396MH single yes
+alloy 2 copper 77 zinc 23
+10/30/2005 2 50
+HZ80979TR boxed yes
+25 ps
+07/25/2006 3 33.333333
+GH60815QM single yes
+PS
+09/11/2004 1 100
+XN22274IM boxed yes
+100 PS
+12/08/2005 8 62.5
+YE82976JP boxed yes
+100 PET
+01/15/2004 5 80
+NG42544TT boxed yes
+100 PS
+04/02/2006 2 100
+XP59172LT single yes
+PETE
+10/24/2004 2 100
+BL99549GX single no
+alloy 2 copper 89 zinc 11
+FH79321LC boxed no
+100 pvc
+IY43150IE single no
+PS
+SA34840YP boxed yes
+100 iron
+11/05/2004 2 50
+RW82567IF boxed no
+25 ps
+SD19885PG boxed yes
+100 alloy 2 copper 87 tin 13
+04/15/2006 8 62.5
+NQ25384UR boxed yes
+5 Brass 2 copper 90 zinc 10
+04/23/2005 5 60
+JY07815DV boxed no
+10 pet
+PO29700HS boxed yes
+10 Alloy 3 tin 82 antimony 14 copper 4
+03/17/2006 6 66.666667
+UJ66203RJ boxed yes
+25 ps
+12/29/2003 5 60
+KR93778IQ boxed yes
+10 babbitt 3 tin 79 antimony 15 copper 8
+07/23/2004 6 100
+JZ63018CE boxed no
+100 babbitt 3 tin 81 antimony 15 copper 4
+EK35648PH boxed yes
+200 steel
+08/01/2004 7 71.428571
+VZ41350OD boxed yes
+25 ps
+11/29/2004 8 25
+RB52378JX boxed yes
+200 Steel
+01/31/2005 2 0
+OJ95262HS boxed yes
+25 ps
+04/11/2004 4 0
+TM56272AW boxed yes
+100 Copper
+06/21/2004 8 50
+HJ09104KX boxed yes
+25 Steel
+03/12/2004 3 66.666667
+KR20888DD single yes
+iron
+07/01/2005 4 75
+FG30690IG boxed no
+25 pete
+KO78721GN single yes
+PETE
+05/15/2006 8 25
+YS31010MZ single yes
+PS
+11/15/2004 7 28.571429
+QU95178DS boxed no
+100 PVC
+PP23147DF single yes
+PS
+05/08/2005 8 87.5
+GJ07430CY boxed no
+50 ps
+BC80167DG boxed yes
+20 pvc
+09/01/2006 8 75
+OO65978LB boxed yes
+100 brass 2 copper 76 zinc 24
+01/05/2005 3 100
+WO52647SQ boxed yes
+100 PS
+09/22/2006 8 50
+OJ29582AD boxed no
+50 steel
+FA29754BU boxed yes
+100 Brass 2 copper 68 zinc 32
+10/25/2005 1 0
+US49554ZG boxed yes
+100 pete
+12/16/2003 8 62.5
+HZ68715SA boxed yes
+2 ps
+10/10/2004 7 14.285714
+VZ48696VQ boxed yes
+10 babbitt 3 tin 82 antimony 9 copper 9
+03/31/2005 4 75
+UZ94115JD boxed no
+10 ps
+CX13046VQ boxed yes
+100 Bronze 2 copper 92 tin 8
+05/02/2005 2 50
+WA98749FI single yes
+PVC
+11/27/2003 3 33.333333
+MQ42132BH boxed yes
+25 Bronze 2 copper 94 tin 6
+10/21/2005 5 80
+CJ65816TF single yes
+alloy 2 copper 66 zinc 34
+05/27/2006 1 100
+HC05819SD single no
+alloy 2 copper 85 tin 15
+LL07782XB boxed yes
+100 copper
+07/25/2006 6 50
+LF56592GX boxed no
+100 PS
+JQ63744KF boxed no
+10 Copper
+GE57271VU boxed yes
+5 Alloy 2 copper 86 zinc 14
+04/17/2006 2 50
+RJ64851XW boxed no
+20 Bronze 2 copper 90 tin 10
+BS38874QR boxed no
+100 alloy 3 tin 81 antimony 14 copper 5
+HD02952IH boxed yes
+10 copper
+05/13/2005 5 20
+XL08164BM boxed no
+200 Copper
+IS48143LE single yes
+PS
+12/30/2004 2 0
+VC80247UJ boxed yes
+100 PS
+06/24/2004 1 0
+UI81628RR boxed no
+100 ps
+TR66625AG boxed yes
+25 Iron
+12/26/2004 2 0
+RG25962LG boxed yes
+100 Iron
+04/08/2005 8 87.5
+CN18033FM boxed yes
+25 Iron
+09/08/2006 7 14.285714
+VG21934MT single yes
+alloy 3 tin 77 antimony 13 copper 10
+08/14/2004 3 100
+CF62928LG boxed yes
+100 Copper
+04/20/2005 2 100
+LX85250YW boxed yes
+5 Babbitt 3 tin 79 antimony 11 copper 10
+02/21/2005 6 33.333333
+RC03366NQ boxed yes
+100 Iron
+04/18/2004 7 85.714286
+NW98775CG boxed yes
+100 Iron
+03/01/2006 7 71.428571
+UB37338VL boxed yes
+100 pvc
+05/30/2005 8 62.5
+FI92033SZ boxed yes
+20 Iron
+05/24/2005 2 0
+VL61061JM boxed yes
+50 Steel
+01/13/2006 8 50
+GW79800KX boxed no
+20 Copper
+BD29556OU single yes
+PS
+01/04/2005 5 20
+ZP29395UW boxed yes
+25 iron
+12/10/2003 3 100
+HG83813NJ boxed yes
+25 PVC
+11/28/2004 3 33.333333
+EV16051VK boxed yes
+50 pvc
+09/10/2005 7 14.285714
+ZE46687OD boxed yes
+10 PVC
+07/06/2004 3 33.333333
+PE00110BK boxed yes
+10 PS
+02/06/2004 3 66.666667
+LP31943TP boxed yes
+100 Steel
+11/04/2004 4 100
+YZ83431XD single yes
+PVC
+06/06/2006 3 33.333333
+IM72234EG single yes
+alloy 2 copper 84 zinc 16
+05/13/2005 6 50
+MI89773AY boxed yes
+5 ps
+04/24/2004 2 50
+QW45485JP single no
+PETE
+VN79761NV boxed yes
+100 Alloy 2 copper 86 zinc 14
+08/02/2006 7 85.714286
+JA62895KQ boxed yes
+25 babbitt 3 tin 85 antimony 8 copper 7
+04/03/2004 8 62.5
+WM87374TS single no
+iron
+TL77477FS boxed yes
+5 iron
+01/23/2006 2 50
+SS47280SH boxed yes
+25 pet
+09/17/2005 1 100
+WA01685KI single no
+PVC
+MX93245TJ boxed yes
+5 ps
+06/25/2006 8 75
+EW70991XW boxed no
+2 Alloy 2 copper 83 tin 17
+UP08245WE single yes
+alloy 3 tin 81 antimony 12 copper 7
+06/10/2005 5 40
+PM07703YK single no
+alloy 3 tin 87 antimony 7 copper 6
+PQ39254JI boxed yes
+25 PVC
+06/01/2006 6 33.333333
+DL36743LR boxed yes
+200 pvc
+03/13/2005 8 37.5
+WJ92852YC boxed yes
+25 ps
+12/31/2004 1 0
+ZH56168XE boxed yes
+50 pvc
+12/19/2005 8 50
+JS28285UJ boxed yes
+100 pete
+06/13/2005 3 33.333333
+QG51264KN boxed yes
+25 ps
+11/05/2005 4 100
+GH10838PU boxed no
+5 Babbitt 3 tin 83 antimony 7 copper 10
+NB90510PB single yes
+steel
+03/07/2004 5 60
+UA94633PP boxed yes
+25 alloy 2 copper 81 zinc 19
+03/15/2004 2 50
+CS72732LR boxed yes
+50 ps
+09/12/2006 6 33.333333
+LM57156MR boxed yes
+2 brass 2 copper 88 zinc 12
+06/10/2004 4 75
+IK61870PN boxed yes
+100 alloy 2 copper 91 tin 9
+12/05/2004 5 40
+GU85805GY single yes
+alloy 2 copper 77 zinc 23
+04/24/2004 4 75
+FK00885CN boxed yes
+100 PS
+03/18/2004 3 100
+IV25274BO single yes
+alloy 3 tin 84 antimony 8 copper 8
+04/16/2006 4 50
+ZY92125FL boxed yes
+25 ps
+10/16/2004 3 0
+OE74228QL boxed no
+10 Steel
+EA06819VR boxed yes
+5 steel
+05/12/2004 4 75
+IM12103NU boxed yes
+100 Iron
+04/15/2005 2 100
+KG50505YQ boxed no
+50 PVC
+GP94831PY boxed yes
+25 steel
+04/04/2004 5 20
+ZL91533LL boxed no
+5 Alloy 2 copper 90 zinc 10
+WD27941OR single yes
+steel
+06/01/2006 6 83.333333
+TY93982ZH single yes
+steel
+01/29/2006 1 100
+HA22893TQ boxed yes
+2 ps
+11/19/2003 2 0
+WK81892PF boxed no
+200 Alloy 2 copper 78 tin 22
+SR29763ED boxed yes
+100 Iron
+08/20/2006 8 50
+II27906DZ boxed yes
+10 pet
+11/26/2005 8 37.5
+EV87566VK single yes
+PETE
+06/10/2004 3 33.333333
+SR77409KJ boxed yes
+100 babbitt 3 tin 81 antimony 14 copper 5
+12/19/2003 7 57.142857
+FM75289GB single yes
+iron
+12/03/2003 3 33.333333
+BW64714OK boxed no
+100 Iron
+FB05279LM boxed yes
+25 PVC
+04/05/2006 4 25
+AW68870ZA boxed yes
+100 Copper
+07/15/2006 1 100
+OK67141JF boxed yes
+25 PVC
+01/03/2004 3 66.666667
+GB99124RW single yes
+steel
+03/24/2006 6 100
+LG94609AT boxed yes
+25 brass 2 copper 86 zinc 14
+11/28/2005 8 62.5
+ZB27824RK single yes
+PET
+09/20/2006 6 16.666667
+BN36459WM boxed yes
+25 Copper
+02/13/2005 8 37.5
+WX77438GA boxed yes
+50 ps
+11/03/2003 7 85.714286
+FW62113KT boxed yes
+100 Steel
+12/18/2005 7 28.571429
+EI41101KS boxed yes
+100 Iron
+09/04/2006 8 37.5
+EW23221HQ boxed no
+100 pet
+RG05013ZN boxed no
+2 iron
+NC75942CK single yes
+PS
+01/20/2004 6 16.666667
+YG69036QI boxed yes
+50 alloy 2 copper 88 zinc 12
+09/27/2006 5 40
+OP47736EF single yes
+PVC
+12/11/2004 6 50
+WN78503QO boxed yes
+10 Alloy 2 copper 95 tin 5
+02/08/2005 2 100
+SO78382FY single yes
+copper
+07/14/2005 6 50
+PW43159MR boxed yes
+5 ps
+06/04/2005 4 25
+QX21407SU boxed no
+200 ps
+NU92775UK boxed yes
+50 Copper
+06/14/2006 6 83.333333
+QL18577OV boxed yes
+10 babbitt 3 tin 83 antimony 10 copper 7
+12/31/2003 3 100
+BT23152OK boxed yes
+100 Bronze 2 copper 87 tin 13
+12/11/2004 4 75
+HZ76234IL single no
+PVC
+TJ02725HX single yes
+iron
+11/06/2003 5 40
+WT37097EC boxed yes
+50 pvc
+05/01/2005 7 28.571429
+GJ86306FL boxed yes
+25 ps
+08/30/2005 3 33.333333
+LO04192LR boxed yes
+100 pvc
+12/24/2004 4 25
+LN01030PV single no
+PVC
+VS49335AD boxed yes
+20 ps
+10/20/2005 7 28.571429
+WF67466RY boxed yes
+50 iron
+09/19/2004 8 62.5
+WB80329YJ boxed yes
+100 copper
+01/08/2004 2 100
+TJ74269FK boxed yes
+100 ps
+03/31/2004 6 50
+MS84840TD boxed yes
+20 alloy 2 copper 86 tin 14
+08/30/2004 6 83.333333
+FR55707EK boxed no
+5 PET
+MP43810BX boxed yes
+2 Copper
+08/01/2005 3 66.666667
+NI58689GG boxed yes
+25 alloy 3 tin 85 antimony 10 copper 5
+05/04/2004 4 50
+FM69642BO boxed no
+2 iron
+NY61680PB boxed yes
+50 PS
+05/17/2005 7 28.571429
+TW32876FN boxed yes
+2 Iron
+10/28/2004 2 50
+EI21487GP boxed no
+10 alloy 3 tin 86 antimony 7 copper 7
+HI29824BT boxed no
+10 alloy 2 copper 81 tin 19
+AA09821ZK boxed yes
+50 Alloy 3 tin 82 antimony 8 copper 7
+03/20/2005 1 100
+UT65938CK boxed yes
+25 Brass 2 copper 72 zinc 28
+03/31/2004 3 33.333333
+BW29764HJ boxed no
+100 Brass 2 copper 69 zinc 31
+YA12319IR boxed yes
+25 Alloy 3 tin 79 antimony 11 copper 10
+08/09/2004 6 66.666667
+RS44078UT boxed yes
+2 ps
+03/10/2005 6 16.666667
+MG59513KC single yes
+copper
+02/11/2006 3 66.666667
+MH78426BT single yes
+PVC
+10/13/2004 2 50
+AU64208YM boxed no
+100 Bronze 2 copper 82 tin 18
+QL62162CZ boxed no
+2 Brass 2 copper 86 zinc 14
+OS38075SV boxed yes
+50 Steel
+05/16/2006 7 57.142857
+AX20758MQ boxed yes
+50 Steel
+01/18/2005 7 28.571429
+RK41000PY boxed yes
+20 PS
+01/09/2006 6 50
+PQ68717MC boxed yes
+100 Alloy 3 tin 83 antimony 12 copper 5
+08/19/2005 5 60
+QR44463UT single yes
+copper
+01/09/2004 8 75
+BV51685OK single no
+alloy 2 copper 90 zinc 10
+RK59322UK boxed no
+50 ps
+CE82646ZT boxed no
+25 pvc
+BB91333YT single yes
+PETE
+12/25/2003 1 100
+WQ78825EM single no
+copper
+OQ41653XX boxed yes
+50 steel
+12/06/2004 6 83.333333
+VS77272DI single yes
+alloy 2 copper 85 zinc 15
+04/21/2005 1 0
+SM09376CC boxed yes
+100 Babbitt 3 tin 79 antimony 11 copper 10
+01/06/2005 7 71.428571
+AH83391KG single no
+PS
+YK76526CV boxed yes
+100 Iron
+12/17/2004 6 50
+AS42431EG single yes
+alloy 2 copper 93 tin 7
+12/19/2004 8 75
+FC07471CW boxed yes
+50 alloy 2 copper 70 zinc 30
+07/25/2004 8 62.5
+MB11468KY boxed no
+100 copper
+NQ90167ZF boxed yes
+25 Brass 2 copper 83 zinc 17
+04/25/2005 5 100
+BV67237SP boxed yes
+20 ps
+07/09/2006 1 0
+JR27755AU boxed yes
+25 Bronze 2 copper 91 tin 9
+05/06/2006 5 60
+ZL14522VH single no
+PS
+ZX14025LI single no
+steel
+JH48277RH single no
+alloy 3 tin 82 antimony 12 copper 6
+IU67751ID boxed yes
+2 Iron
+10/30/2005 7 57.142857
+RB05322IE boxed yes
+25 Steel
+08/30/2005 4 75
+FK92046ZM single no
+alloy 2 copper 87 zinc 13
+TZ27791GA boxed yes
+50 Copper
+05/10/2004 5 40
+GI45061GG boxed yes
+100 Steel
+07/05/2006 7 85.714286
+NP29960PT boxed yes
+100 babbitt 3 tin 78 antimony 12 copper 10
+09/11/2005 2 0
+AV56457AA boxed yes
+100 PS
+11/01/2004 4 0
+RZ89745IB boxed yes
+25 PETE
+07/04/2005 5 60
+AR76219CN boxed yes
+25 steel
+01/05/2006 5 40
+WF70778TY single no
+iron
+DX01685YU boxed yes
+10 Steel
+07/14/2005 2 50
+ZM87513TN boxed yes
+10 steel
+06/04/2006 6 50
+NZ50452EC boxed yes
+25 PS
+11/25/2005 3 66.666667
+VZ83696TC boxed yes
+2 ps
+06/03/2006 2 100
+QG34861BA single no
+PVC
+VG92660OW single yes
+alloy 2 copper 94 tin 6
+09/01/2005 3 66.666667
+ZA56888DE boxed no
+2 PS
+NC61614AF boxed yes
+2 ps
+06/26/2004 1 0
+BU10536JI boxed yes
+50 pete
+07/05/2005 2 50
+WK09537MD boxed yes
+10 Iron
+07/16/2006 2 50
+GE64105WQ boxed yes
+10 Iron
+08/06/2005 5 80
+UJ95761AW boxed yes
+25 babbitt 3 tin 83 antimony 7 copper 7
+01/20/2006 5 60
+WS77596NP boxed no
+50 steel
+PA77425OX boxed no
+25 babbitt 3 tin 83 antimony 7 copper 10
+OA42954WT single no
+alloy 3 tin 79 antimony 13 copper 5
+PL82936FE single yes
+alloy 2 copper 79 tin 21
+06/08/2004 3 33.333333
+JG78725QC boxed yes
+25 steel
+03/12/2006 6 83.333333
+KB87231IY single yes
+iron
+02/28/2006 8 62.5
+PA68512OO boxed yes
+100 Copper
+08/19/2005 7 14.285714
+WK63003AU boxed yes
+25 Copper
+09/15/2004 2 100
+GZ74175WL single yes
+alloy 2 copper 85 tin 15
+10/16/2004 8 75
+FZ14996ON single yes
+alloy 2 copper 65 zinc 35
+07/11/2004 1 0
+JA87166OE boxed yes
+25 Brass 2 copper 77 zinc 23
+09/14/2006 5 40
+JW53241BV single yes
+PS
+02/15/2006 4 50
+CV12280SF boxed no
+50 pvc
+RI52954ZL boxed yes
+200 pvc
+10/29/2005 8 50
+ZE76384YU single no
+alloy 2 copper 78 tin 22
+PC42410SA boxed no
+25 steel
+HY21440KH single no
+PS
+UN22342FX boxed yes
+5 pet
+04/09/2004 8 25
+HW41533RW boxed yes
+100 bronze 2 copper 93 tin 7
+03/01/2006 8 62.5
+GJ78701DJ boxed yes
+5 ps
+04/11/2006 3 0
+LY84720LE boxed yes
+20 steel
+09/18/2004 4 75
+UC69732YR boxed no
+25 pete
+OZ22870JU boxed no
+50 Iron
+TI52937TD boxed no
+2 Copper
+DZ22064AF single yes
+PVC
+02/03/2004 2 50
+FT18434RS boxed no
+100 ps
+RV54188IP boxed yes
+100 Brass 2 copper 77 zinc 23
+11/08/2004 5 60
+PR79350MU boxed no
+25 steel
+XX81601ZK single no
+copper
+NU10540US single yes
+PS
+03/26/2006 7 71.428571
+ZD38313EM boxed no
+50 Iron
+OM16866XQ boxed yes
+20 Iron
+02/17/2005 3 66.666667
+LJ91947BI boxed yes
+25 Steel
+03/21/2004 4 50
+KQ56114XM single yes
+PETE
+08/17/2004 6 33.333333
+AM87349PP boxed yes
+50 ps
+09/20/2006 6 50
+JW32520WC boxed yes
+100 Copper
+05/09/2005 1 100
+YK48804YB single yes
+PETE
+05/19/2004 1 100
+NZ91125NN single yes
+alloy 2 copper 86 tin 14
+07/20/2004 4 50
+SE13794RJ boxed yes
+50 ps
+11/11/2003 6 83.333333
+JV02659AX single yes
+alloy 2 copper 73 zinc 27
+11/26/2004 5 80
+SI69851UU boxed yes
+25 ps
+03/22/2004 4 75
+ZE28564SA boxed no
+50 steel
+SG27877TV boxed yes
+5 Alloy 3 tin 80 antimony 11 copper 9
+01/21/2005 4 50
+NN31031AF boxed yes
+50 pet
+08/12/2004 3 66.666667
+HA58080KE single no
+PVC
+JV52501BB boxed no
+25 ps
+ZB38984YM boxed yes
+10 Copper
+09/04/2004 5 80
+NX83394TZ boxed no
+50 Copper
+MC01459TH single no
+PVC
+OL11166IW single no
+alloy 3 tin 85 antimony 10 copper 5
+AF25764DT boxed no
+100 PS
+AS14551WA single yes
+copper
+05/20/2005 7 57.142857
+YT12320JQ single yes
+alloy 2 copper 83 zinc 17
+04/25/2004 6 50
+WB85027UU boxed yes
+5 pete
+08/06/2004 1 0
+YQ10544ZE single no
+PETE
+PL03168VK boxed yes
+100 Brass 2 copper 89 zinc 11
+05/06/2006 5 40
+CL81095OZ boxed no
+25 Bronze 2 copper 81 tin 19
+IG24754ED boxed yes
+200 ps
+07/20/2004 1 0
+IS02327RW boxed yes
+100 babbitt 3 tin 81 antimony 10 copper 9
+05/20/2004 7 57.142857
+GQ80211IB boxed yes
+25 PS
+03/02/2005 1 100
+RA17611EO boxed no
+50 Iron
+OI63286OK boxed yes
+5 ps
+12/24/2005 8 25
+CA40375FC boxed yes
+25 pvc
+05/17/2005 5 100
+VG96494DK boxed no
+25 Copper
+NX45485HJ boxed yes
+20 ps
+09/01/2006 2 50
+PX70716JL single yes
+steel
+10/22/2004 2 100
+FR24301DE boxed yes
+25 Steel
+08/04/2005 2 50
+TH99999BN boxed yes
+200 Copper
+05/13/2004 7 85.714286
+CV53596QB single yes
+PVC
+08/29/2006 8 25
+QT78966FA boxed yes
+2 Babbitt 3 tin 81 antimony 11 copper 8
+04/28/2006 8 62.5
+CG97195LR boxed yes
+100 Steel
+04/15/2006 5 60
+YN87727VS single yes
+PS
+06/09/2006 6 100
+PD90321DA boxed no
+10 PS
+NL81800KL boxed yes
+20 ps
+05/15/2006 6 0
+IF39649DR boxed no
+5 Brass 2 copper 65 zinc 35
+TC79386JB single yes
+PS
+03/08/2006 5 40
+QG27052WU boxed yes
+100 PS
+10/15/2005 3 33.333333
+FE84128KF boxed yes
+25 ps
+09/23/2004 2 100
+HD26841CN boxed no
+50 PVC
+DT52589EL single no
+iron
+JG18704WS single yes
+iron
+12/28/2005 3 100
+OS43407PN boxed yes
+100 pvc
+12/31/2003 7 71.428571
+KC74799HO single yes
+steel
+03/14/2004 7 42.857143
+TX10919GP boxed yes
+100 Steel
+06/22/2006 2 50
+QK48157VY boxed no
+100 pete
+AF73798XW boxed yes
+50 iron
+03/04/2005 6 50
+RX24208RU boxed no
+20 ps
+LW37159WS boxed yes
+100 Bronze 2 copper 84 tin 16
+05/10/2005 2 100
+TO15156CE boxed no
+2 ps
+FQ59442GQ boxed yes
+100 PVC
+07/13/2006 3 0
+GK97833EO boxed no
+2 pete
+IU19566HN boxed yes
+25 babbitt 3 tin 79 antimony 11 copper 10
+06/02/2006 2 100
+ND84335TX boxed yes
+10 PETE
+03/05/2004 6 33.333333
+AE34057UX boxed yes
+2 ps
+06/15/2005 4 50
+UT92709XT single yes
+PETE
+06/01/2004 5 40
+YB02727NH boxed yes
+200 Copper
+01/11/2006 2 50
+JA63560LQ single yes
+PVC
+02/11/2004 4 25
+MA05413VB boxed yes
+100 Iron
+03/09/2006 6 33.333333
+ZA61491VR boxed yes
+25 alloy 2 copper 82 tin 18
+02/10/2005 8 75
+HB16206JH boxed yes
+10 Brass 2 copper 86 zinc 14
+07/20/2006 8 62.5
+KD06397OL single no
+steel
+TI13570CZ boxed yes
+2 Iron
+07/14/2006 5 80
+NK43101PB boxed yes
+50 Bronze 2 copper 87 tin 13
+11/25/2005 1 100
+JP86577GG single no
+alloy 3 tin 81 antimony 9 copper 10
+BU04623ZG boxed no
+100 PET
+GR47509AA boxed no
+100 pete
+UJ13376XP boxed yes
+25 ps
+03/09/2005 3 66.666667
+CT00284ZM boxed yes
+5 copper
+10/01/2005 4 50
+PM11551BA boxed yes
+100 Alloy 3 tin 88 antimony 8 copper 4
+02/12/2004 3 100
+XZ92590ML boxed no
+10 pvc
+EH49708UX boxed no
+50 ps
+BC70543UT single yes
+alloy 2 copper 94 tin 6
+06/20/2004 6 16.666667
+ZV07898ZQ boxed yes
+200 PS
+03/11/2006 2 0
+VB53927OH single yes
+PVC
+06/18/2004 1 100
+GW36225HZ boxed yes
+50 Iron
+12/29/2005 5 40
+AL90586CO single no
+PETE
+EE83402BU boxed yes
+25 ps
+08/31/2006 4 50
+FJ36269JL boxed yes
+20 bronze 2 copper 78 tin 22
+01/13/2006 8 37.5
+RX29171SW single no
+alloy 2 copper 80 tin 20
+NL46660CC boxed no
+25 steel
+KM59268TW boxed yes
+50 PET
+05/29/2006 1 100
+VE16892LC boxed no
+25 PS
+OD39921ZQ boxed yes
+25 pvc
+04/08/2006 4 0
+UY30963CV boxed yes
+2 Copper
+12/25/2005 8 75
+FE09087VN boxed yes
+50 pete
+09/18/2005 4 0
+LI32451WY boxed yes
+25 babbitt 3 tin 85 antimony 7 copper 8
+04/12/2004 6 50
+TF20181VJ boxed no
+5 Copper
+GO66192CB boxed no
+25 iron
+WS81866GA boxed no
+100 Steel
+LJ14685XZ boxed yes
+20 Steel
+10/01/2006 1 100
+VS69546ZR boxed yes
+25 pet
+11/04/2003 6 33.333333
+BU77991MG boxed yes
+100 steel
+08/22/2006 2 50
+NO22416NX boxed yes
+100 iron
+04/22/2004 2 0
+TA61670PY boxed yes
+25 copper
+01/09/2006 7 28.571429
+AH31221BM boxed yes
+100 pvc
+07/20/2006 6 50
+JI68311VP boxed yes
+25 Steel
+11/12/2003 4 50
+VF99330SN single yes
+steel
+11/30/2004 7 71.428571
+ZR02623VI single yes
+PETE
+12/24/2003 7 42.857143
+JU75056MU single yes
+alloy 2 copper 91 tin 9
+05/16/2005 2 100
+JG46473PA boxed yes
+100 Babbitt 3 tin 80 antimony 15 copper 5
+12/05/2004 1 100
+EC04359CC single yes
+steel
+08/03/2005 6 66.666667
+SO38084QQ boxed no
+5 ps
+WK15402XC single yes
+alloy 3 tin 84 antimony 10 copper 6
+02/20/2006 4 0
+EE46044UR single no
+iron
+HS85950HE boxed yes
+100 steel
+07/19/2006 1 0
+UW04392HC boxed yes
+100 pvc
+05/05/2006 2 0
+RN38527JX boxed yes
+10 ps
+02/13/2006 4 75
+NP46368BQ boxed no
+2 ps
+LJ10649JI boxed yes
+5 Alloy 2 copper 95 tin 5
+12/08/2004 2 50
+DD55029PB boxed yes
+5 copper
+07/10/2004 3 66.666667
+TJ55026GR boxed yes
+100 Copper
+08/21/2005 4 100
+VX43418OE boxed yes
+25 pvc
+07/26/2006 5 20
+LI49428ME boxed yes
+2 Alloy 2 copper 79 zinc 21
+02/19/2006 5 40
+UI44311JZ single yes
+iron
+02/13/2006 7 57.142857
+OO14049GX boxed no
+100 iron
+MY46613CD single yes
+steel
+02/23/2006 3 33.333333
+WC31887RW single yes
+steel
+08/01/2005 1 100
+VB79518RG boxed yes
+5 pete
+07/05/2004 7 57.142857
+TM63012LP boxed yes
+5 Bronze 2 copper 81 tin 19
+04/01/2005 4 50
+ZM50720YF boxed no
+100 brass 2 copper 75 zinc 25
+DM26939XW boxed yes
+5 Iron
+05/23/2006 6 83.333333
+RK42286MZ boxed no
+100 Brass 2 copper 84 zinc 16
+JJ70216MO boxed yes
+5 PS
+06/29/2005 3 33.333333
+CD27096DB boxed yes
+10 Brass 2 copper 86 zinc 14
+06/24/2006 5 80
+CO14918WY single yes
+alloy 2 copper 83 zinc 17
+08/12/2004 4 100
+EL11561VA single yes
+iron
+12/25/2004 8 50
+FK91348BN boxed yes
+100 pete
+06/04/2004 7 14.285714
+WA35325IO boxed yes
+200 PS
+01/29/2004 1 0
+NN46577VD boxed yes
+100 copper
+05/03/2005 8 50
+BN02829MO single yes
+PVC
+09/26/2005 7 42.857143
+YG65682BZ boxed yes
+100 pet
+08/23/2004 3 66.666667
+CY34393VX single yes
+PS
+04/09/2006 6 66.666667
+BZ56079DY single no
+alloy 2 copper 79 tin 21
+CC05521WK single no
+alloy 2 copper 73 zinc 27
+XH18686GE boxed yes
+50 steel
+09/18/2005 3 66.666667
+BL18930NE boxed yes
+5 Alloy 3 tin 78 antimony 13 copper 9
+04/11/2006 7 57.142857
+UU52212LJ boxed yes
+25 Iron
+12/11/2004 7 71.428571
+TH55750EE boxed yes
+200 ps
+10/14/2005 2 0
+VW74447CY boxed no
+25 ps
+RV19076QU boxed yes
+50 Babbitt 3 tin 80 antimony 10 copper 10
+01/20/2006 2 50
+LN91728LU boxed yes
+50 iron
+03/21/2005 2 0
+RG06699FX single no
+alloy 3 tin 83 antimony 9 copper 8
+EN18061BV boxed yes
+25 ps
+06/21/2004 6 0
+IA20267XO boxed yes
+2 Steel
+06/17/2006 3 100
+FH74804VU boxed no
+100 Iron
+ZA44704AU boxed yes
+100 Babbitt 3 tin 80 antimony 10 copper 10
+12/05/2005 8 62.5
+TV46121QT boxed no
+200 brass 2 copper 67 zinc 33
+FN60474FS boxed yes
+20 pvc
+09/19/2006 7 28.571429
+SO49739QH boxed yes
+25 Steel
+08/07/2005 8 37.5
+FJ81761UC single no
+PETE
+SP80952FB boxed yes
+50 Alloy 2 copper 71 zinc 29
+03/30/2004 4 75
+TM51400KL single yes
+iron
+08/30/2004 4 50
